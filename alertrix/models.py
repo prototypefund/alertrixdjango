@@ -16,3 +16,10 @@ class User(
 
     def __str__(self):
         return str(self.username)
+
+
+class MatrixRoom(
+    models.Model,
+):
+    matrix_room_id = models.TextField(
+    )

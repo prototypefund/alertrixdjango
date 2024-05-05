@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from matrixappservice.models import User as MatrixUser
 
 
 class User(

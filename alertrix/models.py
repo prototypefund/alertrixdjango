@@ -23,3 +23,9 @@ class MatrixRoom(
 ):
     matrix_room_id = models.TextField(
     )
+    responsible_user = models.ForeignKey(
+        MatrixUser,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )

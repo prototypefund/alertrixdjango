@@ -6,6 +6,7 @@ from matrixappservice.models import User as MatrixUser
 class User(
     AbstractUser,
 ):
+    USERNAME_FIELD = 'matrix_id'
     username = models.TextField(
         primary_key=True,
     )

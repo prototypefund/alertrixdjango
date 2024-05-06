@@ -15,7 +15,7 @@ class User(
     )
 
     def __str__(self):
-        return str(self.username)
+        return str(self.__getattribute__(self.USERNAME_FIELD))
 
 
 class MatrixRoom(

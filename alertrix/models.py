@@ -11,7 +11,7 @@ class User(
         primary_key=True,
     )
     matrix_id = models.TextField(
-        unique=True,
+        primary_key=True,
         blank=True,
     )
 

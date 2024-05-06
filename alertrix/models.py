@@ -12,7 +12,6 @@ class User(
     )
     matrix_id = models.TextField(
         primary_key=True,
-        blank=True,
     )
 
     def __str__(self):

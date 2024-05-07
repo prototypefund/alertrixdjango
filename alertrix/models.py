@@ -11,6 +11,7 @@ class User(
     matrix_id = models.TextField(
         'Matrix ID',
         primary_key=True,
+        help_text='@user:example.com',
     )
 
     def __str__(self):

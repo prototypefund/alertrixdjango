@@ -9,6 +9,7 @@ class User(
     USERNAME_FIELD = 'matrix_id'
     username = None
     matrix_id = models.TextField(
+        'Matrix ID',
         primary_key=True,
     )
 

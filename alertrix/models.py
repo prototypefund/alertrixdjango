@@ -200,3 +200,28 @@ class DirectMessage(
 
     def __str__(self):
         return str(self.with_user)
+
+
+class Company(
+    MatrixRoom,
+):
+    class Meta:
+        verbose_name = _('company')
+        verbose_name_plural = _('companies')
+
+    slug = models.SlugField(
+        _('slug'),
+        primary_key=True,
+        max_length=settings.ALERTRIX_SLUG_MAX_LENGTH,
+    )
+    handler = models.ForeignKey(
+        Handler,
+        verbose_name=_('handler'),
+        on_delete=models.DO_NOTHING,
+    )
+    admins = models.ForeignKey(
+        Group,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )

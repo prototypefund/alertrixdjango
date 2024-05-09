@@ -227,3 +227,22 @@ class Company(
         blank=True,
         null=True,
     )
+
+
+class MainApplicationServiceKey(
+    models.Model,
+):
+    service = models.ForeignKey(
+        ApplicationServiceRegistration,
+        on_delete=models.CASCADE,
+    )
+
+    def save(
+            self,
+            *args, **kwargs
+    ):
+        self.id = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass

@@ -89,6 +89,14 @@ class Handler(
         ):
             yield matrix_action
         client: nio.AsyncClient = await user.get_client()
+        if event['content']['is_direct']:
+            # This room is a direct messaging room
+            dm = DirectMessage(
+                with_user=event['sender'],
+                matrix_room_id=event['room_id'],
+                responsible_user=user,
+            )
+            await dm.asave()
         device = await user.get_device()
 
 

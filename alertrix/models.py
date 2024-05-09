@@ -28,6 +28,12 @@ class Handler(
         ApplicationServiceRegistration,
         on_delete=models.CASCADE,
     )
+    users = models.ForeignKey(
+        Group,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
 
 
 class MatrixRoom(

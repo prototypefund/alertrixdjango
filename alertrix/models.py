@@ -55,6 +55,22 @@ class Handler(
         ).afirst()
         device = await user.device_set.afirst()
         client = await user.get_client()
+        if event['type'] == 'm.room.message' and event['content']['body'] == 'ping':
+            yield MatrixAction(
+                client=client,
+                args=nio.Api.room_send(
+                    access_token=device.access_token,
+                    room_id=event['room_id'],
+                    event_type='m.room.message',
+                    body={
+                        'body': 'pong',
+                        'msgtype': 'm.text',
+                    },
+                    tx_id=device.latest_transaction_id,
+                ),
+            )
+            device.latest_transaction_id += 1
+            await device.asave()
 
 
 class MatrixRoom(

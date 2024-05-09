@@ -11,6 +11,7 @@ from .. import models
 
 class CreateCompany(
     PermissionRequiredMixin,
+    mixins.ContextActionsMixin,
     CreateView,
 ):
     permission_required = 'alertrix.add_company'

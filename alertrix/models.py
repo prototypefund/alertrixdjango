@@ -18,6 +18,16 @@ class User(
         return str(self.__getattribute__(self.USERNAME_FIELD))
 
 
+class Handler(
+    models.Model,
+    ApplicationServiceHandler,
+):
+    application_service = models.OneToOneField(
+        ApplicationServiceRegistration,
+        on_delete=models.CASCADE,
+    )
+
+
 class MatrixRoom(
     models.Model,
 ):

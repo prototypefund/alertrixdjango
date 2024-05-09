@@ -160,3 +160,21 @@ class MatrixRoom(
             event_type=event_type,
             state_key=state_key,
         )
+
+    async def aget_room_avatar(
+            self,
+    ):
+        room_id = str(self.matrix_room_id)
+        try:
+            state_event = await self.aget_room_state_event(
+                room_id=room_id,
+                event_type='m.room.avatar',
+            )
+            if state_event is None:
+                return ''
+        except exc.MatrixError:
+            return ''
+        return state_event['url']
+
+    def get_room_avatar(self):
+        return async_to_sync(self.aget_room_avatar)()

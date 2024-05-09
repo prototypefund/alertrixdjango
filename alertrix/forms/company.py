@@ -79,4 +79,13 @@ class CompanyForm(
         handler = models.Handler.objects.get(
             id=handler_id,
         )
+        if self.user not in handler.users:
+            if 'handler' not in self.errors:
+                self.add_error(
+                    'handler',
+                    _('you are not allowed to use this %(object)s') % {
+                        'object': models.Handler.Meta.verbose_name,
+                    },
+                )
+            return
         return handler

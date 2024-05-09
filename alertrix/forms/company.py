@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+import synapse.appservice
 from django import forms
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _

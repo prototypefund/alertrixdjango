@@ -123,3 +123,40 @@ class MatrixRoom(
             self,
     ):
         return async_to_sync(self.aget_room_info)()
+
+    async def aget_room_state_event(
+            self,
+            room_id: str,
+            event_type: str,
+            state_key: str = None,
+    ):
+        mx_user = await sync_to_async(self.__getattribute__)('responsible_user')
+        if mx_user is None:
+            return {}
+        client: nio.AsyncClient = await mx_user.get_client()
+        event = await client.room_get_state_event(
+            room_id=room_id,
+            event_type=event_type,
+            state_key=state_key or '',
+        )
+        if type(event) == nio.RoomGetStateEventError:
+            return None
+        if 'errcode' in event.content:
+            e = exc.MatrixError(
+                event.content['error'],
+            )
+            e.errcode = event.content['errcode']
+            raise e
+        return event.content
+
+    def get_room_state_event(
+            self,
+            room_id: str,
+            event_type: str,
+            state_key: str = None,
+    ):
+        return async_to_sync(self.get_room_state_event)(
+            room_id=room_id,
+            event_type=event_type,
+            state_key=state_key,
+        )

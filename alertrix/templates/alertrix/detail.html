@@ -1,0 +1,12 @@
+{% extends 'alertrix/base.html' %}
+{% load static %}
+
+{% block content %}
+{% if view.get_context_actions %}
+<div id="actions">
+    {% for action in view.get_context_actions %}
+    <a href="{% if action.url %}{{ action.url }}{% else %}{% url action.name %}{% endif %}">{% if action.label %}{{ action.label }}{% else %}{{ action.url }}{% endif %}</a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

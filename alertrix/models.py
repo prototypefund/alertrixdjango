@@ -190,3 +190,13 @@ class MatrixRoom(
 
     def get_description(self):
         return self.get_attribute('topic')
+
+
+class DirectMessage(
+    MatrixRoom,
+):
+    with_user = models.TextField(
+    )
+
+    def __str__(self):
+        return str(self.with_user)

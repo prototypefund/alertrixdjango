@@ -72,6 +72,22 @@ class Handler(
             device.latest_transaction_id += 1
             await device.asave()
 
+    async def on_room_invite(
+            self,
+            request,
+            event,
+            user: MatrixUser,
+    ):
+        async for matrix_action in ApplicationServiceHandler.on_room_invite(
+            self,
+            request,
+            event,
+            user,
+        ):
+            yield matrix_action
+        client: nio.AsyncClient = await user.get_client()
+        device = await user.get_device()
+
 
 class MatrixRoom(
     models.Model,

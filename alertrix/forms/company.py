@@ -9,6 +9,7 @@ class CompanyForm(
     class Meta:
         model = models.Company
         fields = [
+            'name',
             'handler',
             'slug',
             'admins',
@@ -18,6 +19,17 @@ class CompanyForm(
         }
         optional = [
         ]
+    name = forms.CharField(
+        label=_('name'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'style': ';'.join([
+                    'resize: none',
+                ]),
+            },
+        ),
+    )
 
     def __init__(
             self,

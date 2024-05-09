@@ -20,6 +20,14 @@ class CompanyForm(
             'matrix_room_id',
         ]
         widgets = {
+            'matrix_room_id': forms.Textarea(
+                attrs={
+                    'rows': 1,
+                    'style': ';'.join([
+                        'resize: none',
+                    ]),
+                },
+            ),
         }
         optional = [
         ]

@@ -43,3 +43,15 @@ class CompanyForm(
         )
         for field_name in self.Meta.optional:
             self.fields[field_name].required = False
+
+    def clean_slug(self):
+        slug = self.data.get('slug') or slugify(self.data.get('name'))
+        if not slug:
+            if 'slug' not in self.errors:
+                self.add_error(
+                    'slug',
+                    _('%(field)s cannot be empty') % {
+                        'field': self.fields['slug'].label,
+                    },
+                )
+        return slug

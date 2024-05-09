@@ -55,3 +55,26 @@ class CompanyForm(
                     },
                 )
         return slug
+
+    def clean_handler(self):
+        raw_selection = self.data['handler']
+        if not raw_selection:
+            if 'handler' not in self.errors:
+                self.add_error(
+                    'handler',
+                    _('handler cannot be empty'),
+                )
+            return
+        try:
+            handler_id = models.Handler._meta.get_field('id').to_python(raw_selection)
+        except ValidationError:
+            if 'handler' not in self.errors:
+                self.add_error(
+                    'handler',
+                    _('invalid handler id'),
+                )
+            return
+        handler = models.Handler.objects.get(
+            id=handler_id,
+        )
+        return handler

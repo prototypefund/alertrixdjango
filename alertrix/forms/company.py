@@ -15,6 +15,8 @@ class CompanyForm(
         ]
         widgets = {
         }
+        optional = [
+        ]
 
     def __init__(
             self,
@@ -25,3 +27,5 @@ class CompanyForm(
             data=data,
             *args, **kwargs
         )
+        for field_name in self.Meta.optional:
+            self.fields[field_name].required = False

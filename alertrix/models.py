@@ -187,3 +187,6 @@ class MatrixRoom(
 
     def get_name(self):
         return self.get_attribute('name')
+
+    def get_description(self):
+        return self.get_attribute('topic')

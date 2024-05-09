@@ -34,6 +34,7 @@ class CompanyForm(
 
     def __init__(
             self,
+            user,
             data=None,
             *args, **kwargs
     ):
@@ -41,6 +42,7 @@ class CompanyForm(
             data=data,
             *args, **kwargs
         )
+        self.user = user
         for field_name in self.Meta.optional:
             self.fields[field_name].required = False
 

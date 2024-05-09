@@ -100,3 +100,25 @@ class MatrixRoom(
         blank=True,
         null=True,
     )
+
+    async def aget_room_info(
+            self,
+    ):
+        mx_user = await sync_to_async(self.__getattribute__)('responsible_user')
+        if mx_user is None:
+            return []
+        client: nio.AsyncClient = await mx_user.get_client()
+        room_info = await client.room_get_state(
+            str(self.matrix_room_id),
+        )
+        if type(room_info) is nio.RoomGetStateError:
+            logging.error(
+                room_info,
+            )
+            return []
+        return room_info.events
+
+    def get_room_info(
+            self,
+    ):
+        return async_to_sync(self.aget_room_info)()

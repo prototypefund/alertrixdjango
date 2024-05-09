@@ -22,6 +22,9 @@ class CreateCompany(
         'get',
         'post',
     ]
+    context_actions = [
+        {'name': 'comp.list', 'label': _('list')},
+    ]
 
     def get_form_kwargs(self):
         kwargs = {

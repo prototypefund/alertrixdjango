@@ -35,6 +35,26 @@ class Handler(
         null=True,
     )
 
+    async def on_m_room_message(
+            self,
+            request,
+            event,
+    ):
+        app_service = await sync_to_async(self.__getattribute__)('application_service')
+        as_client: nio.AsyncClient = await app_service.get_matrix_client()
+        joined_members_resp = await as_client.joined_members(
+            event['room_id'],
+        )
+        members = [
+            str(member.user_id)
+            for member in joined_members_resp.members
+        ]
+        user: MatrixUser = await MatrixUser.objects.filter(
+            user_id__in=members,
+        ).afirst()
+        device = await user.device_set.afirst()
+        client = await user.get_client()
+
 
 class MatrixRoom(
     models.Model,

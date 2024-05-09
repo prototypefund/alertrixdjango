@@ -1,0 +1,28 @@
+{% extends 'alertrix/detail.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block static_content %}
+<script src="{% static 'alertrix/form_management.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ form.Meta.title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<h1>
+    {{ form.Meta.title }}
+</h1>
+<div class="form-control">
+    <div class="advanced-control">
+        <input type="checkbox" id="show-advanced-input-fields">
+        <label id="show-advanced-input-fields-label">{% trans 'show advanced fields' %}</label>
+    </div>
+</div>
+<form method="post">
+    {{ form.as_div }}
+    {% csrf_token %}
+    <input type="submit" value="{% if form.Meta.submit_text %}{{ form.Meta.submit_text }}{% else %}{% translate 'save' %}{% endif %}">
+</form>
+{% endblock %}

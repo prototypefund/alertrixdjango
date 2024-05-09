@@ -6,5 +6,6 @@ from . import views
 
 urlpatterns = [
     path('comp/', include([
+        path('', views.company.ListCompanies.as_view(), name='comp.list'),
     ])),
 ]

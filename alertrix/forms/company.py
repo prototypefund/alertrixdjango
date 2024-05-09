@@ -15,3 +15,13 @@ class CompanyForm(
         ]
         widgets = {
         }
+
+    def __init__(
+            self,
+            data=None,
+            *args, **kwargs
+    ):
+        super().__init__(
+            data=data,
+            *args, **kwargs
+        )

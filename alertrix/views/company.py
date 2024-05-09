@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView
 from .. import forms
+from .. import mixins
 from .. import models
 
 

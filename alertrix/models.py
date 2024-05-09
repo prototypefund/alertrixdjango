@@ -184,3 +184,6 @@ class MatrixRoom(
         for event in self.get_room_info():
             if event['type'] == 'm.room.%(key)s' % {'key': key}:
                 return event['content'][key]
+
+    def get_name(self):
+        return self.get_attribute('name')

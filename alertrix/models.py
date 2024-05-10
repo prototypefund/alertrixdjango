@@ -13,6 +13,7 @@ from matrixappservice import exceptions as exc
 from matrixappservice.handler import Handler as ApplicationServiceHandler
 from matrixappservice.matrix.action import MatrixAction
 from matrixappservice.models import ApplicationServiceRegistration
+from matrixappservice.models import Homeserver
 from matrixappservice.models import User as MatrixUser
 
 

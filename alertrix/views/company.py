@@ -1,3 +1,4 @@
+from asgiref.sync import async_to_sync
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group

@@ -100,5 +100,40 @@ class CreateCompany(
                     )
             mu.save()
             self.object.responsible_user = mu
+        if not self.object.matrix_room_id:
+            matrix_space_id = async_to_sync(self.create_matrix_room)(
+                name=form.data['name'],
+                initial_state=[
+                    {
+                        'type': 'm.room.member',
+                        'content': {
+                            'membership': 'join',
+                            'displayname': form.data['name'],
+                        },
+                        'state_key': self.object.responsible_user.user_id,
+                    },
+                ],
+                space=True,
+            )
+            self.object.matrix_room_id = matrix_space_id
         self.object.save()
         return response
+
+    async def create_matrix_room(
+            self,
+            **kwargs,
+    ):
+        client: nio.AsyncClient = await self.object.responsible_user.get_client()
+        response: nio.RoomCreateResponse = await client.room_create(
+            **kwargs
+        )
+        if type(response) is nio.RoomCreateError:
+            messages.warning(
+                self.request,
+                _('failed to create matrix space: %(errcode)s %(error)s') % {
+                    'errcode': response.status_code,
+                    'error': response.message,
+                },
+            )
+            return None
+        return response.room_id

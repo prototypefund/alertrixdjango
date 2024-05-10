@@ -90,7 +90,7 @@ class CompanyForm(
         handler = models.Handler.objects.get(
             id=handler_id,
         )
-        if self.user not in handler.users:
+        if self.user.groups.filter(id=handler.users.id).count() < 1:
             if 'handler' not in self.errors:
                 self.add_error(
                     'handler',

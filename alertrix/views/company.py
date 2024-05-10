@@ -219,3 +219,35 @@ class CreateCompany(
             )
             return None
         return response.room_id
+
+
+class DetailCompany(
+    mixins.UserIsAdminForThisObjectMixin,
+    mixins.ContextActionsMixin,
+    DetailView,
+):
+    model = models.Company
+    query_pk_and_slug = False
+
+    def get_context_actions(self):
+        return [
+            {'url': reverse('comp.list'), 'label': _('list')},
+            {'url': reverse('comp.edit', kwargs=dict(slug=self.object.pk)), 'label': _('edit')},
+        ]
+
+    def check_matrix_room_id(self):
+        if not self.object.matrix_room_id:
+            messages.error(
+                self.request,
+                _('no matrix space associated with this %(object)s') % {
+                    'object': type(self.object)._meta.verbose_name,
+                },
+            )
+
+    def check(self):
+        self.check_matrix_room_id()
+
+    def get(self, request, *args, **kwargs):
+        res = super().get(request, *args, **kwargs)
+        self.check()
+        return res

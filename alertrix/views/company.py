@@ -114,8 +114,31 @@ class CreateCompany(
                         'state_key': self.object.responsible_user.user_id,
                     },
                 ],
+                invite=(
+                    [
+                        str(self.request.user.matrix_id)
+                    ]
+                    if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+                ),
+                power_level_override=(
+                    {
+                        'users': {
+                            self.object.responsible_user.user_id: 100,
+                            str(self.request.user.matrix_id): 100,
+                        },
+                    }
+                    if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+                ),
                 space=True,
             )
+            if matrix_space_id:
+                if self.request.user.matrix_id:
+                    messages.success(
+                        self.request,
+                        _('%(user_id)s has been invited') % {
+                            'user_id': self.request.user.matrix_id,
+                        },
+                    )
             self.object.matrix_room_id = matrix_space_id
         self.object.save()
         return response

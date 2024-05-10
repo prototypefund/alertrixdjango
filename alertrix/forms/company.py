@@ -17,7 +17,6 @@ class CompanyForm(
             'name',
             'handler',
             'slug',
-            'admins',
             'matrix_room_id',
         ]
         widgets = {
@@ -33,6 +32,7 @@ class CompanyForm(
         optional = [
         ]
         advanced = [
+            'admin_group_name',
         ]
     name = forms.CharField(
         label=_('name'),
@@ -44,6 +44,18 @@ class CompanyForm(
                 ]),
             },
         ),
+    )
+    admin_group_name = forms.CharField(
+        label=_('admin group name'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'style': ';'.join([
+                    'resize: none',
+                ]),
+            },
+        ),
+        required=False,
     )
 
     def __init__(
@@ -73,6 +85,30 @@ class CompanyForm(
                     },
                 )
         return slug
+
+    def clean_admin_group_name(self):
+        admin_group_name = self.data.get('admin_group_name') or '%s_admins' % self.clean_slug()
+        if not admin_group_name:
+            if 'admin_group_name' not in self.errors:
+                self.add_error(
+                    'admin_group_name',
+                    _('%(field)s cannot be empty') % {
+                        'field': self.fields['admin_group_name'].label,
+                    },
+                )
+        if self.user.groups.filter(
+                name=admin_group_name,
+        ).exists():
+            return admin_group_name
+        else:
+            if Group.objects.filter(
+                name=admin_group_name,
+            ).exists():
+                self.add_error(
+                    'admin_group_name',
+                    _('group already exists'),
+                )
+        return admin_group_name
 
     def clean_handler(self):
         raw_selection = self.data['handler']

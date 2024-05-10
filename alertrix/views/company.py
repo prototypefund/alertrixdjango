@@ -59,4 +59,23 @@ class CreateCompany(
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        group_name = form.cleaned_data['admin_group_name']
+        if self.request.user.groups.filter(
+                name=group_name,
+        ).exists():
+            group = Group.objects.get(
+                name=group_name,
+            )
+        else:
+            group = Group.objects.create(
+                name=group_name,
+            )
+            self.request.user.groups.add(
+                group,
+            )
+        self.object.admins = group
+        messages.success(
+            self.request,
+            _('user has been added to group'),
+        )
         return response

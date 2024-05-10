@@ -20,6 +20,7 @@ class UserIsInGroupForThisObjectMixin(
     abc.ABC,
 ):
 
+    @property
     @abc.abstractmethod
     def group_attribute_name(self) -> str:
         return ''
@@ -29,7 +30,6 @@ class UserIsInGroupForThisObjectMixin(
 
 
 class UserIsAdminForThisObjectMixin(
-    UserPassesTestMixin,
+    UserIsInGroupForThisObjectMixin,
 ):
-    def test_func(self):
-        return self.get_object().admins in self.request.user.groups.all()
+    group_attribute_name = 'admins'

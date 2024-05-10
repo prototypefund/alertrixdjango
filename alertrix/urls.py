@@ -13,5 +13,6 @@ urlpatterns = [
         path('<slug:slug>/edit', views.company.UpdateCompany.as_view(), name='comp.edit'),
     ])),
     path('appservice/', include([
+        path('', views.appservice.ListApplicationServices.as_view(), name='appservice.list'),
     ]))
 ]

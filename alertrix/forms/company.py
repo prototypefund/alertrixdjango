@@ -246,4 +246,18 @@ class CompanyForm(
                                 'field': self.fields['matrix_user_id'].label,
                             },
                         )
+        else:
+            account_info = async_to_sync(handler.application_service.request)(
+                method='GET',
+                path='/_matrix/client/v3/profile/%(user_id)s' % {
+                    'user_id': user_id,
+                },
+            )
+            if 'errcode' not in account_info:
+                self.add_error(
+                    'matrix_user_id',
+                    _('%(user_id)s already exists on the homeserver but is unknown to the application service') % {
+                        'user_id': user_id,
+                    },
+                )
         return user_id

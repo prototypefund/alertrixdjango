@@ -33,6 +33,7 @@ class CompanyForm(
             ),
         }
         optional = [
+            'slug',
             'matrix_room_id',
         ]
         advanced = [

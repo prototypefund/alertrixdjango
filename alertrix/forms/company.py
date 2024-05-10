@@ -5,8 +5,10 @@ from django import forms
 from django.contrib.auth.models import Group
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
 from matrixappservice import models as mas_models
 from .. import models
+from .. import widgets
 
 
 class CompanyForm(

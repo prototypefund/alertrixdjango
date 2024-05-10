@@ -21,3 +21,53 @@ class ListApplicationServices(
             admins__in=self.request.user.groups.all(),
         )
         return qs
+
+
+class DetailApplicationService(
+    mixins.UserIsAdminForThisObjectMixin,
+    mixins.ContextActionsMixin,
+    DetailView,
+):
+    model = models.ApplicationServiceRegistration
+    template_name = 'alertrix/applicationserviceregistration_detail.html'
+
+    def get_context_actions(self):
+        return [
+            {'url': reverse('appservice.list'), 'label': _('back')},
+        ]
+
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data(**kwargs)
+        cd['namespaces'] = [
+            [k, self.object.namespace_set.filter(scope=k)]
+            for k in self.object.namespace_set.model.ScopeChoices
+            if self.object.namespace_set.filter(scope=k)
+        ]
+        cd['check'] = self.check()
+        return cd
+
+    def check_handler(self):
+        failed = False
+        try:
+            if self.object.handler is None:
+                failed = True
+        except AttributeError:
+            failed = True
+        if failed:
+            messages.error(
+                self.request,
+                _('<a href="%(url)s">you need to add a handler</a>') % {
+                    'url': '',
+                },
+                extra_tags='safe',
+            )
+
+    def check(self):
+        return {
+            'handler': self.check_handler(),
+        }
+
+    def get(self, request, *args, **kwargs):
+        r = super().get(request, *args, **kwargs)
+        self.check()
+        return r

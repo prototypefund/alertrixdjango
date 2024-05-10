@@ -14,5 +14,6 @@ urlpatterns = [
     ])),
     path('appservice/', include([
         path('', views.appservice.ListApplicationServices.as_view(), name='appservice.list'),
+        path('<int:pk>', views.appservice.DetailApplicationService.as_view(), name='appservice.detail'),
     ]))
 ]

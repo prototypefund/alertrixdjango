@@ -78,4 +78,5 @@ class CreateCompany(
             self.request,
             _('user has been added to group'),
         )
+        self.object.save()
         return response

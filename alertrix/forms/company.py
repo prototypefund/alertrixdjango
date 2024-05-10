@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 import synapse.appservice
+from asgiref.sync import async_to_sync
 from django import forms
 from django.contrib.auth.models import Group
 from django.utils.text import slugify

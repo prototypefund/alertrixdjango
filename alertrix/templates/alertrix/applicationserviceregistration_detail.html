@@ -1,0 +1,23 @@
+{% extends 'alertrix/detail.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{% if object %}{{ object }}{% else %}{% trans 'new company' %}{% endif %}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<h1>
+    {{ object }}
+</h1>
+<div>
+    [m]: <a href="{{ object.homeserver.url }}">{{ object.homeserver.server_name }}</a>
+</div>
+<div>
+    <label>{% trans 'managed by' %}</label>: {{ object.admins }}
+</div>
+<div>
+    <label>{% trans 'available to' %}</label>: {{ object.handler.users }}
+</div>
+{% endblock %}

@@ -12,4 +12,6 @@ urlpatterns = [
         path('<slug:slug>/invite', views.company.InviteUser.as_view(), name='comp.invite'),
         path('<slug:slug>/edit', views.company.UpdateCompany.as_view(), name='comp.edit'),
     ])),
+    path('appservice/', include([
+    ]))
 ]

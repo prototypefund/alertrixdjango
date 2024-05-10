@@ -17,6 +17,7 @@ class CompanyForm(
         model = models.Company
         fields = [
             'name',
+            'description',
             'handler',
             'slug',
             'matrix_room_id',
@@ -49,6 +50,14 @@ class CompanyForm(
                 ]),
             },
         ),
+    )
+    description = forms.CharField(
+        label=_('description'),
+        widget=forms.Textarea(
+            attrs={
+            },
+        ),
+        required=False,
     )
     matrix_user_id = forms.CharField(
         label=_('matrix user id'),

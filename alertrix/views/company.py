@@ -136,6 +136,7 @@ class CreateCompany(
             matrix_space_id = async_to_sync(self.create_matrix_room)(
                 alias=alias,
                 name=form.data['name'],
+                topic=form.data['description'],
                 initial_state=[
                     {
                         'type': 'm.room.member',

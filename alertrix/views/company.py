@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView
 from django.views.generic import ListView
+from django.views.generic import DetailView
 from matrixappservice import models as mas_models
 from .. import forms
 from .. import mixins

@@ -15,6 +15,19 @@ class ContextActionsMixin:
         return self.context_actions
 
 
+class UserIsInGroupForThisObjectMixin(
+    UserPassesTestMixin,
+    abc.ABC,
+):
+
+    @abc.abstractmethod
+    def group_attribute_name(self) -> str:
+        return ''
+
+    def test_func(self):
+        return getattr(self.get_object(), self.group_attribute_name) in self.request.user.groups.all()
+
+
 class UserIsAdminForThisObjectMixin(
     UserPassesTestMixin,
 ):

@@ -37,7 +37,6 @@ class CompanyForm(
         ]
         advanced = [
             'matrix_room_id',
-            'federate',
             'matrix_user_id',
             'admin_group_name',
         ]
@@ -82,11 +81,6 @@ class CompanyForm(
                 ]),
             },
         ),
-        required=False,
-    )
-    federate = forms.BooleanField(
-        label=_('federate'),
-        initial=True,
         required=False,
     )
 
@@ -278,8 +272,14 @@ class CompanyCreateForm(
             'slug',
         ]
         advanced = CompanyForm.Meta.advanced + [
+            'federate',
             'slug',
         ]
+    federate = forms.BooleanField(
+        label=_('federate'),
+        initial=True,
+        required=False,
+    )
 
     def clean_slug(self):
         slug = self.data.get('slug') or slugify(self.data.get('name'))

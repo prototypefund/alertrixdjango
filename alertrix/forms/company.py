@@ -280,3 +280,30 @@ class CompanyForm(
                     },
                 )
         return user_id
+
+
+class InviteUser(
+    forms.Form,
+):
+    matrix_id = forms.CharField(
+    )
+    power_level = forms.IntegerField(
+        max_value=100,
+        min_value=0,
+        required=False,
+        widget=widgets.IntegerWithRecommendationsField(
+            options=[
+                {'value': 0, 'label': _('standard')},
+                {'value': 50, 'label': _('moderator')},
+                {'value': 100, 'label': _('admin')},
+            ],
+        ),
+    )
+
+    class Meta:
+        title = _('invite user')
+        submit_text = _('invite')
+        fields = (
+            'matrix_id',
+            'power_level',
+        )

@@ -56,3 +56,7 @@ class CreateCompany(
         )
         new_form._errors = form._errors
         return self.render_to_response(self.get_context_data(form=new_form))
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response

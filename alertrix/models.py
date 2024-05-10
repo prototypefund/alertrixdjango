@@ -47,6 +47,23 @@ class Handler(
         null=True,
     )
 
+    async def on_query_user(
+            self,
+            request,
+            user_id,
+    ):
+        try:
+            user = await MatrixUser.objects.aget(
+                user_id=user_id,
+            )
+        except MatrixUser.DoesNotExist:
+            user = MatrixUser(
+                user_id,
+                homeserver=await sync_to_async(self.app_service.__getattribute__)('homeserver'),
+                app_service=self.app_service,
+            )
+            await user.register()
+
     async def on_m_room_message(
             self,
             request,

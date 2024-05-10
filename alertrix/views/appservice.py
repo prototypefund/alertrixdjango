@@ -34,6 +34,7 @@ class DetailApplicationService(
     def get_context_actions(self):
         return [
             {'url': reverse('appservice.list'), 'label': _('back')},
+            {'url': reverse('appservice.setup', kwargs=dict(pk=self.object.pk)), 'label': _('setup')},
         ]
 
     def get_context_data(self, **kwargs):
@@ -71,3 +72,27 @@ class DetailApplicationService(
         r = super().get(request, *args, **kwargs)
         self.check()
         return r
+
+
+class SetupApplicationService(
+    mixins.UserIsAdminForThisObjectMixin,
+    mixins.ContextActionsMixin,
+    DetailView,
+):
+    model = models.ApplicationServiceRegistration
+    template_name = 'alertrix/applicationserviceregistration_setup.html'
+
+    def get_context_actions(self):
+        return [
+            {'url': reverse('appservice.list'), 'label': _('list')},
+            {'url': reverse('appservice.detail', kwargs=dict(pk=self.object.pk)), 'label': _('back')},
+        ]
+
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data(**kwargs)
+        cd['namespaces'] = [
+            [k, self.object.namespace_set.filter(scope=k)]
+            for k in self.object.namespace_set.model.ScopeChoices
+            if self.object.namespace_set.filter(scope=k)
+        ]
+        return cd

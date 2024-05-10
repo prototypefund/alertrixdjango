@@ -1,0 +1,30 @@
+{% extends 'alertrix/detail.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{% blocktranslate with title=object %}setting up {{ title }}{% endblocktranslate %}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div>
+    <h1>
+        {% blocktranslate with title=object %}setting up {{ title }}{% endblocktranslate %}
+    </h1>
+</div>
+<p>{% blocktranslate %}specify the path to this application services config by adding the following lines to your <code>homeserver.yaml</code>{% endblocktranslate %}</p>
+<div class="code">
+    <pre><code>app_service_config_files:
+  - /path/to/synapse-config/{{ object.id_homeserver }}.yaml</code></pre>
+</div>
+<p>{% blocktranslate %}copy the following code snippet into the file you previously specified{% endblocktranslate %}</p>
+<div class="code">
+    <pre><code>{% include 'matrix/applicationserviceregistration.yaml' %}</code></pre>
+</div>
+<p>{% blocktranslate %}now restart your homeserver{% endblocktranslate %}</p>
+<p>{% blocktranslate %}you can test the connection by running the following command{% endblocktranslate %}</p>
+<div class="code">
+    <pre><code>curl -H "Authorization: Bearer {{ object.as_token }}" -d '{"transaction_id": "meow"}' {{ object.homeserver.url }}/_matrix/client/v1/appservice/{{ object.id_homeserver }}/ping</code></pre>
+</div>
+{% endblock %}

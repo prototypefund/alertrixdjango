@@ -37,7 +37,6 @@ class CompanyForm(
         ]
         advanced = [
             'matrix_room_id',
-            'matrix_user_id',
             'admin_group_name',
         ]
     name = forms.CharField(
@@ -55,18 +54,6 @@ class CompanyForm(
         label=_('description'),
         widget=forms.Textarea(
             attrs={
-            },
-        ),
-        required=False,
-    )
-    matrix_user_id = forms.CharField(
-        label=_('matrix user id'),
-        widget=forms.Textarea(
-            attrs={
-                'rows': 1,
-                'style': ';'.join([
-                    'resize: none',
-                ]),
             },
         ),
         required=False,
@@ -170,11 +157,24 @@ class CompanyCreateForm(
         ]
         advanced = CompanyForm.Meta.advanced + [
             'federate',
+            'matrix_user_id',
             'slug',
         ]
     federate = forms.BooleanField(
         label=_('federate'),
         initial=True,
+        required=False,
+    )
+    matrix_user_id = forms.CharField(
+        label=_('matrix user id'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'style': ';'.join([
+                    'resize: none',
+                ]),
+            },
+        ),
         required=False,
     )
 

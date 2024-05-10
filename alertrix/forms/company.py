@@ -32,6 +32,8 @@ class CompanyForm(
         }
         optional = [
         ]
+        advanced = [
+        ]
     name = forms.CharField(
         label=_('name'),
         widget=forms.Textarea(
@@ -57,6 +59,8 @@ class CompanyForm(
         self.user = user
         for field_name in self.Meta.optional:
             self.fields[field_name].required = False
+        for field_name in self.Meta.advanced:
+            self.fields[field_name].widget.attrs['class'] = 'advanced'
 
     def clean_slug(self):
         slug = self.data.get('slug') or slugify(self.data.get('name'))

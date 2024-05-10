@@ -20,7 +20,6 @@ class CompanyForm(
             'name',
             'description',
             'handler',
-            'slug',
             'matrix_room_id',
         ]
         widgets = {
@@ -34,11 +33,9 @@ class CompanyForm(
             ),
         }
         optional = [
-            'slug',
             'matrix_room_id',
         ]
         advanced = [
-            'slug',
             'matrix_room_id',
             'federate',
             'matrix_user_id',
@@ -108,18 +105,6 @@ class CompanyForm(
             self.fields[field_name].required = False
         for field_name in self.Meta.advanced:
             self.fields[field_name].widget.attrs['class'] = 'advanced'
-
-    def clean_slug(self):
-        slug = self.data.get('slug') or slugify(self.data.get('name'))
-        if not slug:
-            if 'slug' not in self.errors:
-                self.add_error(
-                    'slug',
-                    _('%(field)s cannot be empty') % {
-                        'field': self.fields['slug'].label,
-                    },
-                )
-        return slug
 
     def clean_admin_group_name(self):
         admin_group_name = self.data.get('admin_group_name') or '%s_admins' % self.clean_slug()
@@ -287,11 +272,26 @@ class CompanyCreateForm(
     class Meta(CompanyForm.Meta):
         title = _('new company')
         fields = CompanyForm.Meta.fields + [
+            'slug',
         ]
         optional = CompanyForm.Meta.optional + [
+            'slug',
         ]
         advanced = CompanyForm.Meta.advanced + [
+            'slug',
         ]
+
+    def clean_slug(self):
+        slug = self.data.get('slug') or slugify(self.data.get('name'))
+        if not slug:
+            if 'slug' not in self.errors:
+                self.add_error(
+                    'slug',
+                    _('%(field)s cannot be empty') % {
+                        'field': self.fields['slug'].label,
+                    },
+                )
+        return slug
 
 
 class InviteUser(

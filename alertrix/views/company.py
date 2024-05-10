@@ -411,6 +411,7 @@ class UpdateCompany(
 
     def form_valid(self, form):
         r = super().form_valid(form)
+        async_to_sync(self.update_room_name)(form.cleaned_data['name'])
         return r
 
     async def put_room_state(
@@ -434,6 +435,14 @@ class UpdateCompany(
                     'error': response.message,
                 },
             )
+
+    async def update_room_name(self, name):
+        return await self.put_room_state(
+            'm.room.name',
+            {
+                'name': name,
+            }
+        )
 
     def get_form_kwargs(self):
         kwargs = {

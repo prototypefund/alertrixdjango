@@ -37,6 +37,7 @@ class CompanyForm(
         ]
         advanced = [
             'matrix_room_id',
+            'federate',
             'matrix_user_id',
             'admin_group_name',
         ]
@@ -81,6 +82,11 @@ class CompanyForm(
                 ]),
             },
         ),
+        required=False,
+    )
+    federate = forms.BooleanField(
+        label=_('federate'),
+        initial=True,
         required=False,
     )
 

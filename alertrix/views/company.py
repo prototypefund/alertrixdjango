@@ -138,6 +138,7 @@ class CreateCompany(
                 alias=alias,
                 name=form.data['name'],
                 topic=form.data['description'],
+                federate=form.data['federate'],
                 initial_state=[
                     {
                         'type': 'm.room.member',

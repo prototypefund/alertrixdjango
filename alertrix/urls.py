@@ -10,5 +10,6 @@ urlpatterns = [
         path('new', views.company.CreateCompany.as_view(), name='comp.new'),
         path('<slug:slug>', views.company.DetailCompany.as_view(), name='comp.detail'),
         path('<slug:slug>/invite', views.company.InviteUser.as_view(), name='comp.invite'),
+        path('<slug:slug>/edit', views.company.UpdateCompany.as_view(), name='comp.edit'),
     ])),
 ]

@@ -390,3 +390,54 @@ class InviteUser(
         cd = super().get_context_data()
         cd['form'] = self.form_class()
         return cd
+
+
+class UpdateCompany(
+    mixins.ContextActionsMixin,
+    UpdateView,
+):
+    model = models.Company
+    form_class = forms.company.CompanyForm
+    template_name = 'alertrix/form.html'
+
+    def get_success_url(self):
+        return reverse('comp.detail', kwargs={'slug': self.object.slug})
+
+    def get_context_actions(self):
+        return [
+            {'url': reverse('comp.list'), 'label': _('list')},
+            {'url': reverse('comp.detail', kwargs={'slug': self.object.slug}), 'label': _('back')},
+        ]
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        return r
+
+    async def put_room_state(
+            self,
+            event_type: str,
+            content: dict,
+    ):
+        user = self.object.responsible_user
+        client: nio.AsyncClient = await user.get_client()
+        response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
+            self.object.matrix_room_id,
+            event_type,
+            content,
+        )
+        if type(response) is nio.RoomPutStateError:
+            messages.error(
+                self.request,
+                _('failed putting room state (%(event_type)s): %(errcode)s %(error)') % {
+                    'event_type': event_type,
+                    'errcode': response.status_code,
+                    'error': response.message,
+                },
+            )
+
+    def get_form_kwargs(self):
+        kwargs = {
+            'user': self.request.user,
+            **super().get_form_kwargs(),
+        }
+        return kwargs

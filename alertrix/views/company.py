@@ -464,4 +464,5 @@ class UpdateCompany(
             'user': self.request.user,
             **super().get_form_kwargs(),
         }
+        kwargs['initial']['admin_group_name'] = self.object.admins.name
         return kwargs

@@ -466,4 +466,5 @@ class UpdateCompany(
         }
         kwargs['initial']['admin_group_name'] = self.object.admins.name
         kwargs['initial']['name'] = self.object.get_name()
+        kwargs['initial']['description'] = self.object.get_description()
         return kwargs

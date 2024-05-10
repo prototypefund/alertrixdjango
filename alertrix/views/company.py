@@ -3,15 +3,36 @@ import synapse.appservice
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView
+from django.views.generic import ListView
 from matrixappservice import models as mas_models
 from .. import forms
 from .. import mixins
 from .. import models
+
+
+class ListCompanies(
+    LoginRequiredMixin,
+    ListView,
+):
+    model = models.Company
+    template_name = 'alertrix/company_list.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(
+            admins__in=self.request.user.groups.all(),
+        )
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset
 
 
 class CreateCompany(

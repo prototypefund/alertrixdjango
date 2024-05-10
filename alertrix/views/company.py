@@ -1,3 +1,4 @@
+import nio
 import synapse.appservice
 from asgiref.sync import async_to_sync
 from django.conf import settings

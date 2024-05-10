@@ -254,3 +254,134 @@ class DetailCompany(
         res = super().get(request, *args, **kwargs)
         self.check()
         return res
+
+
+class InviteUser(
+    mixins.UserIsAdminForThisObjectMixin,
+    mixins.ContextActionsMixin,
+    SingleObjectTemplateResponseMixin,
+    SingleObjectMixin,
+    FormView,
+):
+    model = models.Company
+    form_class = forms.company.InviteUser
+    template_name = 'alertrix/form.html'
+
+    def get_context_actions(self):
+        return [
+            {'url': reverse('comp.list'), 'label': _('list')},
+            {'url': reverse('comp.detail', kwargs=dict(slug=self.object.pk)), 'label': _('back')},
+        ]
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        room_id = self.object.matrix_room_id
+        user_id = form.data['matrix_id']
+        async_to_sync(self.invite_user)(
+            user_id,
+            room_id,
+        )
+        if form.data['power_level']:
+            power_level = int(form.data['power_level'])
+            async_to_sync(self.change_power_level)(
+                user_id,
+                room_id,
+                power_level,
+            )
+        return super().form_valid(form)
+
+    async def invite_user(
+            self,
+            user_id,
+            room_id,
+    ):
+        mx_user = await sync_to_async(self.object.__getattribute__)('responsible_user')
+        client = await mx_user.get_client()
+        resp = await client.room_invite(
+            room_id,
+            user_id,
+        )
+        if type(resp) == nio.RoomInviteResponse:
+            messages.success(
+                self.request,
+                _('%(user_id)s has been invited') % {
+                    'user_id': user_id,
+                },
+            )
+        if type(resp) == nio.RoomInviteError:
+            resp: nio.RoomInviteError
+            messages.error(
+                self.request,
+                _('%(user_id)s could not be invited to this room: %(errcode)s %(error)s') % {
+                    'user_id': user_id,
+                    'error': resp.message,
+                    'errcode': resp.status_code,
+                },
+            )
+        return resp
+
+    async def change_power_level(
+            self,
+            user_id,
+            room_id,
+            power_level,
+    ):
+        mx_user = await sync_to_async(self.object.__getattribute__)('responsible_user')
+        client = await mx_user.get_client()
+        resp: nio.RoomGetStateResponse | nio.RoomGetStateError = await client.room_get_state(
+            room_id,
+        )
+        if type(resp) == nio.RoomGetStateError:
+            messages.error(
+                self.request,
+                _('unable to get room state: %(errcode)s %(error)s') % {
+                    'errcode': resp.status_code,
+                    'error': resp.message,
+                },
+            )
+            return
+        power_levels = None
+        for event in resp.events:
+            if event['type'] == 'm.room.power_levels':
+                power_levels = event['content']
+                break
+        power_levels['users'][user_id] = power_level
+        resp: nio.RoomPutStateError | nio.RoomPutStateResponse = await client.room_put_state(
+            room_id,
+            'm.room.power_levels',
+            power_levels,
+        )
+        if type(resp) == nio.RoomPutStateResponse:
+            messages.success(
+                self.request,
+                _('power level for %(user_id)s has been set to %(power_level)d') % {
+                    'user_id': user_id,
+                    'power_level': power_level,
+                },
+            )
+        if type(resp) == nio.RoomPutStateError:
+            messages.error(
+                self.request,
+                _('%(user_id)s\'s power level could not be set to %(power_level)d: %(errcode)s %(error)s') % {
+                    'user_id': user_id,
+                    'power_level': power_level,
+                    'error': resp.message,
+                    'errcode': resp.status_code,
+                },
+            )
+        return resp
+
+    def get_success_url(self):
+        return reverse('comp.detail', kwargs={'slug': self.object.slug})
+
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data()
+        cd['form'] = self.form_class()
+        return cd

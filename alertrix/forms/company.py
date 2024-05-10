@@ -37,6 +37,7 @@ class CompanyForm(
             'matrix_room_id',
         ]
         advanced = [
+            'slug',
             'matrix_room_id',
             'federate',
             'matrix_user_id',

@@ -190,6 +190,109 @@ class CompanyCreateForm(
                 )
         return slug
 
+    def clean_matrix_user_id(self):
+        handler = self.clean_handler()
+        if handler is None:
+            return
+        user_namespaces = mas_models.Namespace.objects.filter(
+            app_service=handler.application_service,
+            scope=mas_models.Namespace.ScopeChoices.users,
+        )
+        # Create a synapse instance to check if its application service is interested in the generated user id
+        syn: synapse.appservice.ApplicationService = async_to_sync(
+            handler.application_service.get_synapse_application_service
+        )()
+        if not self.data['matrix_user_id']:
+            # Prepare the user_id variable
+            user_id = self.clean_slug()
+            if not syn.is_interested_in_user(
+                    user_id=user_id,
+            ):
+                for namespace in user_namespaces:
+                    if '*' not in namespace.regex:
+                        continue
+                    localpart = namespace.regex.lstrip('@').replace(
+                        '*',
+                        user_id,
+                    )
+                    interested_check_against = '@%(localpart)s:%(server_name)s' % {
+                        'localpart': localpart,
+                        'server_name': handler.application_service.homeserver.server_name,
+                    }
+                    if not syn.is_interested_in_user(
+                            user_id=interested_check_against,
+                    ):
+                        continue
+                    # Overwrite user_id variable
+                    user_id = interested_check_against
+                    break
+                if not user_id:
+                    self.add_error(
+                        'matrix_user_id',
+                        _('%(field)s could not be corrected automatically') % {
+                            'field': self.fields['matrix_user_id'].label,
+                        },
+                        )
+        else:
+            user_id = self.data['matrix_user_id']
+        if not syn.is_interested_in_user(
+            user_id=user_id,
+        ):
+            if 'matrix_user_id' not in self.errors:
+                self.add_error(
+                    'matrix_user_id',
+                    _('%(app_service)s is not interested in %(user_id)s') % {
+                        'app_service': handler.application_service,
+                        'user_id': user_id,
+                    },
+                )
+        if mas_models.User.objects.filter(
+                user_id=user_id,
+        ).exists():
+            mu = mas_models.User.objects.get(
+                user_id=user_id,
+            )
+            devices = mas_models.Device.objects.filter(
+                user=mu,
+            )
+            if devices.count() < 1:
+                if 'matrix_user_id' not in self.errors:
+                    self.add_error(
+                        'matrix_user_id',
+                        _('%(user_id)s is misconfigured and cannot be used') % {
+                            'user_id': user_id,
+                        },
+                    )
+            if models.Company.objects.filter(
+                    responsible_user=mu,
+            ).exists():
+                comp = models.Company.objects.get(
+                    responsible_user=mu,
+                )
+                if comp.responsible_user.user_id != user_id:
+                    if 'matrix_user_id' not in self.errors:
+                        self.add_error(
+                            'matrix_user_id',
+                            _('%(field)s already taken') % {
+                                'field': self.fields['matrix_user_id'].label,
+                            },
+                        )
+        else:
+            account_info = async_to_sync(handler.application_service.request)(
+                method='GET',
+                path='/_matrix/client/v3/profile/%(user_id)s' % {
+                    'user_id': user_id,
+                },
+            )
+            if 'errcode' not in account_info:
+                self.add_error(
+                    'matrix_user_id',
+                    _('%(user_id)s already exists on the homeserver but is unknown to the application service') % {
+                        'user_id': user_id,
+                    },
+                )
+        return user_id
+
 
 class InviteUser(
     forms.Form,

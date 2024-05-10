@@ -11,9 +11,18 @@
 
 {% block content %}
 {{ block.super }}
+{% if object %}
+<h1>
+    {{ object }}
+</h1>
+<h2>
+    {{ form.Meta.title }}
+</h2>
+{% else %}
 <h1>
     {{ form.Meta.title }}
 </h1>
+{% endif %}
 <div class="form-control">
     <div class="advanced-control">
         <input type="checkbox" id="show-advanced-input-fields">

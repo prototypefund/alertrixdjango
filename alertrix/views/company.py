@@ -52,7 +52,7 @@ class CreateCompany(
 ):
     permission_required = 'alertrix.add_company'
     model = models.Company
-    form_class = forms.company.CompanyForm
+    form_class = forms.company.CompanyCreateForm
     template_name = 'alertrix/form.html'
     http_method_names = [
         'get',

@@ -15,7 +15,6 @@ class CompanyForm(
     forms.ModelForm,
 ):
     class Meta:
-        title = _('new company')
         model = models.Company
         fields = [
             'name',
@@ -280,6 +279,13 @@ class CompanyForm(
                     },
                 )
         return user_id
+
+
+class CompanyCreateForm(
+    CompanyForm,
+):
+    class Meta(CompanyForm.Meta):
+        title = _('new company')
 
 
 class InviteUser(

@@ -1,4 +1,5 @@
 import nio
+from asgiref.sync import async_to_sync
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group
 from django.db import models

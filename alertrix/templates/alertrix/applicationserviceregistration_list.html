@@ -1,0 +1,24 @@
+{% extends 'alertrix/base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load matrix %}
+
+{% block title %}
+{% trans 'applicationservices' %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans 'applicationservices' %}</h1>
+<div class="main-list">
+    {% for obj in object_list %}
+    <div onclick="window.location.href = '{% url 'application_service_reg.detail' obj.pk %}'" style="min-height: 128">
+        <div>
+            <div>
+                {{ obj }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -19,6 +19,7 @@ class UserIsInGroupForThisObjectMixin(
     UserPassesTestMixin,
     abc.ABC,
 ):
+    allow_admins = True
 
     @property
     @abc.abstractmethod
@@ -26,7 +27,10 @@ class UserIsInGroupForThisObjectMixin(
         return ''
 
     def test_func(self):
-        return getattr(self.get_object(), self.group_attribute_name) in self.request.user.groups.all()
+        return any([
+            self.request.user.is_superuser,
+            getattr(self.get_object(), self.group_attribute_name) in self.request.user.groups.all()
+        ])
 
 
 class UserIsAdminForThisObjectMixin(

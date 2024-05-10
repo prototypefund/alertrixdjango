@@ -14,6 +14,7 @@ from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from matrixappservice import models as mas_models
 from .. import forms
 from .. import mixins

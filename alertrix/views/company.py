@@ -80,5 +80,24 @@ class CreateCompany(
             self.request,
             _('user has been added to group'),
         )
+        if not self.object.responsible_user:
+            homeserver_name = form.cleaned_data['matrix_user_id'].split(':')[1]
+            hs = mas_models.Homeserver.objects.get(
+                server_name=homeserver_name,
+            )
+            mu, is_new = mas_models.User.objects.get_or_create(
+                user_id=form.cleaned_data['matrix_user_id'],
+                homeserver=hs,
+                app_service=self.object.handler.application_service,
+            )
+            if is_new:
+                try:
+                    async_to_sync(mu.register)()
+                except matrixappservice.exceptions.MUserInUse:
+                    logging.error(
+                        '%(user_id)s already exists on server, but is not known to the database',
+                    )
+            mu.save()
+            self.object.responsible_user = mu
         self.object.save()
         return response

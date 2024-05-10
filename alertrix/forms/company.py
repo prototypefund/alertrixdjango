@@ -34,6 +34,7 @@ class CompanyForm(
         optional = [
         ]
         advanced = [
+            'matrix_user_id',
             'admin_group_name',
         ]
     name = forms.CharField(
@@ -46,6 +47,18 @@ class CompanyForm(
                 ]),
             },
         ),
+    )
+    matrix_user_id = forms.CharField(
+        label=_('matrix user id'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'style': ';'.join([
+                    'resize: none',
+                ]),
+            },
+        ),
+        required=False,
     )
     admin_group_name = forms.CharField(
         label=_('admin group name'),

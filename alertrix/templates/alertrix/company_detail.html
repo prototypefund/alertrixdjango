@@ -11,10 +11,8 @@
 <h1>
     {{ object }}
 </h1>
-{% with matrix_room=object.get_matrix_room %}
-<a href="element://vector/webapp/#/room/{{ matrix_room.matrix_room_id }}">{{ matrix_room.matrix_room_id }}</a>
-{% endwith %}
-{% for data in object.get_matrix_room.get_room_info %}
+<a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
+{% for data in object.get_room_info %}
 {% if data.type == 'm.room.topic' %}
 <div>
     {{ data.content.topic }}

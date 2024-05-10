@@ -2,6 +2,7 @@ import logging
 import nio
 import synapse.appservice
 from asgiref.sync import async_to_sync
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin

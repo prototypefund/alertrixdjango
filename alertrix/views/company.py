@@ -412,6 +412,7 @@ class UpdateCompany(
     def form_valid(self, form):
         r = super().form_valid(form)
         async_to_sync(self.update_room_name)(form.cleaned_data['name'])
+        async_to_sync(self.update_room_description)(form.cleaned_data['description'])
         return r
 
     async def put_room_state(
@@ -442,6 +443,20 @@ class UpdateCompany(
             {
                 'name': name,
             }
+        )
+
+    async def update_room_description(self, topic):
+        return await self.put_room_state(
+            'm.room.topic',
+            {
+                'topic': topic,
+                'org.matrix.msc3765.topic': [
+                    {
+                        'body': topic,
+                        'mimetype': 'text/plain',
+                    },
+                ],
+            },
         )
 
     def get_form_kwargs(self):

@@ -286,6 +286,12 @@ class CompanyCreateForm(
 ):
     class Meta(CompanyForm.Meta):
         title = _('new company')
+        fields = CompanyForm.Meta.fields + [
+        ]
+        optional = CompanyForm.Meta.optional + [
+        ]
+        advanced = CompanyForm.Meta.advanced + [
+        ]
 
 
 class InviteUser(

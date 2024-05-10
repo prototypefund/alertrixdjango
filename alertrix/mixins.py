@@ -33,3 +33,9 @@ class UserIsAdminForThisObjectMixin(
     UserIsInGroupForThisObjectMixin,
 ):
     group_attribute_name = 'admins'
+
+
+class UserIsUserOfThisObjectMixin(
+    UserIsInGroupForThisObjectMixin,
+):
+    group_attribute_name = 'users'

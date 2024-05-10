@@ -37,7 +37,6 @@ class CompanyForm(
         ]
         advanced = [
             'matrix_room_id',
-            'admin_group_name',
         ]
     name = forms.CharField(
         label=_('name'),
@@ -58,18 +57,6 @@ class CompanyForm(
         ),
         required=False,
     )
-    admin_group_name = forms.CharField(
-        label=_('admin group name'),
-        widget=forms.Textarea(
-            attrs={
-                'rows': 1,
-                'style': ';'.join([
-                    'resize: none',
-                ]),
-            },
-        ),
-        required=False,
-    )
 
     def __init__(
             self,
@@ -86,30 +73,6 @@ class CompanyForm(
             self.fields[field_name].required = False
         for field_name in self.Meta.advanced:
             self.fields[field_name].widget.attrs['class'] = 'advanced'
-
-    def clean_admin_group_name(self):
-        admin_group_name = self.data.get('admin_group_name') or '%s_admins' % self.clean_slug()
-        if not admin_group_name:
-            if 'admin_group_name' not in self.errors:
-                self.add_error(
-                    'admin_group_name',
-                    _('%(field)s cannot be empty') % {
-                        'field': self.fields['admin_group_name'].label,
-                    },
-                )
-        if self.user.groups.filter(
-                name=admin_group_name,
-        ).exists():
-            return admin_group_name
-        else:
-            if Group.objects.filter(
-                name=admin_group_name,
-            ).exists():
-                self.add_error(
-                    'admin_group_name',
-                    _('group already exists'),
-                )
-        return admin_group_name
 
     def clean_handler(self):
         raw_selection = self.data['handler']
@@ -160,6 +123,18 @@ class CompanyCreateForm(
             'matrix_user_id',
             'slug',
         ]
+    admin_group_name = forms.CharField(
+        label=_('admin group name'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'style': ';'.join([
+                    'resize: none',
+                ]),
+            },
+        ),
+        required=False,
+    )
     federate = forms.BooleanField(
         label=_('federate'),
         initial=True,
@@ -189,6 +164,30 @@ class CompanyCreateForm(
                     },
                 )
         return slug
+
+    def clean_admin_group_name(self):
+        admin_group_name = self.data.get('admin_group_name') or '%s_admins' % self.clean_slug()
+        if not admin_group_name:
+            if 'admin_group_name' not in self.errors:
+                self.add_error(
+                    'admin_group_name',
+                    _('%(field)s cannot be empty') % {
+                        'field': self.fields['admin_group_name'].label,
+                    },
+                )
+        if self.user.groups.filter(
+                name=admin_group_name,
+        ).exists():
+            return admin_group_name
+        else:
+            if Group.objects.filter(
+                name=admin_group_name,
+            ).exists():
+                self.add_error(
+                    'admin_group_name',
+                    _('group already exists'),
+                )
+        return admin_group_name
 
     def clean_matrix_user_id(self):
         handler = self.clean_handler()

@@ -465,4 +465,5 @@ class UpdateCompany(
             **super().get_form_kwargs(),
         }
         kwargs['initial']['admin_group_name'] = self.object.admins.name
+        kwargs['initial']['name'] = self.object.get_name()
         return kwargs

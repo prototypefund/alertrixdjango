@@ -17,6 +17,132 @@ from ..models import DirectMessage
 from ..models import MainApplicationServiceKey
 
 
+class CreateRegistrationToken(
+    CreateView,
+):
+    form_class = forms.CreateRegistration
+    model = models.RegistrationToken
+    template_name = 'alertrix/form.html'
+    success_url = reverse_lazy('validate')
+    registration_user_selected_cookie_name = 'registration_user_id'
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        # Make sure, all the required dependencies are set up
+        try:
+            main_service = MainApplicationServiceKey.objects.get(id=1).service
+            user_id = '@%(localpart)s:%(server_name)s' % {
+                'localpart': main_service.sender_localpart,
+                'server_name': main_service.homeserver.server_name,
+            }
+            responsible_user = MatrixUser.objects.get(
+                app_service=main_service,
+                user_id=user_id,
+            )
+            DirectMessage.objects.get(
+                responsible_user=responsible_user,
+                with_user=form.data.get('valid_for_matrix_id'),
+            )
+        except MainApplicationServiceKey.DoesNotExist:
+            messages.error(
+                self.request,
+                _('no main application service registration has been specified yet'),
+            )
+            return self.form_invalid(form)
+        except MatrixUser.DoesNotExist:
+            messages.error(
+                self.request,
+                _('this service is not set up to send messages'),
+            )
+            return self.form_invalid(form)
+        except DirectMessage.DoesNotExist:
+            messages.error(
+                self.request,
+                _('invite <a href="https://matrix.to/#/%(user_id)s">%(user_id)s</a> to a direct message first') % {
+                    'user_id': responsible_user.user_id,
+                },
+                extra_tags='safe',
+            )
+            return self.form_invalid(form)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        app_service = MainApplicationServiceKey.objects.get(id=1).service
+        try:
+            success = async_to_sync(self.send_token)(
+                app_service=app_service,
+                user_id=form.data['valid_for_matrix_id'],
+                token=self.object.token,
+            )
+        except DirectMessage.DoesNotExist:
+            success = False
+        if success:
+            self.request.session[self.registration_user_selected_cookie_name] = form.data['valid_for_matrix_id']
+            self.request.session.set_expiry(settings.ACCOUNTS_REGISTRATION_TOKEN_DURATION)
+        return r
+
+    async def send_token(
+            self,
+            app_service: ApplicationServiceRegistration,
+            user_id: str,
+            token: str,
+    ):
+        try:
+            # Save the direct message object
+            dm = await DirectMessage.objects.aget(
+                with_user=user_id,
+                responsible_user=await app_service.get_user(),
+            )
+        except DirectMessage.DoesNotExist:
+            # There could be a room creation process here, but that could be used to spam users using the primary
+            # application services account.
+            return
+        client: nio.AsyncClient = await app_service.get_matrix_client()
+        # send the token
+        room_send_response: nio.RoomSendResponse | nio.RoomSendError = await client.room_send(
+            dm.matrix_room_id,
+            'm.room.message',
+            {
+                'body': _('use this token to register on %(url)s: %(token)s') % {
+                    'url': self.request.get_host(),
+                    'token': token
+                },
+                'msgtype': 'm.text',
+                'format': 'org.matrix.custom.html',
+                'formatted_body': _(
+                    '<p>use this token to register on <a href="%(url)s">%(host)s</a></p>'
+                    '\n<pre><code>%(token)s</code></pre>',
+                ) % {
+                    'url': ''.join([
+                        'http',
+                        's' if self.request.is_secure() else '',
+                        '://',
+                        self.request.get_host(),
+                        ':' + self.request.get_port() if self.request.get_port else '',
+                    ]),
+                    'host': self.request.get_host(),
+                    'token': token,
+                },
+            },
+        )
+        if type(room_send_response) is nio.RoomSendResponse:
+            return True
+        if type(room_send_response) is nio.RoomSendError:
+            messages.error(
+                self.request,
+                _('failed to send token to %(user_id)s: %(errcode)s %(error)s') % {
+                    'user_id': user_id,
+                    'errcode': room_send_response.status_code,
+                    'error': room_send_response.message,
+                },
+            )
+
+
 class CreateUser(
     CreateView,
 ):

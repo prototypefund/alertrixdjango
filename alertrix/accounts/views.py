@@ -144,6 +144,47 @@ class CreateRegistrationToken(
             )
 
 
+class CreateFirstUser(
+    CreateView,
+):
+    model = get_user_model()
+    form_class = forms.CreateFirstUserForm
+    template_name = 'alertrix/form.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        resp = super().form_valid(form)
+        self.object.is_staff = True
+        self.object.is_superuser = True
+        group_name = settings.MATRIX_VALIDATED_GROUP_NAME
+        try:
+            group = Group.objects.get(
+                name=group_name,
+            )
+        except Group.DoesNotExist:
+            group = Group(
+                name=group_name,
+            )
+            group.save()
+        group.user_set.add(self.object)
+        group.save()
+        self.object.save()
+        server_name = self.object.matrix_id.split(':')[1]
+        server_info = async_to_sync(utils.get_server_well_known)(server_name)
+        hs = Homeserver(
+            server_name=server_name,
+            url=server_info['m.homeserver']['base_url'],
+        )
+        hs.save()
+        messages.success(
+            self.request,
+            _('based on you user name, the homeserver on %(url)s has been added') % {
+                'url': hs.url,
+            },
+        )
+        return resp
+
+
 class CreateUser(
     CreateView,
 ):

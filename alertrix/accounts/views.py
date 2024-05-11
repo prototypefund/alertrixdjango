@@ -187,3 +187,7 @@ class CreateUser(
             _('please make sure your password manager works by logging in'),
         )
         return r
+
+
+def registration_or_first_user_view(request):
+    return CreateRegistrationToken.as_view()(request)

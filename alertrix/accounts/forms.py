@@ -37,6 +37,24 @@ class CreateRegistration(
         return self.data.get('valid_for_matrix_id').strip()
 
 
+class CreateFirstUserForm(
+    UserCreationForm,
+):
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            'matrix_id',
+        ]
+        widgets = {
+            'matrix_id': forms.Textarea(
+                attrs={
+                    'rows': 1,
+                },
+            ),
+        }
+
+
 class CreateUserForm(
     UserCreationForm,
 ):

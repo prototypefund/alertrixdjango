@@ -232,4 +232,6 @@ class CreateUser(
 
 
 def registration_or_first_user_view(request):
+    if get_user_model().objects.count() == 0:
+        return CreateFirstUser.as_view()(request)
     return CreateRegistrationToken.as_view()(request)

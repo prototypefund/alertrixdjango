@@ -12,6 +12,7 @@ from matrixappservice.models import User as MatrixUser
 from . import forms
 from . import models
 from ..models import DirectMessage
+from ..models import MainApplicationServiceKey
 
 
 class CreateUser(

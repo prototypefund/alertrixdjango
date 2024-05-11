@@ -8,6 +8,7 @@ from django.views.generic import CreateView
 
 from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import Homeserver
+from matrixappservice.models import User as MatrixUser
 from . import forms
 from . import models
 

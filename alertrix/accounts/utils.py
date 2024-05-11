@@ -17,3 +17,14 @@ def get_token(length: int = None):
             for _ in range(length)
         ]
     )
+
+
+async def get_server_well_known(server_name: str) -> dict:
+    async with aiohttp.ClientSession() as session:
+        response = await session.get(''.join([
+            'http://',
+            server_name,
+            '/.well-known/matrix/client',
+        ]))
+        data = await response.json()
+    return data

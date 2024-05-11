@@ -26,6 +26,9 @@ class CreateRegistration(
         labels = {
             'valid_for_matrix_id': _('matrix id'),
         }
+        help_texts = {
+            'valid_for_matrix_id': get_user_model()._meta.get_field('matrix_id').help_text,
+        }
 
     submit_text = _('register')
 

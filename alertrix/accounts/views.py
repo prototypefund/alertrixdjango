@@ -151,6 +151,12 @@ class CreateUser(
     template_name = 'alertrix/form.html'
     success_url = reverse_lazy('login')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        if CreateRegistrationToken.registration_user_selected_cookie_name in self.request.session:
+            initial['matrix_id'] = self.request.session[CreateRegistrationToken.registration_user_selected_cookie_name]
+        return initial
+
     def form_valid(self, form):
         self.object = form.save()
         self.object.save()

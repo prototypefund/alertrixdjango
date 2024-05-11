@@ -11,6 +11,7 @@ from matrixappservice.models import Homeserver
 from matrixappservice.models import User as MatrixUser
 from . import forms
 from . import models
+from ..models import DirectMessage
 
 
 class CreateUser(

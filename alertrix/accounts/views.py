@@ -1,4 +1,5 @@
 import nio
+from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model

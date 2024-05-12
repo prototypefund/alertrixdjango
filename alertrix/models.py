@@ -226,7 +226,7 @@ class MatrixRoom(
         return self.get_attribute('topic')
 
     def __str__(self):
-        return self.get_name()
+        return self.get_name() or super().__str__()
 
 
 class DirectMessage(

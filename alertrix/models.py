@@ -212,7 +212,6 @@ class MatrixRoom(
         return state_event['url']
 
     def get_room_avatar(self):
-        print('getting room avatar')
         return async_to_sync(self.aget_room_avatar)()
 
     def get_attribute(self, key: str):

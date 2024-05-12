@@ -63,6 +63,7 @@ class CreateUserForm(
     )
 
     class Meta:
+        title = _('create user')
         model = get_user_model()
         fields = [
             'token',

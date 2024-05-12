@@ -42,6 +42,7 @@ class CreateFirstUserForm(
 ):
 
     class Meta:
+        title = _('create admin account')
         model = get_user_model()
         fields = [
             'matrix_id',

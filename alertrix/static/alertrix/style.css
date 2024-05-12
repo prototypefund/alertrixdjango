@@ -7,3 +7,6 @@
 .main-list > div:hover {
     background-color: #bbb;
 }
+:required {
+    box-shadow: 0px 0px 4px orange;
+}

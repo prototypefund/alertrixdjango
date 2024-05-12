@@ -12,11 +12,10 @@
 <h1>{% trans 'companies' %}</h1>
 <div class="main-list">
     {% for obj in object_list %}
-    {% with matrix_room=obj.get_matrix_room %}
     <div onclick="window.location.href = '{% url 'comp.detail' slug=obj.slug %}'" style="min-height: 128">
-        {% if matrix_room.matrix_room_id %}
+        {% if obj.matrix_room_id %}
         <div style="float: left">
-            <img src="{% mxc_to_http obj.handler.application_service.homeserver.url matrix_room.get_room_avatar 128 128 %}" alt="" height="128">
+            <img src="{% mxc_to_http obj.handler.application_service.homeserver.url obj.get_room_avatar 128 128 %}" alt="" height="128">
         </div>
         {% endif %}
         <div>
@@ -25,11 +24,10 @@
             </div>
             <br>
             <div class="alertrix-company-actions">
-                <a href="element://vector/webapp/#/room/{{ matrix_room.matrix_room_id }}">[m]</a>
+                <a href="element://vector/webapp/#/room/{{ obj.matrix_room_id }}">[m]</a>
             </div>
         </div>
     </div>
-    {% endwith %}
     {% endfor %}
     {% if perms.alertrix.add_company %}
     <div onclick="window.location.href = '{% url 'comp.new' %}'" style="min-height: 128">

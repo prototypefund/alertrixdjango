@@ -10,6 +10,7 @@ class CreateRegistration(
     forms.ModelForm,
 ):
     class Meta:
+        title = _('create registration token')
         model = models.RegistrationToken
         fields = [
             'valid_for_matrix_id',

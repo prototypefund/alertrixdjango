@@ -31,8 +31,7 @@ class CreateRegistration(
         help_texts = {
             'valid_for_matrix_id': get_user_model()._meta.get_field('matrix_id').help_text,
         }
-
-    submit_text = _('register')
+        submit_text = _('register')
 
     def clean_valid_for_matrix_id(self):
         return self.data.get('valid_for_matrix_id').strip()

@@ -1,0 +1,9 @@
+.main-list > div {
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #aaa;
+    margin: 4px;
+}
+.main-list > div:hover {
+    background-color: #bbb;
+}

@@ -122,6 +122,7 @@ class CompanyCreateForm(
             'federate',
             'matrix_user_id',
             'slug',
+            'admin_group_name',
         ]
     admin_group_name = forms.CharField(
         label=_('admin group name'),

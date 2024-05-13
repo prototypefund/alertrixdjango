@@ -1,5 +1,6 @@
 import nio
 import synapse.appservice
+from asgiref.sync import async_to_sync
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 

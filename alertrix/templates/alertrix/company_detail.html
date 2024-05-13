@@ -23,6 +23,11 @@
 <div>
     <h2>{% trans 'units' %}</h2>
     <div>
+        <div>
+            <a href="{% url 'unit.new' %}?companies={{ object.slug }}">
+                <div><img src="{% static 'alertrix/icons/new.svg' %}"></div>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

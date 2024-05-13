@@ -50,6 +50,7 @@ class ListCompanies(
 class CreateCompany(
     PermissionRequiredMixin,
     mixins.ContextActionsMixin,
+    matrixroom.CreateMatrixRoom,
     CreateView,
 ):
     permission_required = 'alertrix.add_company'

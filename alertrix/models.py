@@ -268,6 +268,14 @@ class Company(
     )
 
 
+class Unit(
+    MatrixRoom,
+):
+    class Meta:
+        verbose_name = _('unit')
+        verbose_name_plural = _('units')
+
+
 class MainApplicationServiceKey(
     models.Model,
 ):

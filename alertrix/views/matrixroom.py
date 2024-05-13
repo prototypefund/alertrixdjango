@@ -97,11 +97,36 @@ class CreateMatrixRoom(
             return None
         return response.room_id
 
+    async def room_put_state(
+            self,
+            room_id: str,
+            event_type: str,
+            content,
+            state_key: str = "",
+    ):
+        matrix_room = await models.MatrixRoom.objects.aget(matrix_room_id=room_id)
+        user = await sync_to_async(getattr)(matrix_room, 'responsible_user')
+        client: nio.AsyncClient = await user.get_client()
+        if client is not None:
+            response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
+                room_id=room_id,
+                event_type=event_type,
+                content=content,
+                state_key=state_key,
+            )
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.responsible_user = form.cleaned_data['responsible_user']
         self.ensure_matrix_room_id(
             form=form,
         )
+        for state_event in self.get_matrix_state_events(
+                form=form,
+        ):
+            async_to_sync(self.room_put_state)(
+                event_type=state_event.pop('type'),
+                **state_event,
+            )
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())

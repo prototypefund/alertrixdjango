@@ -95,7 +95,7 @@ class CreateCompany(
         return self.render_to_response(self.get_context_data(form=new_form))
 
     def form_valid(self, form):
-        response = super().form_valid(form)
+        self.object = form.save(commit=False)
         group_name = form.cleaned_data['admin_group_name']
         if self.request.user.groups.filter(
                 name=group_name,
@@ -208,7 +208,7 @@ class CreateCompany(
                     )
             self.object.matrix_room_id = matrix_space_id
         self.object.save()
-        return response
+        return HttpResponseRedirect(self.get_success_url())
 
     async def create_matrix_room(
             self,

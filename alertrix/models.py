@@ -132,6 +132,7 @@ class MatrixRoom(
     models.Model,
 ):
     matrix_room_id = models.TextField(
+        primary_key=True,
     )
     responsible_user = models.ForeignKey(
         MatrixUser,

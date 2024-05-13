@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from matrixappservice import models as mas_models
+from . import matrixroom
 from .. import models
 from .. import widgets
 

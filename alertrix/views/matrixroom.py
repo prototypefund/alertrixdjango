@@ -21,6 +21,15 @@ class CreateMatrixRoom(
         }
         return kwargs
 
+    def get_matrix_room_args(self, form):
+        """
+        Return the arguments used to create the room.
+        :param form:
+        :return:
+        """
+        return dict(
+        )
+
     def ensure_matrix_room_id(self, form):
         """
         Make sure this object has a valid matrix room associated
@@ -89,6 +98,9 @@ class CreateMatrixRoom(
                     if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
                 ),
                 space=True,
+                **self.get_matrix_room_args(
+                    form=form,
+                ),
             )
             if matrix_space_id:
                 if self.request.user.matrix_id:

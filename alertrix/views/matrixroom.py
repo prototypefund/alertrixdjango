@@ -96,3 +96,12 @@ class CreateMatrixRoom(
             )
             return None
         return response.room_id
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.responsible_user = form.cleaned_data['responsible_user']
+        self.ensure_matrix_room_id(
+            form=form,
+        )
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())

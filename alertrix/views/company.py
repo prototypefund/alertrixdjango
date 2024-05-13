@@ -177,11 +177,7 @@ class CreateCompany(
                     )
             mu.save()
             self.object.responsible_user = mu
-        self.ensure_matrix_room_id(
-            form=form,
-        )
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form=form)
 
 
 class DetailCompany(

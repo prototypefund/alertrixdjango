@@ -65,13 +65,6 @@ class CreateCompany(
         {'name': 'comp.list', 'label': _('list')},
     ]
 
-    def get_form_kwargs(self):
-        kwargs = {
-            'user': self.request.user,
-            **super().get_form_kwargs(),
-        }
-        return kwargs
-
     def get_success_url(self):
         return reverse('comp.detail', kwargs={'slug': self.object.slug})
 

@@ -65,3 +65,18 @@ class MatrixRoomForm(
             if field_name not in self.fields:
                 continue
             self.fields[field_name].widget.attrs['class'] = 'advanced'
+
+
+class MatrixRoomCreateForm(
+    MatrixRoomForm,
+):
+    class Meta(MatrixRoomForm.Meta):
+        fields = MatrixRoomForm.Meta.fields
+        advanced = MatrixRoomForm.Meta.advanced + [
+            'federate',
+        ]
+    federate = forms.BooleanField(
+        label=_('federate'),
+        initial=True,
+        required=False,
+    )

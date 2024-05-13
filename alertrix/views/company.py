@@ -100,10 +100,21 @@ class CreateCompany(
                 },
             )
             break
-        return {
+        args = {
             **super().get_matrix_room_args(form=form),
             'alias': alias,
         }
+        args['initial_state'] = args['initial_state'] + [
+            {
+                'type': 'm.room.member',
+                'content': {
+                    'membership': 'join',
+                    'displayname': form.data['name'],
+                },
+                'state_key': self.object.responsible_user.user_id,
+            },
+        ]
+        return args
 
     def form_invalid(self, form):
         """

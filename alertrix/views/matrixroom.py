@@ -32,14 +32,6 @@ class CreateMatrixRoom(
             topic=form.data['description'],
             federate=form.data['federate'],
             initial_state=[
-                {
-                    'type': 'm.room.member',
-                    'content': {
-                        'membership': 'join',
-                        'displayname': form.data['name'],
-                    },
-                    'state_key': self.object.responsible_user.user_id,
-                },
             ],
             invite=(
                 [

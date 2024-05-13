@@ -21,6 +21,9 @@ class CreateMatrixRoom(
         }
         return kwargs
 
+    def get_matrix_state_events(self, form):
+        return []
+
     def get_matrix_room_args(self, form):
         """
         Return the arguments used to create the room.

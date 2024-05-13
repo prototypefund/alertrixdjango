@@ -205,25 +205,6 @@ class CreateCompany(
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-    async def create_matrix_room(
-            self,
-            **kwargs,
-    ):
-        client: nio.AsyncClient = await self.object.responsible_user.get_client()
-        response: nio.RoomCreateResponse = await client.room_create(
-            **kwargs
-        )
-        if type(response) is nio.RoomCreateError:
-            messages.warning(
-                self.request,
-                _('failed to create matrix space: %(errcode)s %(error)s') % {
-                    'errcode': response.status_code,
-                    'error': response.message,
-                },
-            )
-            return None
-        return response.room_id
-
 
 class DetailCompany(
     mixins.UserIsAdminForThisObjectMixin,

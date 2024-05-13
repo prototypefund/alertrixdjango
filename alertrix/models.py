@@ -124,6 +124,9 @@ class Handler(
             await dm.asave()
         device = await user.get_device()
 
+    def __str__(self):
+        return str(self.application_service)
+
 
 class MatrixRoom(
     models.Model,

@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
-from matrixappservice import models as mas_models
 from .. import models
 
 

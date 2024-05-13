@@ -104,7 +104,7 @@ class CreateCompany(
                 name=group_name,
             )
         else:
-            group = Group.objects.create(
+            group, is_new = Group.objects.get_or_create(
                 name=group_name,
             )
             self.request.user.groups.add(

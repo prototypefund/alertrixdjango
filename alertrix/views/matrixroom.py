@@ -65,39 +65,7 @@ class CreateMatrixRoom(
         :return:
         """
         if not self.object.matrix_room_id:
-            alias_namespaces = mas_models.Namespace.objects.filter(
-                app_service=self.object.handler.application_service,
-                scope=mas_models.Namespace.ScopeChoices.aliases,
-            )
-            # Prepare the alias variable
-            alias = None
-            # Create a synapse instance to check if its application service is interested in the generated user id
-            syn: synapse.appservice.ApplicationService = async_to_sync(
-                self.object.handler.application_service.get_synapse_application_service
-            )()
-            for namespace in alias_namespaces:
-                if '*' not in namespace.regex:
-                    continue
-                localpart = namespace.regex.lstrip('@').replace('*', self.object.slug)
-                interested_check_against = '@%(localpart)s:%(server_name)s' % {
-                    'localpart': localpart,
-                    'server_name': self.object.handler.application_service.homeserver.server_name,
-                }
-                if not syn.is_interested_in_user(
-                        user_id=interested_check_against,
-                ):
-                    continue
-                # Overwrite user_id variable
-                alias = interested_check_against
-                messages.info(
-                    self.request,
-                    _('the matrix room alias has automatically been set to \"%(alias)s\"') % {
-                        'alias': alias,
-                    },
-                )
-                break
             matrix_space_id = async_to_sync(self.create_matrix_room)(
-                alias=alias,
                 **self.get_matrix_room_args(
                     form=form,
                 ),

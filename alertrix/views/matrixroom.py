@@ -28,6 +28,35 @@ class CreateMatrixRoom(
         :return:
         """
         return dict(
+            name=form.data['name'],
+            topic=form.data['description'],
+            federate=form.data['federate'],
+            initial_state=[
+                {
+                    'type': 'm.room.member',
+                    'content': {
+                        'membership': 'join',
+                        'displayname': form.data['name'],
+                    },
+                    'state_key': self.object.responsible_user.user_id,
+                },
+            ],
+            invite=(
+                [
+                    str(self.request.user.matrix_id)
+                ]
+                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+            ),
+            power_level_override=(
+                {
+                    'users': {
+                        self.object.responsible_user.user_id: 100,
+                        str(self.request.user.matrix_id): 100,
+                    },
+                }
+                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+            ),
+            space=True,
         )
 
     def ensure_matrix_room_id(self, form):
@@ -69,35 +98,6 @@ class CreateMatrixRoom(
                 break
             matrix_space_id = async_to_sync(self.create_matrix_room)(
                 alias=alias,
-                name=form.data['name'],
-                topic=form.data['description'],
-                federate=form.data['federate'],
-                initial_state=[
-                    {
-                        'type': 'm.room.member',
-                        'content': {
-                            'membership': 'join',
-                            'displayname': form.data['name'],
-                        },
-                        'state_key': self.object.responsible_user.user_id,
-                    },
-                ],
-                invite=(
-                    [
-                        str(self.request.user.matrix_id)
-                    ]
-                    if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
-                ),
-                power_level_override=(
-                    {
-                        'users': {
-                            self.object.responsible_user.user_id: 100,
-                            str(self.request.user.matrix_id): 100,
-                        },
-                    }
-                    if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
-                ),
-                space=True,
                 **self.get_matrix_room_args(
                     form=form,
                 ),

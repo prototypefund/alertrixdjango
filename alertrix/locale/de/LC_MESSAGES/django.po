@@ -17,3 +17,7 @@ msgstr ""
 #: accounts/forms.py
 msgid "create registration token"
 msgstr "Registrier-Token erstellen"
+
+#: accounts/forms.py
+msgid "matrix id"
+msgstr "Matrix-ID"

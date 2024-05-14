@@ -213,7 +213,9 @@ class MatrixRoom(
                 return ''
         except exc.MatrixError:
             return ''
-        return state_event['url']
+        if 'url' in state_event:
+            return state_event['url']
+        return ''
 
     def get_room_avatar(self):
         return async_to_sync(self.aget_room_avatar)()

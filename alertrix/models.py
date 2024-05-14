@@ -256,6 +256,15 @@ class MatrixRoom(
         ]
         return members
 
+    def get_joined_members(self):
+        membership_info = self.get_members()
+        members = [
+            state_event
+            for state_event in membership_info
+            if state_event['content']['membership'] == 'join'
+        ]
+        return members
+
     def __str__(self):
         return self.get_name() or super().__str__()
 

@@ -13,3 +13,16 @@
 :required {
     box-shadow: 0px 0px 4px orange;
 }
+.main-list > div > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.main-list > div > img {
+    min-width: 128px;
+}
+tr {
+    border-size: 1px;
+}
+.object-title {
+    font-weight: bold;
+}

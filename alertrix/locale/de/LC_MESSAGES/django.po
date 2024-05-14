@@ -29,3 +29,7 @@ msgstr "Registrieren"
 #: accounts/forms.py
 msgid "create admin account"
 msgstr "Admin-Account erstellen"
+
+#: accounts/forms.py
+msgid "create user"
+msgstr "Nutzer anlegen"

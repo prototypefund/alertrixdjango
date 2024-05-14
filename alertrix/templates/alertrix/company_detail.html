@@ -24,6 +24,25 @@
 <div>
     <h2>{% trans 'units' %}</h2>
     <div class="main-list">
+        {% for child in object.get_children %}
+        {% if child.responsible_user %}
+        <div class="unit">
+            {% if child.company or child.unit %}
+            <img src="{% if child.get_room_avatar %}{% mxc_to_http child.responsible_user.homeserver.url child.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
+            {% endif %}
+            <div>
+                <div class="object-title">{{ child }}</div>
+                {% if child.get_description %}
+                <div>{{ child.get_description }}</div>
+                {% endif %}
+                <div>
+                    <span>💬 {{ child.get_children|length }}</span>
+                    <span>🧑 {{ child.get_joined_members|length }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
         <div class="unit" onclick="window.location.href = '{% url 'unit.new' %}?companies={{ object.slug }}'">
             <img src="{% static 'alertrix/icons/new.svg' %}" height="128">
             <div>

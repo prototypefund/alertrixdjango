@@ -1,0 +1,15 @@
+# Alertrix (German translation).
+# Copyright (C) 2024 Fabian Becker
+# This file is distributed under the same license as the alertrix package.
+# Fabian Becker <info@alertrix.net>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: info@alertrix.net\n"
+"POT-Creation-Date: 2024-05-14 18:19+0200\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"

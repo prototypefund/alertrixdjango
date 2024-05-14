@@ -231,6 +231,22 @@ class MatrixRoom(
     def get_description(self):
         return self.get_attribute('topic')
 
+    def get_children(self):
+        children = []
+        for state_event in self.get_room_info():
+            if state_event['type'] != 'm.space.child':
+                continue
+            try:
+                matrix_room = MatrixRoom.objects.get(
+                    matrix_room_id=state_event['state_key'],
+                )
+            except MatrixRoom.DoesNotExist:
+                matrix_room = MatrixRoom(
+                    matrix_room_id=state_event['state_key'],
+                )
+            children.append(matrix_room)
+        return children
+
     def __str__(self):
         return self.get_name() or super().__str__()
 

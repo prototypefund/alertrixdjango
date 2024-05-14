@@ -23,10 +23,11 @@
 <div>
     <h2>{% trans 'units' %}</h2>
     <div class="main-list">
-        <div>
-            <a href="{% url 'unit.new' %}?companies={{ object.slug }}">
-                <div><img src="{% static 'alertrix/icons/new.svg' %}"></div>
-            </a>
+        <div class="unit" onclick="window.location.href = '{% url 'unit.new' %}?companies={{ object.slug }}'">
+            <img src="{% static 'alertrix/icons/new.svg' %}" height="128">
+            <div>
+                <div class="object.title">{% trans 'new unit' %}</div>
+            </div>
         </div>
     </div>
 </div>

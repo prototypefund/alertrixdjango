@@ -247,6 +247,15 @@ class MatrixRoom(
             children.append(matrix_room)
         return children
 
+    def get_members(self):
+        room_info = self.get_room_info()
+        members = [
+            state_event
+            for state_event in room_info
+            if state_event['type'] == 'm.room.member'
+        ]
+        return members
+
     def __str__(self):
         return self.get_name() or super().__str__()
 

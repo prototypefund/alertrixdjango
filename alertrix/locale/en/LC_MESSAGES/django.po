@@ -170,3 +170,7 @@ msgstr "User has been added to group."
 #: views/company.py
 msgid "no matrix space associated with this %(object)s"
 msgstr "No matrix space associated with this %(object)s."
+
+#: views/company.py
+msgid "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
+msgstr "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"

@@ -5,6 +5,7 @@ from . import views
 
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('comp/', include([
         path('', views.company.ListCompanies.as_view(), name='comp.list'),
         path('new', views.company.CreateCompany.as_view(), name='comp.new'),

@@ -17,3 +17,7 @@ msgstr ""
 #: accounts/forms.py
 msgid "matrix id"
 msgstr "Matrix ID"
+
+#: accounts/forms.py
+msgid "create admin account"
+msgstr "Create admin account"

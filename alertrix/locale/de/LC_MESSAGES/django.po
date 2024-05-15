@@ -191,6 +191,10 @@ msgstr ""
 msgid "now restart your homeserver"
 msgstr "Starte jetzt deinen Heimserver neu."
 
+#: templates/alertrix/applicationserviceregistration_setup.html
+msgid "you can test the connection by running the following command"
+msgstr "Du kannst die Verbindung testen, indem du folgenden Befehl ausführst."
+
 #: templates/alertrix/company_detail.html
 msgid "members"
 msgstr "Mitglieder"

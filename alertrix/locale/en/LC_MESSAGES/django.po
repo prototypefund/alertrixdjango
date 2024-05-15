@@ -179,6 +179,10 @@ msgid "new unit"
 msgstr "New unit"
 
 #: forms/unit.py
+msgid "you need to select at least one company"
+msgstr "You need to select at least one company."
+
+#: forms/unit.py
 msgid "this choice is not valid"
 msgstr "This choice is not valid."
 

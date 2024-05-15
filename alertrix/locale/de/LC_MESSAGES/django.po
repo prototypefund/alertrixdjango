@@ -283,6 +283,10 @@ msgstr "Einrichten"
 msgid "<a href=\"%(url)s\">you need to add a handler</a>"
 msgstr "<a href=\"%(url)s\">Du musst eine Verhaltensdefinition hinzufügen</a>"
 
+#: views/appservice.py
+msgid "list"
+msgstr "Liste"
+
 #: views/company.py
 msgid "the matrix room alias has automatically been set to \"%(alias)s\""
 msgstr "Der Raum-Alias wurde automatisch auf \"%(alias)s\" gesetzt."

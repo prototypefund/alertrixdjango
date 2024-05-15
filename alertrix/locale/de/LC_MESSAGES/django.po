@@ -69,3 +69,7 @@ msgstr "Verhaltensdefinition darf nicht leer sein."
 #: forms/company.py
 msgid "you are not allowed to use this %(object)s"
 msgstr "Du bist nicht berechtigt, dieses %(object)s zu verwenden."
+
+#: forms/company.py
+msgid "admin group name"
+msgstr "Name der Admin-Gruppe"

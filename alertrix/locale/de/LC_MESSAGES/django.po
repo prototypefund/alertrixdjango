@@ -224,6 +224,10 @@ msgid "back"
 msgstr "Zurück"
 
 #: views/appservice.py
+msgid "setup"
+msgstr "Einrichten"
+
+#: views/appservice.py
 msgid "<a href=\"%(url)s\">you need to add a handler</a>"
 msgstr "<a href=\"%(url)s\">Du musst eine Verhaltensdefinition hinzufügen</a>"
 

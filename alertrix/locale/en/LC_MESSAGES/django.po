@@ -31,6 +31,10 @@ msgid "create admin account"
 msgstr "Create admin account"
 
 #: accounts/forms.py
+msgid "create user"
+msgstr "Create user"
+
+#: accounts/forms.py
 msgid "not a valid token for %(user_id)s"
 msgstr "Not a valid token for %(user_id)s"
 

@@ -107,6 +107,10 @@ msgid "matrix user id"
 msgstr "Matrix-Nutzer-ID"
 
 #: forms/company.py
+msgid "%(field)s cannot be empty"
+msgstr "%(field)s darf nicht leer sein."
+
+#: forms/company.py
 msgid "group already exists"
 msgstr "Gruppe existiert bereits"
 

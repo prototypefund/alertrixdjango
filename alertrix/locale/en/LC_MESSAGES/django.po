@@ -61,3 +61,7 @@ msgstr "Invalid handler id"
 #: forms/company.py
 msgid "new company"
 msgstr "New company"
+
+#: forms/company.py
+msgid "federate"
+msgstr "Federate"

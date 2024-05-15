@@ -117,3 +117,7 @@ msgstr "Handler"
 #: models.py
 msgid "units"
 msgstr "Units"
+
+#: templates/alertrix/applicationserviceregistration_detail.py
+msgid "available to"
+msgstr "Available to"

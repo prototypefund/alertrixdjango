@@ -67,6 +67,10 @@ msgid "failed to send token to %(user_id)s: %(errcode)s %(error)s"
 msgstr "Fehler beim senden des Tokens an %(user_id)s: %(errcode)s %(error)s"
 
 #: accounts/views.py
+msgid "based on you user name, the homeserver on %(url)s has been added"
+msgstr "Basierend auf deinem Nutzernamen wurde der Heimserver unter %(url)s hinzugefügt."
+
+#: accounts/views.py
 msgid "%(user)s has been added to %(group_name)s"
 msgstr "%(user)s wurde zu %(group_name)s hinzugefügt."
 

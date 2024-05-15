@@ -71,6 +71,10 @@ msgid "invalid handler id"
 msgstr "Invalid handler id"
 
 #: forms/company.py
+msgid "you are not allowed to use this %(object)s"
+msgstr "You are not allowed to use this %(object)s"
+
+#: forms/company.py
 msgid "new company"
 msgstr "New company"
 

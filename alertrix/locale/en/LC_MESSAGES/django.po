@@ -113,3 +113,7 @@ msgstr "Companies"
 #: models.py
 msgid "handler"
 msgstr "Handler"
+
+#: models.py
+msgid "units"
+msgstr "Units"

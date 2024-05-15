@@ -154,3 +154,7 @@ msgstr "Power Level"
 #: templates/alertrix/form.py
 msgid "save"
 msgstr "Save"
+
+#: views/appservice.py
+msgid "setup"
+msgstr "Setup"

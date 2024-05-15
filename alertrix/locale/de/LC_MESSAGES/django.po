@@ -109,3 +109,7 @@ msgstr "Beschreibung"
 #: forms/unit.py
 msgid "you need to select at least one company"
 msgstr "Du musst mindestens eine Organisation auswählen."
+
+#: models.py
+msgid "company"
+msgstr "Organisation"

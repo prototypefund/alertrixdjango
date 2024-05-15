@@ -121,3 +121,7 @@ msgstr "Rohbau"
 #: models.py
 msgid "unit"
 msgstr "Einheit"
+
+#: templates/alertrix/applicationserviceregistration_detail.html
+msgid "managed by"
+msgstr "Verwaltet von"

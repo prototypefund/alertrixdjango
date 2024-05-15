@@ -53,3 +53,7 @@ msgstr "Dieser Service ist noch nicht eingerichtet, um Nachrichten zu versenden.
 #: accounts/views.py
 msgid "use this token to register on %(url)s: %(token)s"
 msgstr "Nutze dieses Token, um dich bei %(url)s zu registrieren: %(token)s"
+
+#: accounts/views.py
+msgid "failed to send token to %(user_id)s: %(errcode)s %(error)s"
+msgstr "Fehler beim senden des Tokens an %(user_id)s: %(errcode)s %(error)s"

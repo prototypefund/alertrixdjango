@@ -138,3 +138,7 @@ msgstr ""
 msgid "copy the following code snippet into the file you previously specified"
 msgstr ""
 "Copy the following code snippet into the file you previously specified."
+
+#: templates/alertrix/applicationserviceregistration_setup.py
+msgid "you can test the connection by running the following command"
+msgstr "You can test the connection by running the following command."

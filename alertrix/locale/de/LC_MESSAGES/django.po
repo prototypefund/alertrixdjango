@@ -142,3 +142,7 @@ msgstr ""
 #: templates/alertrix/applicationserviceregistration_setup.html
 msgid "now restart your homeserver"
 msgstr "Starte jetzt deinen Heimserver neu."
+
+#: templates/alertrix/company_detail.html
+msgid "members"
+msgstr "Mitglieder"

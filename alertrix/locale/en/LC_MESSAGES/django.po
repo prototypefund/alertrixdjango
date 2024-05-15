@@ -77,3 +77,11 @@ msgstr "%(field)s could not be corrected automatically."
 #: forms/company.py
 msgid "%(user_id)s is misconfigured and cannot be used"
 msgstr "%(user_id)s is misconfigured and cannot be used."
+
+#: forms/company.py
+msgid ""
+"%(user_id)s already exists on the homeserver but is unknown to the "
+"application service"
+msgstr ""
+"%(user_id)s already exists on the homeserver but is unknown to the "
+"application service."

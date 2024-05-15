@@ -125,3 +125,8 @@ msgstr "Available to"
 #: templates/alertrix/applicationserviceregistration_setup.py
 msgid "setting up %(title)s"
 msgstr "Setting up %(title)s"
+
+#: templates/alertrix/applicationserviceregistration_setup.py
+msgid "copy the following code snippet into the file you previously specified"
+msgstr ""
+"Copy the following code snippet into the file you previously specified."

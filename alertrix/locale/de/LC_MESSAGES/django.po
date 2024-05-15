@@ -117,3 +117,7 @@ msgstr "Organisation"
 #: models.py
 msgid "slug"
 msgstr "Rohbau"
+
+#: models.py
+msgid "unit"
+msgstr "Einheit"

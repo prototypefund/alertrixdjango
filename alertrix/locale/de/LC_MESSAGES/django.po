@@ -93,3 +93,7 @@ msgstr "%(field)s ist bereits vergriffen."
 #: forms/company.py
 msgid "standard"
 msgstr "Standard"
+
+#: forms/company.py
+msgid "admin"
+msgstr "Admin"

@@ -150,3 +150,7 @@ msgstr "User ID"
 #: templates/alertrix/company_detail.py
 msgid "power level"
 msgstr "Power Level"
+
+#: templates/alertrix/form.py
+msgid "save"
+msgstr "Save"

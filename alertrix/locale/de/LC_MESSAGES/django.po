@@ -49,3 +49,7 @@ msgstr "Es wurde noch kein Anwendungsdienst registriert."
 #: accounts/views.py
 msgid "this service is not set up to send messages"
 msgstr "Dieser Service ist noch nicht eingerichtet, um Nachrichten zu versenden."
+
+#: accounts/views.py
+msgid "use this token to register on %(url)s: %(token)s"
+msgstr "Nutze dieses Token, um dich bei %(url)s zu registrieren: %(token)s"

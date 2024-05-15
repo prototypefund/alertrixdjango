@@ -107,6 +107,10 @@ msgid "admin group name"
 msgstr "Name der Admin-Gruppe"
 
 #: forms/company.py
+msgid "federate"
+msgstr "Föderiere"
+
+#: forms/company.py
 msgid "matrix user id"
 msgstr "Matrix-Nutzer-ID"
 

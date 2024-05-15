@@ -256,6 +256,10 @@ msgid "user id"
 msgstr "User ID"
 
 #: templates/alertrix/company_detail.py
+msgid "display name"
+msgstr "Display Name"
+
+#: templates/alertrix/company_detail.py
 msgid "power level"
 msgstr "Power Level"
 

@@ -101,3 +101,7 @@ msgstr "Name"
 #: forms/unit.py
 msgid "new unit"
 msgstr "New unit"
+
+#: forms/unit.py
+msgid "this choice is not valid"
+msgstr "This choice is not valid."

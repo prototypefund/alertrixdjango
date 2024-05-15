@@ -73,3 +73,7 @@ msgstr "%(field)s cannot be empty"
 #: forms/company.py
 msgid "%(field)s could not be corrected automatically"
 msgstr "%(field)s could not be corrected automatically."
+
+#: forms/company.py
+msgid "%(user_id)s is misconfigured and cannot be used"
+msgstr "%(user_id)s is misconfigured and cannot be used."

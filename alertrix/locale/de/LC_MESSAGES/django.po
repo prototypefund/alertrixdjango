@@ -236,6 +236,10 @@ msgid "the matrix room alias has automatically been set to \"%(alias)s\""
 msgstr "Der Raum-Alias wurde automatisch auf \"%(alias)s\" gesetzt."
 
 #: views/company.py
+msgid "user has been added to group"
+msgstr "Nutzer wurde der Gruppe hinzugefügt."
+
+#: views/company.py
 msgid "edit"
 msgstr "Bearbeiten"
 

@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "alertrix"
+version = "0.0.0"
+description = "Der Messenger für Einsatzkräfte"
+authors = ["Fabian Becker <info@alertrix.net>"]
+license = "AGPLv3+"
+readme = "README.md"
+packages = [
+    {include = "alertrix", from = "."},
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Django = "^5.0.5"
+matrix-synapse = "^1.105.1"
+matrix-nio = "0.24.0"
+djangomatrixappservice = { git = "https://codeberg.org/alertrix/djangomatrixappservice@ff576a7277960827e247dde8a069a6b7ee18f9ad" }
+
+
+[tool.poetry-dynamic-versioning]
+enable = true
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+    "poetry-dynamic-versioning>=1.0.0,<2.0.0",
+]
+build-backend = "poetry_dynamic_versioning.backend"

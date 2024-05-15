@@ -138,3 +138,7 @@ msgstr ""
 "Gib den Pfad zu der Konfiguration für den Anwendungsdienst an, indem du"
 " die folgenden Zeilen zu der <code>homeserver.yaml</code> deines Heimservers"
 " hinzufügst."
+
+#: templates/alertrix/applicationserviceregistration_setup.html
+msgid "now restart your homeserver"
+msgstr "Starte jetzt deinen Heimserver neu."

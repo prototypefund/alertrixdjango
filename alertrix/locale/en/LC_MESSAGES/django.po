@@ -71,6 +71,10 @@ msgstr ""
 "<pre><code>%(token)s</code></pre>"
 
 #: accounts/views.py
+msgid "failed to send token to %(user_id)s: %(errcode)s %(error)s"
+msgstr "Failed to send token to %(user_id)s: %(errcode)s %(error)s"
+
+#: accounts/views.py
 msgid "based on you user name, the homeserver on %(url)s has been added"
 msgstr "Based on you user name, the homeserver on %(url)s has been added."
 

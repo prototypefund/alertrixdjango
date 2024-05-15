@@ -154,6 +154,10 @@ msgstr "Beschreibung"
 msgid "you need to select at least one company"
 msgstr "Du musst mindestens eine Organisation auswählen."
 
+#: forms/unit.py
+msgid "this choice is not valid"
+msgstr "Diese Auswahl ist ungültig."
+
 #: models.py
 msgid "company"
 msgstr "Organisation"

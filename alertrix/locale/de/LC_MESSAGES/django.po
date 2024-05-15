@@ -154,3 +154,7 @@ msgstr "Anzeigename"
 #: templates/alertrix/form.html
 msgid "show advanced fields"
 msgstr "Erweiterte Felder anzeigen"
+
+#: views/appservice.py
+msgid "back"
+msgstr "Zurück"

@@ -85,3 +85,7 @@ msgid ""
 msgstr ""
 "%(user_id)s already exists on the homeserver but is unknown to the "
 "application service."
+
+#: forms/company.py
+msgid "moderator"
+msgstr "Moderator"

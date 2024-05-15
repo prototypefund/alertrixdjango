@@ -162,6 +162,10 @@ msgstr "Admin"
 msgid "invite user"
 msgstr "Invite user"
 
+#: forms/company.py
+msgid "invite"
+msgstr "Invite"
+
 #: forms/matrixroom.py
 msgid "name"
 msgstr "Name"

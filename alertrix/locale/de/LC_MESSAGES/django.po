@@ -77,3 +77,7 @@ msgstr "Name der Admin-Gruppe"
 #: forms/company.py
 msgid "matrix user id"
 msgstr "Matrix-Nutzer-ID"
+
+#: forms/company.py
+msgid "group already exists"
+msgstr "Gruppe existiert bereits"

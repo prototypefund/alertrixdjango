@@ -187,6 +187,10 @@ msgid "this choice is not valid"
 msgstr "Diese Auswahl ist ungültig."
 
 #: models.py
+msgid "responsible user"
+msgstr "Zuständiger Account"
+
+#: models.py
 msgid "company"
 msgstr "Organisation"
 

@@ -136,6 +136,7 @@ class MatrixRoom(
     )
     responsible_user = models.ForeignKey(
         MatrixUser,
+        verbose_name=_('responsible user'),
         on_delete=models.DO_NOTHING,
         blank=True,
         null=True,

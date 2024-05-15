@@ -147,6 +147,10 @@ msgstr ""
 "application service."
 
 #: forms/company.py
+msgid "standard"
+msgstr "Standard"
+
+#: forms/company.py
 msgid "moderator"
 msgstr "Moderator"
 

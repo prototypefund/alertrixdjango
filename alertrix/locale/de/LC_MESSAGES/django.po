@@ -267,6 +267,10 @@ msgstr "Berechtigungslevel"
 msgid "show advanced fields"
 msgstr "Erweiterte Felder anzeigen"
 
+#: templates/alertrix/form.html
+msgid "save"
+msgstr "Speichern"
+
 #: views/appservice.py
 msgid "back"
 msgstr "Zurück"

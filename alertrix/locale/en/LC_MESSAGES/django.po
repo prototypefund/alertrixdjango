@@ -49,3 +49,7 @@ msgstr ""
 #: accounts/views.py
 msgid "based on you user name, the homeserver on %(url)s has been added"
 msgstr "Based on you user name, the homeserver on %(url)s has been added."
+
+#: accounts/views.py
+msgid "please make sure your password manager works by logging in"
+msgstr "Please make sure your password manager works by logging in."

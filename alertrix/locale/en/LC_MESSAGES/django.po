@@ -166,3 +166,7 @@ msgstr "List"
 #: views/company.py
 msgid "user has been added to group"
 msgstr "User has been added to group."
+
+#: views/company.py
+msgid "no matrix space associated with this %(object)s"
+msgstr "No matrix space associated with this %(object)s."

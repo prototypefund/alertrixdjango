@@ -61,3 +61,7 @@ msgstr "Fehler beim senden des Tokens an %(user_id)s: %(errcode)s %(error)s"
 #: accounts/views.py
 msgid "%(user)s has been added to %(group_name)s"
 msgstr "%(user)s wurde zu %(group_name)s hinzugefügt."
+
+#: forms/company.py
+msgid "handler cannot be empty"
+msgstr "Verhaltensdefinition darf nicht leer sein."

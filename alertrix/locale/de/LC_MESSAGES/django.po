@@ -65,3 +65,7 @@ msgstr "%(user)s wurde zu %(group_name)s hinzugefügt."
 #: forms/company.py
 msgid "handler cannot be empty"
 msgstr "Verhaltensdefinition darf nicht leer sein."
+
+#: forms/company.py
+msgid "you are not allowed to use this %(object)s"
+msgstr "Du bist nicht berechtigt, dieses %(object)s zu verwenden."

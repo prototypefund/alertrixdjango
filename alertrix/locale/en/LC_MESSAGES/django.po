@@ -146,3 +146,7 @@ msgstr "You can test the connection by running the following command."
 #: templates/alertrix/company_detail.py
 msgid "user id"
 msgstr "User ID"
+
+#: templates/alertrix/company_detail.py
+msgid "power level"
+msgstr "Power Level"

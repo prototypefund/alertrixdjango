@@ -65,3 +65,7 @@ msgstr "New company"
 #: forms/company.py
 msgid "federate"
 msgstr "Federate"
+
+#: forms/company.py
+msgid "%(field)s cannot be empty"
+msgstr "%(field)s cannot be empty"

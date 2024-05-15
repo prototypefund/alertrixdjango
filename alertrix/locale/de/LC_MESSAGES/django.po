@@ -206,6 +206,10 @@ msgstr "Verhaltensdefinition"
 msgid "unit"
 msgstr "Einheit"
 
+#: models.py
+msgid "units"
+msgstr "Einheiten"
+
 #: templates/alertrix/applicationserviceregistration_detail.html
 msgid "managed by"
 msgstr "Verwaltet von"

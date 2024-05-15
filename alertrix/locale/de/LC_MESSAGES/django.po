@@ -178,3 +178,11 @@ msgstr "%(user_id)s wurde eingeladen."
 #: views/company.py
 msgid "unable to get room state: %(errcode)s %(error)s"
 msgstr "Nicht in der Lage, den Raum-Status abzufragen: %(errcode)s %(error)s"
+
+#: views/company.py
+msgid ""
+"%(user_id)s's power level could not be set to %(power_level)d: %(errcode)s "
+"%(error)s"
+msgstr ""
+"Das Berechtigungslevel von %(user_id)s konnte nicht auf %(power_level)d gesetzt werden: %(errcode)s "
+"%(error)s"

@@ -74,6 +74,10 @@ msgstr "Basierend auf deinem Nutzernamen wurde der Heimserver unter %(url)s hinz
 msgid "%(user)s has been added to %(group_name)s"
 msgstr "%(user)s wurde zu %(group_name)s hinzugefügt."
 
+#: accounts/views.py
+msgid "please make sure your password manager works by logging in"
+msgstr "Bitte stelle sicher, dass dein Passwort-Manager funktioniert, indem du dich einloggst."
+
 #: forms/company.py
 msgid "handler cannot be empty"
 msgstr "Verhaltensdefinition darf nicht leer sein."

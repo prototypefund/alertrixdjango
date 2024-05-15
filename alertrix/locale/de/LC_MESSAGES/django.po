@@ -167,6 +167,10 @@ msgid "slug"
 msgstr "Rohbau"
 
 #: models.py
+msgid "handler"
+msgstr "Verhaltensdefinition"
+
+#: models.py
 msgid "unit"
 msgstr "Einheit"
 

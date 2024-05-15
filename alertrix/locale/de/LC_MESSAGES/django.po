@@ -170,3 +170,7 @@ msgstr "Der Raum-Alias wurde automatisch auf \"%(alias)s\" gesetzt."
 #: views/company.py
 msgid "edit"
 msgstr "Bearbeiten"
+
+#: views/company.py
+msgid "%(user_id)s has been invited"
+msgstr "%(user_id)s wurde eingeladen."

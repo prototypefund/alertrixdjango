@@ -316,6 +316,10 @@ msgid "unable to get room state: %(errcode)s %(error)s"
 msgstr "Nicht in der Lage, den Raum-Status abzufragen: %(errcode)s %(error)s"
 
 #: views/company.py
+msgid "power level for %(user_id)s has been set to %(power_level)d"
+msgstr "Berechtigungslevel für %(user_id)s wurde auf %(power_level)d gesetzt."
+
+#: views/company.py
 msgid ""
 "%(user_id)s's power level could not be set to %(power_level)d: %(errcode)s "
 "%(error)s"

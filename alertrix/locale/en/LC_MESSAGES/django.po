@@ -272,6 +272,10 @@ msgid "save"
 msgstr "Save"
 
 #: views/appservice.py
+msgid "back"
+msgstr "Back"
+
+#: views/appservice.py
 msgid "setup"
 msgstr "Setup"
 

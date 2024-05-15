@@ -93,3 +93,7 @@ msgstr "Moderator"
 #: forms/company.py
 msgid "invite user"
 msgstr "Invite user"
+
+#: forms/matrixroom.py
+msgid "name"
+msgstr "Name"

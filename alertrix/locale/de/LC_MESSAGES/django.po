@@ -159,6 +159,10 @@ msgid "admin"
 msgstr "Admin"
 
 #: forms/company.py
+msgid "invite user"
+msgstr "Nutzer einladen"
+
+#: forms/company.py
 msgid "invite"
 msgstr "Einladen"
 

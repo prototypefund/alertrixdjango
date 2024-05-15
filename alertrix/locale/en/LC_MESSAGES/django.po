@@ -119,6 +119,10 @@ msgid "%(field)s cannot be empty"
 msgstr "%(field)s cannot be empty"
 
 #: forms/company.py
+msgid "group already exists"
+msgstr "Group already exists"
+
+#: forms/company.py
 msgid "%(field)s could not be corrected automatically"
 msgstr "%(field)s could not be corrected automatically."
 

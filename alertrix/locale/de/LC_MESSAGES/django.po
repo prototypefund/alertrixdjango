@@ -105,3 +105,7 @@ msgstr "Einladen"
 #: forms/matrixroom.py
 msgid "description"
 msgstr "Beschreibung"
+
+#: forms/unit.py
+msgid "you need to select at least one company"
+msgstr "Du musst mindestens eine Organisation auswählen."

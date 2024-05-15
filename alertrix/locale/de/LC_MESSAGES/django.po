@@ -131,6 +131,10 @@ msgid "standard"
 msgstr "Standard"
 
 #: forms/company.py
+msgid "moderator"
+msgstr "Moderator"
+
+#: forms/company.py
 msgid "admin"
 msgstr "Admin"
 

@@ -135,6 +135,10 @@ msgid "%(user_id)s is misconfigured and cannot be used"
 msgstr "%(user_id)s is misconfigured and cannot be used."
 
 #: forms/company.py
+msgid "%(field)s already taken"
+msgstr "%(field)s already taken."
+
+#: forms/company.py
 msgid ""
 "%(user_id)s already exists on the homeserver but is unknown to the "
 "application service"

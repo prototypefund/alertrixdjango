@@ -129,3 +129,12 @@ msgstr "Verwaltet von"
 #: templates/alertrix/applicationserviceregistration_list.html
 msgid "applicationservices"
 msgstr "Anwendungsdienste"
+
+#: templates/alertrix/applicationserviceregistration_setup.html
+msgid ""
+"specify the path to this application services config by adding the following "
+"lines to your <code>homeserver.yaml</code>"
+msgstr ""
+"Gib den Pfad zu der Konfiguration für den Anwendungsdienst an, indem du"
+" die folgenden Zeilen zu der <code>homeserver.yaml</code> deines Heimservers"
+" hinzufügst."

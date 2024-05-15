@@ -188,6 +188,10 @@ msgid "you can test the connection by running the following command"
 msgstr "You can test the connection by running the following command."
 
 #: templates/alertrix/company_detail.py
+msgid "members"
+msgstr "Members"
+
+#: templates/alertrix/company_detail.py
 msgid "user id"
 msgstr "User ID"
 

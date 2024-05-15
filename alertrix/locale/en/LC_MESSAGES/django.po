@@ -57,3 +57,7 @@ msgstr "Please make sure your password manager works by logging in."
 #: forms/company.py
 msgid "invalid handler id"
 msgstr "Invalid handler id"
+
+#: forms/company.py
+msgid "new company"
+msgstr "New company"

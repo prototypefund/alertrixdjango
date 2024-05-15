@@ -200,6 +200,10 @@ msgid "power level"
 msgstr "Power Level"
 
 #: templates/alertrix/form.py
+msgid "show advanced fields"
+msgstr "Show advanced fields"
+
+#: templates/alertrix/form.py
 msgid "save"
 msgstr "Save"
 

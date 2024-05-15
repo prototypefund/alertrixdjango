@@ -195,6 +195,10 @@ msgid "companies"
 msgstr "Companies"
 
 #: models.py
+msgid "slug"
+msgstr "Slug"
+
+#: models.py
 msgid "handler"
 msgstr "Handler"
 

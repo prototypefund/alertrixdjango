@@ -211,6 +211,10 @@ msgstr "Mitglieder"
 msgid "display name"
 msgstr "Anzeigename"
 
+#: templates/alertrix/company_detail.html
+msgid "power level"
+msgstr "Berechtigungslevel"
+
 #: templates/alertrix/form.html
 msgid "show advanced fields"
 msgstr "Erweiterte Felder anzeigen"

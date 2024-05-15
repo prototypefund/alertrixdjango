@@ -162,6 +162,10 @@ msgstr "Units"
 msgid "available to"
 msgstr "Available to"
 
+#: templates/alertrix/applicationserviceregistration_list.py
+msgid "applicationservices"
+msgstr "Application Services"
+
 #: templates/alertrix/applicationserviceregistration_setup.py
 msgid "setting up %(title)s"
 msgstr "Setting up %(title)s"

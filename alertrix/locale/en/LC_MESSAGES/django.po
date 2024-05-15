@@ -178,3 +178,7 @@ msgstr "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
 #: views/company.py
 msgid "power level for %(user_id)s has been set to %(power_level)d"
 msgstr "Power level for %(user_id)s has been set to %(power_level)d."
+
+#: views/company.py
+msgid "failed putting room state (%(event_type)s): %(errcode)s %(error)"
+msgstr "Unable to get room state: %(errcode)s %(error)s"

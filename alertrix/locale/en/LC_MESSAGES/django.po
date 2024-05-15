@@ -126,6 +126,10 @@ msgstr "Invite user"
 msgid "name"
 msgstr "Name"
 
+#: forms/matrixroom.py
+msgid "description"
+msgstr "Description"
+
 #: forms/unit.py
 msgid "new unit"
 msgstr "New unit"

@@ -151,6 +151,10 @@ msgid "handler"
 msgstr "Handler"
 
 #: models.py
+msgid "unit"
+msgstr "Unit"
+
+#: models.py
 msgid "units"
 msgstr "Units"
 

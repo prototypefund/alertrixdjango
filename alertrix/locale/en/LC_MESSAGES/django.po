@@ -162,3 +162,7 @@ msgstr "Setup"
 #: views/appservice.py
 msgid "list"
 msgstr "List"
+
+#: views/company.py
+msgid "user has been added to group"
+msgstr "User has been added to group."

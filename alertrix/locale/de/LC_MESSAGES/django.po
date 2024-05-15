@@ -113,3 +113,7 @@ msgstr "Du musst mindestens eine Organisation auswählen."
 #: models.py
 msgid "company"
 msgstr "Organisation"
+
+#: models.py
+msgid "slug"
+msgstr "Rohbau"

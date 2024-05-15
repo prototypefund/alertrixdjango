@@ -212,25 +212,57 @@ msgid "setup"
 msgstr "Setup"
 
 #: views/appservice.py
+msgid "<a href=\"%(url)s\">you need to add a handler</a>"
+msgstr "<a href=\"%(url)s\">you need to add a handler.</a>"
+
+#: views/appservice.py
 msgid "list"
 msgstr "List"
+
+#: views/company.py
+msgid "the matrix room alias has automatically been set to \"%(alias)s\""
+msgstr "The matrix room alias has automatically been set to \"%(alias)s\"."
 
 #: views/company.py
 msgid "user has been added to group"
 msgstr "User has been added to group."
 
 #: views/company.py
+msgid "edit"
+msgstr "Edit"
+
+#: views/company.py
 msgid "no matrix space associated with this %(object)s"
 msgstr "No matrix space associated with this %(object)s."
+
+#: views/company.py
+msgid "%(user_id)s has been invited"
+msgstr "%(user_id)s has been invited."
 
 #: views/company.py
 msgid "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
 msgstr "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
 
 #: views/company.py
+msgid "unable to get room state: %(errcode)s %(error)s"
+msgstr "Unable to get room state: %(errcode)s %(error)s"
+
+#: views/company.py
 msgid "power level for %(user_id)s has been set to %(power_level)d"
 msgstr "Power level for %(user_id)s has been set to %(power_level)d."
 
 #: views/company.py
+msgid ""
+"%(user_id)s's power level could not be set to %(power_level)d: %(errcode)s "
+"%(error)s"
+msgstr ""
+"%(user_id)s's power level could not be set to %(power_level)d: %(errcode)s "
+"%(error)s"
+
+#: views/company.py
 msgid "failed putting room state (%(event_type)s): %(errcode)s %(error)"
 msgstr "Unable to get room state: %(errcode)s %(error)s"
+
+#: views/matrixroom.py
+msgid "failed to create matrix space: %(errcode)s %(error)s"
+msgstr "failed to create matrix space: %(errcode)s %(error)s"

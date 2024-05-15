@@ -59,6 +59,10 @@ msgstr ""
 "direct message first."
 
 #: accounts/views.py
+msgid "use this token to register on %(url)s: %(token)s"
+msgstr "Use this token to register on %(url)s: %(token)s"
+
+#: accounts/views.py
 msgid ""
 "<p>use this token to register on <a href=\"%(url)s\">%(host)s</a></p>\n"
 "<pre><code>%(token)s</code></pre>"

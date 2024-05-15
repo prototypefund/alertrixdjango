@@ -166,3 +166,7 @@ msgstr "<a href=\"%(url)s\">Du musst eine Verhaltensdefinition hinzufügen</a>"
 #: views/company.py
 msgid "the matrix room alias has automatically been set to \"%(alias)s\""
 msgstr "Der Raum-Alias wurde automatisch auf \"%(alias)s\" gesetzt."
+
+#: views/company.py
+msgid "edit"
+msgstr "Bearbeiten"

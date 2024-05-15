@@ -191,6 +191,10 @@ msgid "company"
 msgstr "Organisation"
 
 #: models.py
+msgid "companies"
+msgstr "Organisationen"
+
+#: models.py
 msgid "slug"
 msgstr "Rohbau"
 

@@ -15,6 +15,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: accounts/forms.py
+msgid "create registration token"
+msgstr "Create a registration token"
+
+#: accounts/forms.py
 msgid "matrix id"
 msgstr "Matrix ID"
 

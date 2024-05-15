@@ -127,6 +127,14 @@ msgid "setting up %(title)s"
 msgstr "Setting up %(title)s"
 
 #: templates/alertrix/applicationserviceregistration_setup.py
+msgid ""
+"specify the path to this application services config by adding the following "
+"lines to your <code>homeserver.yaml</code>"
+msgstr ""
+"Specify the path to this application services config by adding the following "
+"lines to your <code>homeserver.yaml</code>"
+
+#: templates/alertrix/applicationserviceregistration_setup.py
 msgid "copy the following code snippet into the file you previously specified"
 msgstr ""
 "Copy the following code snippet into the file you previously specified."

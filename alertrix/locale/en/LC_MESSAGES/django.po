@@ -109,3 +109,7 @@ msgstr "This choice is not valid."
 #: models.py
 msgid "companies"
 msgstr "Companies"
+
+#: models.py
+msgid "handler"
+msgstr "Handler"

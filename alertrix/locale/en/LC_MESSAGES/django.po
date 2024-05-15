@@ -87,6 +87,10 @@ msgid "please make sure your password manager works by logging in"
 msgstr "Please make sure your password manager works by logging in."
 
 #: forms/company.py
+msgid "handler cannot be empty"
+msgstr "Handler cannot be empty."
+
+#: forms/company.py
 msgid "invalid handler id"
 msgstr "Invalid handler id"
 

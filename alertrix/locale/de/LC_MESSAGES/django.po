@@ -97,3 +97,7 @@ msgstr "Standard"
 #: forms/company.py
 msgid "admin"
 msgstr "Admin"
+
+#: forms/company.py
+msgid "invite"
+msgstr "Einladen"

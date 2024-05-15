@@ -103,6 +103,10 @@ msgid "new company"
 msgstr "New company"
 
 #: forms/company.py
+msgid "admin group name"
+msgstr "Admin group name"
+
+#: forms/company.py
 msgid "federate"
 msgstr "Federate"
 

@@ -150,3 +150,7 @@ msgstr "Mitglieder"
 #: templates/alertrix/company_detail.html
 msgid "display name"
 msgstr "Anzeigename"
+
+#: templates/alertrix/form.html
+msgid "show advanced fields"
+msgstr "Erweiterte Felder anzeigen"

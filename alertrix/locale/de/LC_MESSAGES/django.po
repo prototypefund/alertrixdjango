@@ -55,6 +55,14 @@ msgid "use this token to register on %(url)s: %(token)s"
 msgstr "Nutze dieses Token, um dich bei %(url)s zu registrieren: %(token)s"
 
 #: accounts/views.py
+msgid ""
+"<p>use this token to register on <a href=\"%(url)s\">%(host)s</a></p>\n"
+"<pre><code>%(token)s</code></pre>"
+msgstr ""
+"<p>Nutze dieses Token, um dich bei <a href=\"%(url)s\">%(host)s</a> zu registrieren:</p>\n"
+"<pre><code>%(token)s</code></pre>"
+
+#: accounts/views.py
 msgid "failed to send token to %(user_id)s: %(errcode)s %(error)s"
 msgstr "Fehler beim senden des Tokens an %(user_id)s: %(errcode)s %(error)s"
 

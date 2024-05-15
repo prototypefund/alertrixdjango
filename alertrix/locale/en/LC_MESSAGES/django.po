@@ -45,3 +45,7 @@ msgid ""
 msgstr ""
 "<p>Use this token to register on <a href=\"%(url)s\">%(host)s</a></p>\n"
 "<pre><code>%(token)s</code></pre>"
+
+#: accounts/views.py
+msgid "based on you user name, the homeserver on %(url)s has been added"
+msgstr "Based on you user name, the homeserver on %(url)s has been added."

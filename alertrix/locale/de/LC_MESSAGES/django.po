@@ -143,6 +143,10 @@ msgid "invite"
 msgstr "Einladen"
 
 #: forms/matrixroom.py
+msgid "name"
+msgstr "Name"
+
+#: forms/matrixroom.py
 msgid "description"
 msgstr "Beschreibung"
 

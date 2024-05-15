@@ -174,3 +174,7 @@ msgstr "Bearbeiten"
 #: views/company.py
 msgid "%(user_id)s has been invited"
 msgstr "%(user_id)s wurde eingeladen."
+
+#: views/company.py
+msgid "unable to get room state: %(errcode)s %(error)s"
+msgstr "Nicht in der Lage, den Raum-Status abzufragen: %(errcode)s %(error)s"

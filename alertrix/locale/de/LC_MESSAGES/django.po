@@ -139,6 +139,14 @@ msgid "%(field)s already taken"
 msgstr "%(field)s ist bereits vergriffen."
 
 #: forms/company.py
+msgid ""
+"%(user_id)s already exists on the homeserver but is unknown to the "
+"application service"
+msgstr ""
+"%(user_id)s existiert bereits auf dem Heimserver, ist dem Anwendungsdienst"
+" aber unbekannt"
+
+#: forms/company.py
 msgid "standard"
 msgstr "Standard"
 

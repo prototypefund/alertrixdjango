@@ -70,7 +70,7 @@ class CompanyCreateForm(
         ]
         advanced = CompanyForm.Meta.advanced + [
             'federate',
-            'matrix_user_id',
+            'responsible_user',
             'slug',
             'admin_group_name',
         ]
@@ -91,7 +91,7 @@ class CompanyCreateForm(
         initial=True,
         required=False,
     )
-    matrix_user_id = forms.CharField(
+    responsible_user = forms.CharField(
         label=_('matrix user id'),
         widget=forms.Textarea(
             attrs={
@@ -140,7 +140,7 @@ class CompanyCreateForm(
                 )
         return admin_group_name
 
-    def clean_matrix_user_id(self):
+    def clean_responsible_user(self):
         handler = self.clean_handler()
         if handler is None:
             return
@@ -152,7 +152,7 @@ class CompanyCreateForm(
         syn: synapse.appservice.ApplicationService = async_to_sync(
             handler.application_service.get_synapse_application_service
         )()
-        if not self.data['matrix_user_id']:
+        if not self.data['responsible_user']:
             # Prepare the user_id variable
             user_id = self.clean_slug()
             if not syn.is_interested_in_user(
@@ -178,19 +178,19 @@ class CompanyCreateForm(
                     break
                 if not user_id:
                     self.add_error(
-                        'matrix_user_id',
+                        'responsible_user',
                         _('%(field)s could not be corrected automatically') % {
-                            'field': self.fields['matrix_user_id'].label,
+                            'field': self.fields['responsible_user'].label,
                         },
                         )
         else:
-            user_id = self.data['matrix_user_id']
+            user_id = self.data['responsible_user']
         if not syn.is_interested_in_user(
             user_id=user_id,
         ):
-            if 'matrix_user_id' not in self.errors:
+            if 'responsible_user' not in self.errors:
                 self.add_error(
-                    'matrix_user_id',
+                    'responsible_user',
                     _('%(app_service)s is not interested in %(user_id)s') % {
                         'app_service': handler.application_service,
                         'user_id': user_id,
@@ -206,9 +206,9 @@ class CompanyCreateForm(
                 user=mu,
             )
             if devices.count() < 1:
-                if 'matrix_user_id' not in self.errors:
+                if 'responsible_user' not in self.errors:
                     self.add_error(
-                        'matrix_user_id',
+                        'responsible_user',
                         _('%(user_id)s is misconfigured and cannot be used') % {
                             'user_id': user_id,
                         },
@@ -220,13 +220,14 @@ class CompanyCreateForm(
                     responsible_user=mu,
                 )
                 if comp.responsible_user.user_id != user_id:
-                    if 'matrix_user_id' not in self.errors:
+                    if 'responsible_user' not in self.errors:
                         self.add_error(
-                            'matrix_user_id',
+                            'responsible_user',
                             _('%(field)s already taken') % {
-                                'field': self.fields['matrix_user_id'].label,
+                                'field': self.fields['responsible_user'].label,
                             },
                         )
+            return mu
         else:
             account_info = async_to_sync(handler.application_service.request)(
                 method='GET',
@@ -236,12 +237,16 @@ class CompanyCreateForm(
             )
             if 'errcode' not in account_info:
                 self.add_error(
-                    'matrix_user_id',
+                    'responsible_user',
                     _('%(user_id)s already exists on the homeserver but is unknown to the application service') % {
                         'user_id': user_id,
                     },
                 )
-        return user_id
+        return mas_models.User(
+            user_id=user_id,
+            homeserver=handler.application_service.homeserver,
+            app_service=handler.application_service,
+        )
 
 
 class InviteUser(

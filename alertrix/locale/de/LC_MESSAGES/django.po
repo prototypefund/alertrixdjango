@@ -125,3 +125,7 @@ msgstr "Einheit"
 #: templates/alertrix/applicationserviceregistration_detail.html
 msgid "managed by"
 msgstr "Verwaltet von"
+
+#: templates/alertrix/applicationserviceregistration_list.html
+msgid "applicationservices"
+msgstr "Anwendungsdienste"

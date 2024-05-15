@@ -327,6 +327,10 @@ msgstr ""
 "Das Berechtigungslevel von %(user_id)s konnte nicht auf %(power_level)d gesetzt werden: %(errcode)s "
 "%(error)s"
 
+#: views/company.py
+msgid "failed putting room state (%(event_type)s): %(errcode)s %(error)"
+msgstr "Fehler beim Setzen des Raum-Status (%(event_type)s): %(errcode)s %(error)"
+
 #: views/matrixroom.py
 msgid "failed to create matrix space: %(errcode)s %(error)s"
 msgstr "Fehler beim Erstellen des Matrix-Space: %(errcode)s %(error)s"

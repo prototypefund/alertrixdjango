@@ -29,3 +29,11 @@ msgstr "Not a valid token for %(user_id)s"
 #: accounts/views.py
 msgid "no main application service registration has been specified yet"
 msgstr "New application service registration"
+
+#: accounts/views.py
+msgid ""
+"invite <a href=\"https://matrix.to/#/%(user_id)s\">%(user_id)s</a> to a "
+"direct message first"
+msgstr ""
+"Invite <a href=\"https://matrix.to/#/%(user_id)s\">%(user_id)s</a> to a "
+"direct message first."

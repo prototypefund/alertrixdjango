@@ -223,6 +223,10 @@ msgid "applicationservices"
 msgstr "Anwendungsdienste"
 
 #: templates/alertrix/applicationserviceregistration_setup.html
+msgid "setting up %(title)s"
+msgstr "%(title)s einrichten"
+
+#: templates/alertrix/applicationserviceregistration_setup.html
 msgid ""
 "specify the path to this application services config by adding the following "
 "lines to your <code>homeserver.yaml</code>"

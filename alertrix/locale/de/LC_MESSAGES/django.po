@@ -236,6 +236,10 @@ msgstr ""
 " hinzufügst."
 
 #: templates/alertrix/applicationserviceregistration_setup.html
+msgid "copy the following code snippet into the file you previously specified"
+msgstr "Kopiere den folgenden Codeschnipsel in die Datei, die du eben angegeben hast."
+
+#: templates/alertrix/applicationserviceregistration_setup.html
 msgid "now restart your homeserver"
 msgstr "Starte jetzt deinen Heimserver neu."
 

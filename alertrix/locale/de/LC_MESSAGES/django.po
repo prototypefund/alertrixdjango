@@ -89,3 +89,7 @@ msgstr "%(app_service)s ist nicht an %(user_id)s interessiert."
 #: forms/company.py
 msgid "%(field)s already taken"
 msgstr "%(field)s ist bereits vergriffen."
+
+#: forms/company.py
+msgid "standard"
+msgstr "Standard"

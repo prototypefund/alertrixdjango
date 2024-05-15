@@ -81,3 +81,7 @@ msgstr "Matrix-Nutzer-ID"
 #: forms/company.py
 msgid "group already exists"
 msgstr "Gruppe existiert bereits"
+
+#: forms/company.py
+msgid "%(app_service)s is not interested in %(user_id)s"
+msgstr "%(app_service)s ist nicht an %(user_id)s interessiert."

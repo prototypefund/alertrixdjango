@@ -174,3 +174,7 @@ msgstr "No matrix space associated with this %(object)s."
 #: views/company.py
 msgid "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
 msgstr "%(user_id)s could not be invited to this room: %(errcode)s %(error)s"
+
+#: views/company.py
+msgid "power level for %(user_id)s has been set to %(power_level)d"
+msgstr "Power level for %(user_id)s has been set to %(power_level)d."

@@ -25,3 +25,7 @@ msgstr "Create admin account"
 #: accounts/forms.py
 msgid "not a valid token for %(user_id)s"
 msgstr "Not a valid token for %(user_id)s"
+
+#: accounts/views.py
+msgid "no main application service registration has been specified yet"
+msgstr "New application service registration"

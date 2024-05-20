@@ -5,6 +5,8 @@ description = "Der Messenger für Einsatzkräfte"
 authors = ["Fabian Becker <info@alertrix.net>"]
 license = "AGPLv3+"
 readme = "README.md"
+include = [
+]
 packages = [
     {include = "alertrix", from = "."},
 ]

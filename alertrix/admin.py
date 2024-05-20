@@ -4,3 +4,7 @@ from . import models
 admin.site.register(
     models.Handler,
 )
+
+admin.site.register(
+    models.MainApplicationServiceKey,
+)

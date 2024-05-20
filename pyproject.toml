@@ -6,6 +6,7 @@ authors = ["Fabian Becker <info@alertrix.net>"]
 license = "AGPLv3+"
 readme = "README.md"
 include = [
+    "alertrix/locale/*/LC_MESSAGES/django.mo",
 ]
 packages = [
     {include = "alertrix", from = "."},

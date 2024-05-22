@@ -47,7 +47,10 @@ class CreateUnit(
             })
         return state_events
 
-    def get_matrix_room_args(self, form):
+    def get_matrix_room_args(
+            self,
+            form,
+    ):
         args = super().get_matrix_room_args(form=form)
         args['initial_state'] = args['initial_state'] + [
             {

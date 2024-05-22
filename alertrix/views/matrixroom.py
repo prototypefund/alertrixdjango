@@ -37,7 +37,7 @@ class CreateMatrixRoom(
         return dict(
             name=form.data['name'],
             topic=form.data['description'],
-            federate=form.data['federate'],
+            federate=form.data['federate'] == 'on' if 'federate' in form.data else False,
             initial_state=[
             ],
             invite=(

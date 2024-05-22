@@ -51,7 +51,9 @@ class CreateUnit(
             self,
             form,
     ):
-        args = super().get_matrix_room_args(form=form)
+        args = super().get_matrix_room_args(
+            form=form,
+        )
         args['initial_state'] = args['initial_state'] + [
             {
                 'type': 'm.room.join_rules',

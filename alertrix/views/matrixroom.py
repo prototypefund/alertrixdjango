@@ -28,6 +28,7 @@ class CreateMatrixRoom(
     def get_matrix_room_args(
             self,
             form,
+            **kwargs,
     ):
         """
         Return the arguments used to create the room.
@@ -57,6 +58,7 @@ class CreateMatrixRoom(
                 if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
             ),
             space=True,
+            **kwargs,
         )
 
     def ensure_matrix_room_id(self, form):

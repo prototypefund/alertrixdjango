@@ -50,9 +50,11 @@ class CreateUnit(
     def get_matrix_room_args(
             self,
             form,
+            **kwargs
     ):
         args = super().get_matrix_room_args(
             form=form,
+            **kwargs,
         )
         args['initial_state'] = args['initial_state'] + [
             {

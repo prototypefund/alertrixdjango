@@ -36,7 +36,11 @@
     <div class="main-list">
         {% for parent in object.get_parents %}
         {% if parent.responsible_user %}
+        {% if parent.company %}
         <div class="company" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
+        {% else %}
+        <div class="company">
+        {% endif %}
             {% if parent.get_room_avatar %}
             <img src="{% if parent.get_room_avatar %}{% mxc_to_http parent.responsible_user.homeserver.url parent.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
             {% else %}

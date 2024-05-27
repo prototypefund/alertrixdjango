@@ -10,6 +10,31 @@
 
 {% block content %}
 {{ block.super }}
+<div>
+    {% if object.get_parents %}
+    {% for parent in object.get_parents %}
+    {% if parent.responsible_user %}
+    {% if parent.company %}
+    <div class="company" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
+    {% elif parent.unit %}
+    <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
+    {% else %}
+    <div class="company">
+    {% endif %}
+        {% if parent.get_room_avatar %}
+        <img src="{% if parent.get_room_avatar %}{% mxc_to_http parent.responsible_user.homeserver.url parent.get_room_avatar 128 128 %}{% endif %}" alt="{{ parent }}" width="128" height="128">
+        {% else %}
+        <img src="" width="128" height="128" alt="{{ parent }}">
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="uncontrolled-matrix-room">
+        {{ parent.matrix_room_id }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
 <table>
     <tr>
         <td>
@@ -34,39 +59,6 @@
 {% endif %}
 {% endfor %}
 <div>
-    {% if object.get_parents %}
-    <h2>{% trans 'superordinate' %}</h2>
-    <div class="main-list">
-        {% for parent in object.get_parents %}
-        {% if parent.responsible_user %}
-        {% if parent.company %}
-        <div class="company" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
-        {% elif parent.unit %}
-        <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
-        {% else %}
-        <div class="company">
-        {% endif %}
-            {% if parent.get_room_avatar %}
-            <img src="{% if parent.get_room_avatar %}{% mxc_to_http parent.responsible_user.homeserver.url parent.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
-            {% else %}
-            <img src="" height="128">
-            {% endif %}
-            <div>
-                <div class="object-title">{{ parent }}</div>
-                <div>
-                    <span>💬 {{ parent.get_children|length }}</span>
-                    <span>🧑 {{ parent.get_joined_members|length }}</span>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="uncontrolled-matrix-room">
-            {{ parent.matrix_room_id }}
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
     {% if object.get_children|length %}
     <h2>{% trans 'subordinate' %}</h2>
     <div class="main-list">

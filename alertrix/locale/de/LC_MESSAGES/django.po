@@ -276,6 +276,11 @@ msgid "save"
 msgstr "Speichern"
 
 #: templates/alertrix/unit_detail.html
+msgctxt "verb"
+msgid "alert"
+msgstr "Alarmieren"
+
+#: templates/alertrix/unit_detail.html
 msgid "superordinate"
 msgstr "Übergeordnet"
 

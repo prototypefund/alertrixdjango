@@ -1,4 +1,5 @@
 import nio
+from asgiref.sync import async_to_sync
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DetailView

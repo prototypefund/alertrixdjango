@@ -253,6 +253,9 @@ class MatrixRoom(
     def get_children(self):
         return self.get_relations('m.space.child')
 
+    def get_parents(self):
+        return self.get_relations('m.space.parent')
+
     def get_members(self):
         room_info = self.get_room_info()
         members = [

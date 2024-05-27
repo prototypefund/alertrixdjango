@@ -45,3 +45,7 @@ tr {
 .alarm-button:enabled {
   background-color: #ff2020;
 }
+table {
+    overflow-x: auto;
+    display: block;
+}

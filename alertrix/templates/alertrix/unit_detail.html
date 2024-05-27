@@ -10,10 +10,16 @@
 
 {% block content %}
 {{ block.super }}
+<table>
+    <tr>
+        <td>
 <h1>
     {{ object }}
 </h1>
 <a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
+        </td>
+    </tr>
+</table>
 {% for data in object.get_room_info %}
 {% if data.type == 'm.room.topic' %}
 <div>

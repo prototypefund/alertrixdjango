@@ -31,6 +31,16 @@
 {% endif %}
 {% endfor %}
 <div>
+    {% if object.get_parents %}
+    <h2>{% trans 'superordinate' %}</h2>
+    <div class="main-list">
+        {% for parent in object.get_parents %}
+        <div class="uncontrolled-matrix-room">
+            {{ parent.matrix_room_id }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 <div>
     <h2>{% trans 'members' %}</h2>

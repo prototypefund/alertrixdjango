@@ -74,6 +74,13 @@
         {% else %}
         <div class="unit">
         {% endif %}
+            {% if child.company or child.unit %}
+            {% if child.get_room_avatar %}
+            <img src="{% if child.get_room_avatar %}{% mxc_to_http child.responsible_user.homeserver.url child.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
+            {% else %}
+            <img src="" height="128">
+            {% endif %}
+            {% endif %}
             <div>
                 <div class="object-title">{{ child }}</div>
                 {% if child.get_description %}

@@ -38,6 +38,8 @@
         {% if parent.responsible_user %}
         {% if parent.company %}
         <div class="company" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
+        {% elif parent.unit %}
+        <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
         {% else %}
         <div class="company">
         {% endif %}

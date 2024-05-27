@@ -26,3 +26,15 @@ tr {
 .object-title {
     font-weight: bold;
 }
+.alarm-button {
+  padding: 1.5ex;
+  border-width: .5ex;
+  border-color: black;
+  border-radius: 1em;
+}
+.alarm-button:disabled {
+    background-color: #a88;
+}
+.alarm-button:enabled {
+  background-color: #ff2020;
+}

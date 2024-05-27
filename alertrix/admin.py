@@ -18,6 +18,10 @@ admin.site.register(
 )
 
 admin.site.register(
+    models.DirectMessage,
+)
+
+admin.site.register(
     models.Company,
     CompanyAdmin,
 )

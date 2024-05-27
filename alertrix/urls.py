@@ -15,6 +15,7 @@ urlpatterns = [
     ])),
     path('unit/', include([
         path('new', views.unit.CreateUnit.as_view(), name='unit.new'),
+        path('<pk>', views.unit.UnitDetailView.as_view(), name='unit.detail'),
     ])),
     path('appservice/', include([
         path('', views.appservice.ListApplicationServices.as_view(), name='appservice.list'),

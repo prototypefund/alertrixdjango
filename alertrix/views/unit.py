@@ -92,3 +92,29 @@ class CreateUnit(
                 }
             })
         return args
+
+
+class UnitDetailView(
+    mixins.LoginRequiredMixin,
+    mixins.UserPassesTestMixin,
+    DetailView,
+):
+    model = models.Unit
+
+    async def aget_joined_members(self):
+        self.object = await sync_to_async(self.get_object)()
+        responsible_user = await sync_to_async(getattr)(self.object, 'responsible_user')
+        client: nio.AsyncClient = await responsible_user.get_client()
+        joined_members_response: nio.JoinedMembersResponse | nio.JoinedMembersError = await client.joined_members(
+            self.object.matrix_room_id,
+        )
+        return joined_members_response
+
+    def test_func(self):
+        joined_members_response = async_to_sync(self.aget_joined_members)()
+        if self.request.user.matrix_id in [
+            user.user_id
+            for user in joined_members_response.members
+        ]:
+            return True
+        return False

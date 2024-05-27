@@ -68,9 +68,24 @@
     <h2>{% trans 'subordinate' %}</h2>
     <div class="main-list">
         {% for child in object.get_children %}
+        {% if child.responsible_user %}
+        <div class="unit">
+            <div>
+                <div class="object-title">{{ child }}</div>
+                {% if child.get_description %}
+                <div class="object-description">{{ child.get_description }}</div>
+                {% endif %}
+                <div>
+                    <span>💬 {{ child.get_children|length }}</span>
+                    <span>🧑 {{ child.get_joined_members|length }}</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
         <div class="uncontrolled-matrix-room">
             {{ child.matrix_room_id }}
         </div>
+        {% endif %}
         {% endfor %}
     </div>
     {% endif %}

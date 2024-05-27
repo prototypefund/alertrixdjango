@@ -25,3 +25,7 @@ admin.site.register(
     models.Company,
     CompanyAdmin,
 )
+
+admin.site.register(
+    models.Unit,
+)

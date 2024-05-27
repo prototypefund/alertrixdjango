@@ -69,7 +69,11 @@
     <div class="main-list">
         {% for child in object.get_children %}
         {% if child.responsible_user %}
+        {% if child.unit %}
+        <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=child.matrix_room_id %}'">
+        {% else %}
         <div class="unit">
+        {% endif %}
             <div>
                 <div class="object-title">{{ child }}</div>
                 {% if child.get_description %}

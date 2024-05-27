@@ -275,6 +275,10 @@ msgstr "Erweiterte Felder anzeigen"
 msgid "save"
 msgstr "Speichern"
 
+#: templates/alertrix/unit_detail.html
+msgid "superordinate"
+msgstr "Übergeordnet"
+
 #: views/appservice.py
 msgid "back"
 msgstr "Zurück"

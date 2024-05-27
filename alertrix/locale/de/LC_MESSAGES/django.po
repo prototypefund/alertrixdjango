@@ -279,6 +279,10 @@ msgstr "Speichern"
 msgid "superordinate"
 msgstr "Übergeordnet"
 
+#: templates/alertrix/unit_detail.html
+msgid "subordinate"
+msgstr "Untergeordnet"
+
 #: views/appservice.py
 msgid "back"
 msgstr "Zurück"

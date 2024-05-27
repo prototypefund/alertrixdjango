@@ -243,7 +243,7 @@ class MatrixRoom(
                 )
             except MatrixRoom.DoesNotExist:
                 matrix_room = MatrixRoom(
-                    matrix_room_id=state_event['state_key'],
+                    matrix_room_id=state_event['room_id'],
                 )
             children.append(matrix_room)
         return children

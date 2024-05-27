@@ -80,7 +80,11 @@ class UnitCreateForm(
 
     def clean_responsible_user(self):
         companies = self.clean_companies()
-        if companies is None:
+        if not companies:
+            self.add_error(
+                'responsible_user',
+                _('cannot select responsible user as not valid company is selected'),
+            )
             return
         relevant_companies = models.Company.objects.filter(
             slug__in=[ident for ident, _ in self.fields['companies'].choices],

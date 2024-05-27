@@ -1,0 +1,34 @@
+{% extends 'alertrix/detail.html' %}
+
+{% load i18n %}
+{% load matrix %}
+{% load static %}
+
+{% block title %}
+{{ object }}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<h1>
+    {{ object }}
+</h1>
+<a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
+<div>
+</div>
+<div>
+    <h2>{% trans 'members' %}</h2>
+    <table>
+        <thead><td>{% trans 'user id' %}</td><td>{% trans 'display name' %}</td><td>{% trans 'power level' %}</td></thead>
+        <tbody>
+        {% for data in object.get_room_info %}
+        {% if data.type == 'm.room.member' %}
+        {% if data.content.membership != 'leave' %}
+        <tr><td>{{ data.state_key }}</td><td>{{ data.content.displayname }}</td><td>{% for pl in object.get_room_info %}{% if pl.type == 'm.room.power_levels' %}{% for user, level in pl.content.users.items %}{% if user == data.state_key %}{{ level }}{% endif %}{% endfor %}{% endif %}{% endfor %}</td></tr>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

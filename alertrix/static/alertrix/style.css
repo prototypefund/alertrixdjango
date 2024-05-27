@@ -13,9 +13,16 @@
 :required {
     box-shadow: 0px 0px 4px orange;
 }
-.main-list > div > div {
+.matrix-room-card {
+    border-width: 1px;
     display: inline-block;
     vertical-align: top;
+    background-color: #aaa;
+    border-radius: 4px;
+    padding: 4px;
+}
+.matrix-room-card:hover {
+    background-color: #bbb;
 }
 .main-list > div > img {
     min-width: 128px;

@@ -19,6 +19,9 @@
 <h1>
     {{ object }}
 </h1>
+            <div>
+                <button class="alarm-button" disabled="disabled" title="{% trans 'this feature is not available yet' %}">{% trans 'alert' context "verb" %}</button>
+            </div>
 <a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
         </td>
     </tr>

@@ -281,6 +281,10 @@ msgid "alert"
 msgstr "Alarmieren"
 
 #: templates/alertrix/unit_detail.html
+msgid "this feature is not available yet"
+msgstr "Dieses Feature ist noch nicht verfügbar."
+
+#: templates/alertrix/unit_detail.html
 msgid "superordinate"
 msgstr "Übergeordnet"
 

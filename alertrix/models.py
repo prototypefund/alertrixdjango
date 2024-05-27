@@ -232,10 +232,10 @@ class MatrixRoom(
     def get_description(self):
         return self.get_attribute('topic')
 
-    def get_children(self):
+    def get_relations(self, relation_type: str):
         children = []
         for state_event in self.get_room_info():
-            if state_event['type'] != 'm.space.child':
+            if state_event['type'] != relation_type:
                 continue
             try:
                 matrix_room = MatrixRoom.objects.get(
@@ -249,6 +249,9 @@ class MatrixRoom(
                 )
             children.append(matrix_room)
         return children
+
+    def get_children(self):
+        return self.get_relations('m.space.child')
 
     def get_members(self):
         room_info = self.get_room_info()

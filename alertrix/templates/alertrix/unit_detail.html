@@ -15,11 +15,11 @@
     {% for parent in object.get_parents %}
     {% if parent.responsible_user %}
     {% if parent.company %}
-    <div class="company" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
+    <div class="company matrix-room-card" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
     {% elif parent.unit %}
-    <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
+    <div class="unit matrix-room-card" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
     {% else %}
-    <div class="company">
+    <div class="company matrix-room-card">
     {% endif %}
         {% if parent.get_room_avatar %}
         <img src="{% if parent.get_room_avatar %}{% mxc_to_http parent.responsible_user.homeserver.url parent.get_room_avatar 128 128 %}{% endif %}" alt="{{ parent }}" width="128" height="128">

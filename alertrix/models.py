@@ -242,6 +242,8 @@ class MatrixRoom(
                     matrix_room_id=state_event['state_key'],
                 )
             except MatrixRoom.DoesNotExist:
+                if state_event['room_id'] == self.matrix_room_id:
+                    continue
                 matrix_room = MatrixRoom(
                     matrix_room_id=state_event['room_id'],
                 )

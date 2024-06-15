@@ -101,6 +101,55 @@ class Handler(
             )
             device.latest_transaction_id += 1
             await device.asave()
+        if event['type'] == 'm.room.message' and event['content']['body'].lower().split(' ')[0] == 'start':
+            # Create the widget
+            room_id = event['room_id']
+            event_type = 'im.vector.modular.widgets'
+            content = {
+                'type': 'm.custom',
+                'url': request.META['HTTP_X_FORWARDED_PROTO'] + '://' + request.get_host(),
+                'name': request.get_host(),
+                'data': {
+                },
+            }
+            widget_id = '%(room)s_%(user)s_%(tms)s' % {
+                'room': slugify(room_id),
+                'user': slugify(event['sender']),
+                'tms': int(timezone.now().timestamp()),
+            }
+            widget_create_action = MatrixAction(
+                client=client,
+                args=nio.Api.room_put_state(
+                    access_token=client.access_token,
+                    room_id=room_id,
+                    event_type=event_type,
+                    body=content,
+                    state_key=widget_id,
+                ),
+            )
+            yield widget_create_action
+            device.latest_transaction_id += 1
+            # Set the room layout
+            await device.asave()
+            content = {
+                'widgets': {
+                    widget_id: {
+                        'container': 'top',
+                    },
+                },
+            }
+            yield MatrixAction(
+                client=client,
+                args=nio.Api.room_put_state(
+                    access_token=client.access_token,
+                    room_id=room_id,
+                    event_type='io.element.widgets.layout',
+                    body=content,
+                    state_key='',
+                ),
+            )
+            device.latest_transaction_id += 1
+            await device.asave()
         await client.close()
 
     async def on_room_invite(

@@ -101,6 +101,7 @@ class Handler(
             )
             device.latest_transaction_id += 1
             await device.asave()
+        await client.close()
 
     async def on_room_invite(
             self,

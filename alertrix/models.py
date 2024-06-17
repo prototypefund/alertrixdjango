@@ -373,6 +373,26 @@ class Unit(
         verbose_name_plural = _('units')
 
 
+class Widget(
+    models.Model,
+):
+    id = models.TextField(
+        primary_key=True,
+    )
+    room_id = models.TextField(
+    )
+    user_id = models.TextField(
+    )
+    created_timestamp = models.DateTimeField(
+        auto_now=True,
+    )
+    first_use_timestamp = models.DateTimeField(
+        default=None,
+        blank=True,
+        null=True,
+    )
+
+
 class MainApplicationServiceKey(
     models.Model,
 ):

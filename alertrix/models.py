@@ -117,6 +117,12 @@ class Handler(
                 'user': slugify(event['sender']),
                 'tms': int(timezone.now().timestamp()),
             }
+            widget = Widget(
+                id=widget_id,
+                room_id=room_id,
+                user_id=event['sender'],
+            )
+            await widget.asave()
             widget_create_action = MatrixAction(
                 client=client,
                 args=nio.Api.room_put_state(

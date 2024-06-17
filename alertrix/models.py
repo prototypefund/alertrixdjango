@@ -158,6 +158,15 @@ class Handler(
             await device.asave()
         await client.close()
 
+    async def on_im_vector_modular_widgets(
+            self,
+            request,
+            event,
+    ):
+        """
+        React to im.vector.modular.widgets events
+        """
+
     async def on_room_invite(
             self,
             request,

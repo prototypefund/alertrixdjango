@@ -20,6 +20,9 @@ class WidgetWatcher:
             models.Widget,
             id=widget_id,
         )
+        if not widget.first_use_timestamp:
+            widget.first_use_timestamp = timezone.now()
+            widget.save()
         response = self.get_response(request, *args, **kwargs)
         if 'widgetId' in request.GET:
             if (

@@ -205,8 +205,13 @@ class Handler(
         client: nio.AsyncClient = await user.get_client()
         if 'is_direct' in event['content'] and event['content']['is_direct']:
             # This room is a direct messaging room
+            person, new = await sync_to_async(get_user_model().objects.get_or_create)(
+                matrix_id=event['sender'],
+            )
+            if new:
+                await person.asave()
             dm = DirectMessage(
-                with_user=event['sender'],
+                with_user=person,
                 matrix_room_id=event['room_id'],
                 responsible_user=user,
             )
@@ -370,7 +375,9 @@ class MatrixRoom(
 class DirectMessage(
     MatrixRoom,
 ):
-    with_user = models.TextField(
+    with_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
 
     def __str__(self):

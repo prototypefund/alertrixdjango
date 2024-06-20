@@ -29,6 +29,8 @@ class WidgetWatcher:
         widget_id = None
         if 'widgetId' in request.GET:
             widget_id = request.GET['widgetId']
+        if not widget_id and 'widgetId' in request.COOKIES:
+            widget_id = request.COOKIES['widgetId']
         if widget_id:
             response = self.get_widget_response(
                 request,

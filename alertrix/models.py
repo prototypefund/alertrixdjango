@@ -3,6 +3,7 @@ import traceback
 
 import matrixappservice.exceptions
 import nio
+from django.http import HttpResponse
 from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.conf import settings
@@ -168,6 +169,21 @@ class Handler(
         """
         React to im.vector.modular.widgets events
         """
+        if event['content'] == {}:
+            widget_id = event['state_key']
+            try:
+                widget = await Widget.objects.aget(id=widget_id)
+                if event['room_id'] != widget.room_id:
+                    raise PermissionError(
+                        matrixappservice.exceptions.MInvalidParam(
+                            'Widget should not exist in this room.',
+                        ),
+                    )
+                await widget.adelete()
+            except Widget.DoesNotExist:
+                return HttpResponse(
+                    str(matrixappservice.exceptions.MNotFOUND()),
+                )
 
     async def on_room_invite(
             self,

@@ -11,6 +11,18 @@ class WidgetWatcher:
             *args, **kwargs,
     ):
         response = self.get_response(request, *args, **kwargs)
+        if 'widgetId' in request.GET:
+            if (
+                    'widgetId' in request.COOKIES and request.GET['widgetId'] != request.COOKIES['widgetId']
+                    or widget_id not in request.COOKIES
+            ):
+                response.set_cookie(
+                    'widgetId',
+                    request.GET['widgetId'],
+                    secure=True,
+                    httponly=True,
+                    samesite="none",
+                )
         return response
 
     def __call__(self, request, *args, **kwargs):

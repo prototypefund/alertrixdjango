@@ -125,7 +125,7 @@ class Handler(
             }
             widget = Widget(
                 id=widget_id,
-                room_id=room_id,
+                room=room,
                 user_id=event['sender'],
             )
             await widget.asave()
@@ -415,7 +415,9 @@ class Widget(
     id = models.TextField(
         primary_key=True,
     )
-    room_id = models.TextField(
+    room = models.ForeignKey(
+        MatrixRoom,
+        on_delete=models.CASCADE,
     )
     user_id = models.TextField(
     )

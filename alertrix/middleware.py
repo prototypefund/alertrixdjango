@@ -16,6 +16,10 @@ class WidgetWatcher:
             widget_id,
             *args, **kwargs,
     ):
+        widget = get_object_or_404(
+            models.Widget,
+            id=widget_id,
+        )
         response = self.get_response(request, *args, **kwargs)
         if 'widgetId' in request.GET:
             if (

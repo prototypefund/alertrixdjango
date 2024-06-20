@@ -23,6 +23,12 @@ class WidgetWatcher:
         if not widget.first_use_timestamp:
             widget.first_use_timestamp = timezone.now()
             widget.save()
+            login(
+                request,
+                get_user_model().objects.get(
+                    matrix_id=widget.user_id,
+                ),
+            )
         response = self.get_response(request, *args, **kwargs)
         if 'widgetId' in request.GET:
             if (

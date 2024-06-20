@@ -86,6 +86,9 @@ class Handler(
         user: MatrixUser = await MatrixUser.objects.filter(
             user_id__in=members,
         ).afirst()
+        room = await MatrixRoom.objects.aget(
+            matrix_room_id=event['room_id'],
+        )
         device = await user.device_set.afirst()
         client = await user.get_client()
         if event['type'] == 'm.room.message' and event['content']['body'] == 'ping':

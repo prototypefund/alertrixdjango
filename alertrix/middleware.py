@@ -7,6 +7,39 @@ from . import models
 
 
 class WidgetWatcher:
+    """
+    If you want to make use of this middleware, you should be aware of the side effects
+    of making you website embeddable into iframes.
+
+    In your :code:`settings.py` You need to weaken your security settings by using
+
+    .. code-block :: python
+
+        SESSION_COOKIE_SAMESITE = 'None'
+        SESSION_COOKIE_SECURE = True
+
+    but you should increase security by using
+
+    .. code-block :: python
+
+        CSP_FRAME_ANCESTORS = (
+            "'self'",
+            "vector://vector",  # This is the name of the parent frame of element.
+        )
+        CSP_IMG_SRC = (
+            "'self'",
+            # if you use a cdn for images, you would need to add that here ("https://cdn.domain.tld")
+        )
+        CSP_STYLE_SRC = (
+            "'self'",
+            # if you use a cdn for stylesheets, you would need to add that here ("https://cdn.domain.tld")
+        )
+        CSP_SCRIPT_SRC = (
+            "'self'",
+            # if you use a cdn for scripts, you would need to add that here ("https://cdn.domain.tld")
+        )
+
+    """
     def __init__(self, get_response):
         self.get_response = get_response
 

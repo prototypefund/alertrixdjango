@@ -403,6 +403,14 @@ class MatrixRoom(
             if user_objects.exists():
                 yield user_objects.first()
 
+    def delete(self, using=None, keep_parents=False):
+        async_to_sync(self.leave)(
+        )
+        return super().delete(
+            using=using,
+            keep_parents=keep_parents,
+        )
+
     async def leave(self):
         client: nio.AsyncClient = await self.responsible_user.get_client()
         ma = MatrixAction(

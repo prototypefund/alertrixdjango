@@ -384,6 +384,14 @@ class MatrixRoom(
         ]
         return members
 
+    def get_real_users(self):
+        for member in self.get_members():
+            user_objects = get_user_model().objects.filter(
+                matrix_id=member.user_id,
+            )
+            if user_objects.exists():
+                yield user_objects.first()
+
     def get_as_users(self):
         """
         Get all users of a room that are controlled by this application service.

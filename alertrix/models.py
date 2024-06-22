@@ -384,6 +384,17 @@ class MatrixRoom(
         ]
         return members
 
+    def get_as_users(self):
+        """
+        Get all users of a room that are controlled by this application service.
+        """
+        for member in self.get_members():
+            user_objects = MatrixUser.objects.filter(
+                matrix_id=member.user_id,
+            )
+            if user_objects.exists():
+                yield user_objects.first()
+
     def __str__(self):
         return self.get_name() or super().__str__()
 

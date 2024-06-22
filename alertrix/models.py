@@ -448,7 +448,6 @@ class Company(
     slug = models.SlugField(
         _('slug'),
         primary_key=True,
-        max_length=settings.ALERTRIX_SLUG_MAX_LENGTH,
     )
     handler = models.ForeignKey(
         Handler,

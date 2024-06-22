@@ -217,6 +217,14 @@ class Handler(
                 matrix_id=event['sender'],
             )
             if new:
+                group, group_new = await Group.objects.aget_or_create(
+                    name=settings.MATRIX_VALIDATED_GROUP_NAME,
+                )
+                if group_new:
+                    await group.asave()
+                await sync_to_async(group.user_set.add)(
+                    person,
+                )
                 person.set_unusable_password()
                 await person.asave()
             dm = DirectMessage(

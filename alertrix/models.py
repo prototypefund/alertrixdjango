@@ -217,6 +217,7 @@ class Handler(
                 matrix_id=event['sender'],
             )
             if new:
+                person.set_unusable_password()
                 await person.asave()
             dm = DirectMessage(
                 with_user=person,

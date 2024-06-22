@@ -304,7 +304,7 @@ class MatrixRoom(
             event_type: str,
             state_key: str = None,
     ):
-        return async_to_sync(self.get_room_state_event)(
+        return async_to_sync(self.aget_room_state_event)(
             event_type=event_type,
             state_key=state_key,
         )

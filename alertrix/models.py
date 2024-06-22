@@ -277,7 +277,6 @@ class MatrixRoom(
 
     async def aget_room_state_event(
             self,
-            room_id: str,
             event_type: str,
             state_key: str = None,
     ):
@@ -286,7 +285,7 @@ class MatrixRoom(
             return {}
         client: nio.AsyncClient = await mx_user.get_client()
         event = await client.room_get_state_event(
-            room_id=room_id,
+            room_id=str(self.matrix_room_id),
             event_type=event_type,
             state_key=state_key or '',
         )
@@ -302,12 +301,10 @@ class MatrixRoom(
 
     def get_room_state_event(
             self,
-            room_id: str,
             event_type: str,
             state_key: str = None,
     ):
         return async_to_sync(self.get_room_state_event)(
-            room_id=room_id,
             event_type=event_type,
             state_key=state_key,
         )
@@ -318,7 +315,6 @@ class MatrixRoom(
         room_id = str(self.matrix_room_id)
         try:
             state_event = await self.aget_room_state_event(
-                room_id=room_id,
                 event_type='m.room.avatar',
             )
             if state_event is None:

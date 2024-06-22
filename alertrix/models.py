@@ -128,10 +128,11 @@ class Handler(
                 'data': {
                 },
             }
-            widget_id = '%(room)s_%(user)s_%(tms)s' % {
+            widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
                 'room': slugify(room_id),
                 'user': slugify(event['sender']),
                 'tms': int(timezone.now().timestamp()),
+                'random': secrets.token_urlsafe(128),
             }
             widget = Widget(
                 id=widget_id,

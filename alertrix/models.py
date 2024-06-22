@@ -363,14 +363,17 @@ class MatrixRoom(
     def get_parents(self):
         return self.get_relations('m.space.parent')
 
-    def get_members(self):
-        room_info = self.get_room_info()
+    async def aget_members(self):
+        room_info = await self.aget_room_info()
         members = [
             state_event
             for state_event in room_info
             if state_event['type'] == 'm.room.member'
         ]
         return members
+
+    def get_members(self):
+        return async_to_sync(self.aget_members)()
 
     def get_joined_members(self):
         membership_info = self.get_members()

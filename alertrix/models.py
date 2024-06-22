@@ -237,6 +237,52 @@ class Handler(
             await dm.asave()
         device = await user.get_device()
 
+    async def on_room_leave(
+            self,
+            request,
+            event: dict,
+            user: User,
+    ):
+        """
+
+        :param request: The django request
+        :param event: A dictionary representing the matrix event
+        :param user: An account if it is controlled by this application service.
+        :return:
+        """
+        try:
+            room = await MatrixRoom.objects.aget(
+                matrix_room_id=event['room_id'],
+            )
+        except MatrixRoom.DoesNotExist:
+            yield HttpResponse(
+                str(matrixappservice.exceptions.MNotFOUND(
+                    'This room could not be found',
+                )),
+            )
+            return
+        try:
+            dm = await DirectMessage.objects.aget(
+                matrix_room_id=event['room_id'],
+            )
+        except DirectMessage.DoesNotExist:
+            pass
+        except get_user_model().DoesNotExist:
+            pass
+        finally:
+            dm = None
+        # Check if we are the last member of this room
+        members = await room.aget_members()
+        if dm is not None and len(members) == 1 and members[0] == room.responsible_user.matrix_id:
+            async for ma in room.leave():
+                yield ma
+        async for ma in super().on_room_leave(
+            request,
+            event,
+            room.responsible_user,
+        ):
+            yield ma
+
     def __str__(self):
         return str(self.application_service)
 

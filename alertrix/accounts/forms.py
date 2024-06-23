@@ -47,6 +47,12 @@ class CreateRegistration(
                 _('there should be exactly one ":" in your full username'),
             )
             return
+        if len(cleaned_matrix_id.lstrip('@').split(':')[0]) <= 0:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('you need to enter you full matrix user id including the localpart'),
+            )
+            return
         try:
             user = get_user_model().objects.get(
                 matrix_id=cleaned_matrix_id,

@@ -53,6 +53,12 @@ class CreateRegistration(
                 _('you need to enter you full matrix user id including the localpart'),
             )
             return
+        if len(cleaned_matrix_id.split(':')[1]) <= 0:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('you need to enter you full matrix user id including the server name'),
+            )
+            return
         try:
             user = get_user_model().objects.get(
                 matrix_id=cleaned_matrix_id,

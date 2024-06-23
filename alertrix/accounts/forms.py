@@ -34,7 +34,23 @@ class CreateRegistration(
         submit_text = _('register')
 
     def clean_valid_for_matrix_id(self):
-        return self.data.get('valid_for_matrix_id').strip()
+        cleaned_matrix_id = self.data.get('valid_for_matrix_id').strip()
+        try:
+            user = get_user_model().objects.get(
+                matrix_id=cleaned_matrix_id,
+            )
+            if user.has_usable_password():
+                raise AttributeError()
+        except (
+            get_user_model().DoesNotExist,
+            AttributeError
+        ):
+            self.add_error(
+                'valid_for_matrix_id',
+                _('If this user exists, they are not prepared to set a password'),
+            )
+        finally:
+            return cleaned_matrix_id
 
 
 class CreateFirstUserForm(

@@ -25,8 +25,10 @@ class CreateRegistrationToken(
     form_class = forms.CreateRegistration
     model = models.RegistrationToken
     template_name = 'alertrix/form.html'
-    success_url = reverse_lazy('validate')
     registration_user_selected_cookie_name = 'registration_user_id'
+
+    def get_success_url(self):
+        return reverse_lazy('validate', kwargs={'matrix_id': self.object.valid_for_matrix_id})
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -187,12 +189,13 @@ class CreateFirstUser(
 
 
 class CreateUser(
-    CreateView,
+    UpdateView,
 ):
     model = get_user_model()
     form_class = forms.CreateUserForm
     template_name = 'alertrix/form.html'
     success_url = reverse_lazy('login')
+    pk_url_kwarg = 'matrix_id'
 
     def get_initial(self):
         initial = super().get_initial()

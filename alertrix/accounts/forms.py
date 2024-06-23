@@ -35,6 +35,12 @@ class CreateRegistration(
 
     def clean_valid_for_matrix_id(self):
         cleaned_matrix_id = self.data.get('valid_for_matrix_id').strip()
+        if not cleaned_matrix_id.startswith('@'):
+            self.add_error(
+                'valid_for_matrix_id',
+                _('a matrix user id always starts with "@"'),
+            )
+            return
         try:
             user = get_user_model().objects.get(
                 matrix_id=cleaned_matrix_id,

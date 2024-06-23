@@ -299,6 +299,21 @@ class Handler(
             dm = await DirectMessage.objects.aget(
                 matrix_room_id=event['room_id'],
             )
+            app_service: ApplicationServiceRegistration = await sync_to_async(getattr)(
+                await MainApplicationServiceKey.objects.aget(id=1),
+                'service',
+            )
+            main_user = await app_service.get_user()
+            dm_user = await sync_to_async(getattr)(
+                dm,
+                'responsible_user',
+            )
+            if dm_user == main_user:
+                user = await get_user_model().objects.aget(
+                    matrix_id=event['state_key'],
+                )
+                if await sync_to_async(getattr)(dm, 'with_user') == user:
+                    await user.adelete()
         except DirectMessage.DoesNotExist:
             pass
         except get_user_model().DoesNotExist:

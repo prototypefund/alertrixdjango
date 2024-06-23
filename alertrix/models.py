@@ -214,6 +214,40 @@ class Handler(
             yield matrix_action
         client: nio.AsyncClient = await user.get_client()
         if 'is_direct' in event['content'] and event['content']['is_direct']:
+            try:
+                app_service: ApplicationServiceRegistration = await sync_to_async(getattr)(
+                    await MainApplicationServiceKey.objects.aget(id=1),
+                    'service',
+                )
+                main_user = await app_service.get_user()
+            except (
+                    ApplicationServiceRegistration.DoesNotExist,
+                    MainApplicationServiceKey.DoesNotExist,
+            ):
+                main_user = None
+            if user != main_user:
+                device = await user.get_device()
+                client: nio.AsyncClient = await user.get_client()
+                ma = MatrixAction(
+                    client=client,
+                    args=nio.Api.room_send(
+                        access_token=client.access_token,
+                        room_id=event['room_id'],
+                        event_type='m.room.message',
+                        body={
+                            'msgtype': 'm.text',
+                            'body': '%(scheme)s://%(host)s' % {
+                                'scheme': request.scheme,
+                                'host': request.get_host(),
+                            },
+                        },
+                        tx_id=device.latest_transaction_id,
+                    )
+                )
+                device.latest_transaction_id += 1
+                await device.asave()
+                yield ma
+                return
             # This room is a direct messaging room
             person, new = await sync_to_async(get_user_model().objects.get_or_create)(
                 matrix_id=event['sender'],

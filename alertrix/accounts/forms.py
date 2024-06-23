@@ -41,6 +41,12 @@ class CreateRegistration(
                 _('a matrix user id always starts with "@"'),
             )
             return
+        if len(cleaned_matrix_id.split(':')) != 2:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('there should be exactly one ":" in your full username'),
+            )
+            return
         try:
             user = get_user_model().objects.get(
                 matrix_id=cleaned_matrix_id,

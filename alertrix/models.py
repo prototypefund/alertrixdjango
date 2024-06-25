@@ -1,6 +1,10 @@
 import logging
+import secrets
 import traceback
+
+import matrixappservice.exceptions
 import nio
+from django.http import HttpResponse
 from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.conf import settings
@@ -8,6 +12,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
+from django.utils import timezone
 
 from matrixappservice import exceptions as exc
 from matrixappservice.handler import Handler as ApplicationServiceHandler
@@ -15,6 +21,7 @@ from matrixappservice.matrix.action import MatrixAction
 from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import Homeserver
 from matrixappservice.models import User as MatrixUser
+from django.contrib.auth import get_user_model
 
 
 class User(
@@ -81,6 +88,17 @@ class Handler(
         user: MatrixUser = await MatrixUser.objects.filter(
             user_id__in=members,
         ).afirst()
+        try:
+            room = await MatrixRoom.objects.aget(
+                matrix_room_id=event['room_id'],
+            )
+        except MatrixRoom.DoesNotExist:
+            yield HttpResponse(
+                str(matrixappservice.exceptions.MNotFOUND(
+                    'This room could not be found',
+                )),
+            )
+            return
         device = await user.device_set.afirst()
         client = await user.get_client()
         if event['type'] == 'm.room.message' and event['content']['body'] == 'ping':
@@ -99,6 +117,87 @@ class Handler(
             )
             device.latest_transaction_id += 1
             await device.asave()
+        if event['type'] == 'm.room.message' and event['content']['body'].lower().split(' ')[0] == 'start':
+            # Create the widget
+            room_id = event['room_id']
+            event_type = 'im.vector.modular.widgets'
+            content = {
+                'type': 'm.custom',
+                'url': request.META['HTTP_X_FORWARDED_PROTO'] + '://' + request.get_host(),
+                'name': request.get_host(),
+                'data': {
+                },
+            }
+            widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
+                'room': slugify(room_id),
+                'user': slugify(event['sender']),
+                'tms': int(timezone.now().timestamp()),
+                'random': secrets.token_urlsafe(128),
+            }
+            widget = Widget(
+                id=widget_id,
+                room=room,
+                user_id=event['sender'],
+            )
+            await widget.asave()
+            widget_create_action = MatrixAction(
+                client=client,
+                args=nio.Api.room_put_state(
+                    access_token=client.access_token,
+                    room_id=room_id,
+                    event_type=event_type,
+                    body=content,
+                    state_key=widget_id,
+                ),
+            )
+            yield widget_create_action
+            device.latest_transaction_id += 1
+            # Set the room layout
+            await device.asave()
+            content = {
+                'widgets': {
+                    widget_id: {
+                        'container': 'top',
+                    },
+                },
+            }
+            yield MatrixAction(
+                client=client,
+                args=nio.Api.room_put_state(
+                    access_token=client.access_token,
+                    room_id=room_id,
+                    event_type='io.element.widgets.layout',
+                    body=content,
+                    state_key='',
+                ),
+            )
+            device.latest_transaction_id += 1
+            await device.asave()
+        await client.close()
+
+    async def on_im_vector_modular_widgets(
+            self,
+            request,
+            event,
+    ):
+        """
+        React to im.vector.modular.widgets events
+        """
+        if event['content'] == {}:
+            widget_id = event['state_key']
+            try:
+                widget = await Widget.objects.aget(id=widget_id)
+                if event['room_id'] != widget.room_id:
+                    raise PermissionError(
+                        matrixappservice.exceptions.MInvalidParam(
+                            'Widget should not exist in this room.',
+                        ),
+                    )
+                await widget.adelete()
+            except Widget.DoesNotExist:
+                return HttpResponse(
+                    str(matrixappservice.exceptions.MNotFOUND()),
+                )
 
     async def on_room_invite(
             self,
@@ -115,14 +214,123 @@ class Handler(
             yield matrix_action
         client: nio.AsyncClient = await user.get_client()
         if 'is_direct' in event['content'] and event['content']['is_direct']:
+            try:
+                app_service: ApplicationServiceRegistration = await sync_to_async(getattr)(
+                    await MainApplicationServiceKey.objects.aget(id=1),
+                    'service',
+                )
+                main_user = await app_service.get_user()
+            except (
+                    ApplicationServiceRegistration.DoesNotExist,
+                    MainApplicationServiceKey.DoesNotExist,
+            ):
+                main_user = None
+            if user != main_user:
+                device = await user.get_device()
+                client: nio.AsyncClient = await user.get_client()
+                ma = MatrixAction(
+                    client=client,
+                    args=nio.Api.room_send(
+                        access_token=client.access_token,
+                        room_id=event['room_id'],
+                        event_type='m.room.message',
+                        body={
+                            'msgtype': 'm.text',
+                            'body': '%(scheme)s://%(host)s' % {
+                                'scheme': request.scheme,
+                                'host': request.get_host(),
+                            },
+                        },
+                        tx_id=device.latest_transaction_id,
+                    )
+                )
+                device.latest_transaction_id += 1
+                await device.asave()
+                yield ma
+                return
             # This room is a direct messaging room
+            person, new = await sync_to_async(get_user_model().objects.get_or_create)(
+                matrix_id=event['sender'],
+            )
+            if new:
+                group, group_new = await Group.objects.aget_or_create(
+                    name=settings.MATRIX_VALIDATED_GROUP_NAME,
+                )
+                if group_new:
+                    await group.asave()
+                await sync_to_async(group.user_set.add)(
+                    person,
+                )
+                person.set_unusable_password()
+                await person.asave()
             dm = DirectMessage(
-                with_user=event['sender'],
+                with_user=person,
                 matrix_room_id=event['room_id'],
                 responsible_user=user,
             )
             await dm.asave()
         device = await user.get_device()
+
+    async def on_room_leave(
+            self,
+            request,
+            event: dict,
+            user: User,
+    ):
+        """
+
+        :param request: The django request
+        :param event: A dictionary representing the matrix event
+        :param user: An account if it is controlled by this application service.
+        :return:
+        """
+        try:
+            room = await MatrixRoom.objects.aget(
+                matrix_room_id=event['room_id'],
+            )
+        except MatrixRoom.DoesNotExist:
+            yield HttpResponse(
+                str(matrixappservice.exceptions.MNotFOUND(
+                    'This room could not be found',
+                )),
+            )
+            return
+        try:
+            dm = await DirectMessage.objects.aget(
+                matrix_room_id=event['room_id'],
+            )
+            app_service: ApplicationServiceRegistration = await sync_to_async(getattr)(
+                await MainApplicationServiceKey.objects.aget(id=1),
+                'service',
+            )
+            main_user = await app_service.get_user()
+            dm_user = await sync_to_async(getattr)(
+                dm,
+                'responsible_user',
+            )
+            if dm_user == main_user:
+                user = await get_user_model().objects.aget(
+                    matrix_id=event['state_key'],
+                )
+                if await sync_to_async(getattr)(dm, 'with_user') == user:
+                    await user.adelete()
+        except DirectMessage.DoesNotExist:
+            pass
+        except get_user_model().DoesNotExist:
+            pass
+        finally:
+            dm = None
+        # Check if we are the last member of this room
+        members = await room.aget_members()
+        if dm is not None and len(members) == 1 and members[0] == room.responsible_user.matrix_id:
+            async for ma in room.leave():
+                yield ma
+        async for ma in super().on_room_leave(
+            request,
+            event,
+            room.responsible_user,
+        ):
+            yield ma
 
     def __str__(self):
         return str(self.application_service)
@@ -166,7 +374,6 @@ class MatrixRoom(
 
     async def aget_room_state_event(
             self,
-            room_id: str,
             event_type: str,
             state_key: str = None,
     ):
@@ -175,7 +382,7 @@ class MatrixRoom(
             return {}
         client: nio.AsyncClient = await mx_user.get_client()
         event = await client.room_get_state_event(
-            room_id=room_id,
+            room_id=str(self.matrix_room_id),
             event_type=event_type,
             state_key=state_key or '',
         )
@@ -191,12 +398,10 @@ class MatrixRoom(
 
     def get_room_state_event(
             self,
-            room_id: str,
             event_type: str,
             state_key: str = None,
     ):
-        return async_to_sync(self.get_room_state_event)(
-            room_id=room_id,
+        return async_to_sync(self.aget_room_state_event)(
             event_type=event_type,
             state_key=state_key,
         )
@@ -207,7 +412,6 @@ class MatrixRoom(
         room_id = str(self.matrix_room_id)
         try:
             state_event = await self.aget_room_state_event(
-                room_id=room_id,
                 event_type='m.room.avatar',
             )
             if state_event is None:
@@ -256,14 +460,17 @@ class MatrixRoom(
     def get_parents(self):
         return self.get_relations('m.space.parent')
 
-    def get_members(self):
-        room_info = self.get_room_info()
+    async def aget_members(self):
+        room_info = await self.aget_room_info()
         members = [
             state_event
             for state_event in room_info
             if state_event['type'] == 'm.room.member'
         ]
         return members
+
+    def get_members(self):
+        return async_to_sync(self.aget_members)()
 
     def get_joined_members(self):
         membership_info = self.get_members()
@@ -274,6 +481,44 @@ class MatrixRoom(
         ]
         return members
 
+    def get_real_users(self):
+        for member in self.get_members():
+            user_objects = get_user_model().objects.filter(
+                matrix_id=member.user_id,
+            )
+            if user_objects.exists():
+                yield user_objects.first()
+
+    def get_as_users(self):
+        """
+        Get all users of a room that are controlled by this application service.
+        """
+        for member in self.get_members():
+            user_objects = MatrixUser.objects.filter(
+                matrix_id=member.user_id,
+            )
+            if user_objects.exists():
+                yield user_objects.first()
+
+    def delete(self, using=None, keep_parents=False):
+        async_to_sync(self.leave)(
+        )
+        return super().delete(
+            using=using,
+            keep_parents=keep_parents,
+        )
+
+    async def leave(self):
+        client: nio.AsyncClient = await self.responsible_user.get_client()
+        ma = MatrixAction(
+            client=client,
+            args=nio.Api.room_leave(
+                access_token=client.access_token,
+                room_id=self.matrix_room_id,
+            )
+        )
+        yield ma
+
     def __str__(self):
         return self.get_name() or super().__str__()
 
@@ -281,7 +526,9 @@ class MatrixRoom(
 class DirectMessage(
     MatrixRoom,
 ):
-    with_user = models.TextField(
+    with_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
 
     def __str__(self):
@@ -298,7 +545,6 @@ class Company(
     slug = models.SlugField(
         _('slug'),
         primary_key=True,
-        max_length=settings.ALERTRIX_SLUG_MAX_LENGTH,
     )
     handler = models.ForeignKey(
         Handler,
@@ -319,6 +565,28 @@ class Unit(
     class Meta:
         verbose_name = _('unit')
         verbose_name_plural = _('units')
+
+
+class Widget(
+    models.Model,
+):
+    id = models.TextField(
+        primary_key=True,
+    )
+    room = models.ForeignKey(
+        MatrixRoom,
+        on_delete=models.CASCADE,
+    )
+    user_id = models.TextField(
+    )
+    created_timestamp = models.DateTimeField(
+        auto_now=True,
+    )
+    first_use_timestamp = models.DateTimeField(
+        default=None,
+        blank=True,
+        null=True,
+    )
 
 
 class MainApplicationServiceKey(

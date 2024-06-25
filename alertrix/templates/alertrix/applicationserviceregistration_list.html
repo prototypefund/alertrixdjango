@@ -12,13 +12,15 @@
 <h1>{% trans 'applicationservices' %}</h1>
 <div class="main-list">
     {% for obj in object_list %}
-    <div onclick="window.location.href = '{% url 'appservice.detail' obj.pk %}'" style="min-height: 128">
+    <a href="{% url 'appservice.detail' obj.pk %}">
+    <div class="main-list-item" style="min-height: 128">
         <div>
             <div>
                 {{ obj }}
             </div>
         </div>
     </div>
+    </a>
     {% endfor %}
 </div>
 {% endblock %}

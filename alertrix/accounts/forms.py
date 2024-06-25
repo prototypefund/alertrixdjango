@@ -34,7 +34,47 @@ class CreateRegistration(
         submit_text = _('register')
 
     def clean_valid_for_matrix_id(self):
-        return self.data.get('valid_for_matrix_id').strip()
+        cleaned_matrix_id = self.data.get('valid_for_matrix_id').strip()
+        if not cleaned_matrix_id.startswith('@'):
+            self.add_error(
+                'valid_for_matrix_id',
+                _('a matrix user id always starts with "@"'),
+            )
+            return
+        if len(cleaned_matrix_id.split(':')) != 2:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('there should be exactly one ":" in your full username'),
+            )
+            return
+        if len(cleaned_matrix_id.lstrip('@').split(':')[0]) <= 0:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('you need to enter you full matrix user id including the localpart'),
+            )
+            return
+        if len(cleaned_matrix_id.split(':')[1]) <= 0:
+            self.add_error(
+                'valid_for_matrix_id',
+                _('you need to enter you full matrix user id including the server name'),
+            )
+            return
+        try:
+            user = get_user_model().objects.get(
+                matrix_id=cleaned_matrix_id,
+            )
+            if user.has_usable_password():
+                raise AttributeError()
+        except (
+            get_user_model().DoesNotExist,
+            AttributeError
+        ):
+            self.add_error(
+                'valid_for_matrix_id',
+                _('If this user exists, they are not prepared to set a password'),
+            )
+        finally:
+            return cleaned_matrix_id
 
 
 class CreateFirstUserForm(

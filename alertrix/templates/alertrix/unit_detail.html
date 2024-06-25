@@ -15,7 +15,8 @@
     {% for parent in object.get_parents %}
     {% if parent.responsible_user %}
     {% if parent.company %}
-    <div class="company matrix-room-card" onclick="window.location.href = '{% url 'comp.detail' slug=parent.company.slug %}'">
+    <a href="{% url 'comp.detail' slug=parent.company.slug %}">
+    <div class="company matrix-room-card">
     {% elif parent.unit %}
     <div class="unit matrix-room-card" onclick="window.location.href = '{% url 'unit.detail' pk=parent.matrix_room_id %}'">
     {% else %}
@@ -27,6 +28,7 @@
         <img src="" width="128" height="128" alt="{{ parent }}">
         {% endif %}
     </div>
+    </a>
     {% else %}
     <div class="uncontrolled-matrix-room">
         {{ parent.matrix_room_id }}

@@ -24,9 +24,6 @@
 .matrix-room-card:hover {
     background-color: #bbb;
 }
-.main-list > div > img {
-    min-width: 128px;
-}
 tr {
     border-size: 1px;
 }

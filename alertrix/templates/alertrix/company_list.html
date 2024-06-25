@@ -13,10 +13,10 @@
 <div class="main-list">
     {% for obj in object_list %}
     <a href="{% url 'comp.detail' slug=obj.slug %}" style="min-height: 128">
-        <div>
+        <div class="main-list-item matrix-room-card">
         {% if obj.matrix_room_id %}
         <div style="float: left">
-            <img src="{% mxc_to_http obj.handler.application_service.homeserver.url obj.get_room_avatar 128 128 %}" alt="" height="128">
+            <img src="{% mxc_to_http obj.handler.application_service.homeserver.url obj.get_room_avatar 128 128 %}" alt="" height="128" width="128">
         </div>
         {% endif %}
         <div>

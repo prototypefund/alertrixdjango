@@ -27,7 +27,7 @@
         {% for child in object.get_children %}
         {% if child.responsible_user %}
         <a href="{% url 'unit.detail' pk=child.matrix_room_id %}">
-            <div class="unit">
+            <div class="main-list-item matrix-room-card">
             {% if child.company or child.unit %}
             <img src="{% if child.get_room_avatar %}{% mxc_to_http child.responsible_user.homeserver.url child.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
             {% endif %}

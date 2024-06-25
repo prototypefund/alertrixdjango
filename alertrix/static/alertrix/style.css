@@ -1,10 +1,10 @@
-.main-list > div {
+.main-list-item {
     padding: 8px;
     border-radius: 8px;
     background-color: #aaa;
     margin: 4px;
 }
-.main-list > div:hover {
+.main-list-item:hover {
     background-color: #bbb;
 }
 .errorlist {
@@ -23,9 +23,6 @@
 }
 .matrix-room-card:hover {
     background-color: #bbb;
-}
-.main-list > div > img {
-    min-width: 128px;
 }
 tr {
     border-size: 1px;

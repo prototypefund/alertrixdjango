@@ -10,4 +10,6 @@ def home(request):
     return render(
         request,
         'alertrix/home.html',
+        context={
+        },
     )

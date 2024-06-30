@@ -11,5 +11,8 @@ def home(request):
         request,
         'alertrix/home.html',
         context={
+            'main_user': models.MainApplicationServiceKey.objects.get(
+                id=1,
+            ).service.get_user(),
         },
     )

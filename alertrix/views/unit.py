@@ -104,7 +104,7 @@ class UnitDetailView(
     async def aget_joined_members(self):
         self.object = await sync_to_async(self.get_object)()
         responsible_user = await sync_to_async(getattr)(self.object, 'responsible_user')
-        client: nio.AsyncClient = await responsible_user.get_client()
+        client: nio.AsyncClient = await responsible_user.aget_client()
         joined_members_response: nio.JoinedMembersResponse | nio.JoinedMembersError = await client.joined_members(
             self.object.matrix_room_id,
         )

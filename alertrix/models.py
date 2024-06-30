@@ -356,7 +356,7 @@ class MatrixRoom(
         mx_user = await sync_to_async(self.__getattribute__)('responsible_user')
         if mx_user is None:
             return []
-        client: nio.AsyncClient = await mx_user.get_client()
+        client: nio.AsyncClient = await mx_user.aget_client()
         room_info = await client.room_get_state(
             str(self.matrix_room_id),
         )
@@ -380,7 +380,7 @@ class MatrixRoom(
         mx_user = await sync_to_async(self.__getattribute__)('responsible_user')
         if mx_user is None:
             return {}
-        client: nio.AsyncClient = await mx_user.get_client()
+        client: nio.AsyncClient = await mx_user.aget_client()
         event = await client.room_get_state_event(
             room_id=str(self.matrix_room_id),
             event_type=event_type,
@@ -509,7 +509,7 @@ class MatrixRoom(
         )
 
     async def leave(self):
-        client: nio.AsyncClient = await self.responsible_user.get_client()
+        client: nio.AsyncClient = await self.responsible_user.aget_client()
         ma = MatrixAction(
             client=client,
             args=nio.Api.room_leave(

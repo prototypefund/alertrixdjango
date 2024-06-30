@@ -3,4 +3,6 @@
 {% load matrix %}
 
 {% block content %}
+{% if not user.is_authenticated %}
+{% endif %}
 {% endblock %}

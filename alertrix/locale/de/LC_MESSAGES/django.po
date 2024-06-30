@@ -275,6 +275,10 @@ msgstr "Erweiterte Felder anzeigen"
 msgid "save"
 msgstr "Speichern"
 
+#: templates/alertrix/home.html
+msgid "send <code>start</code> to <a href=\"%(url)s\">%(matrix_id)s</a> in a direct message"
+msgstr "Sende <code>start</code> an <a href=\"%(url)s\">%(matrix_id)s</a> in einer Direktnachricht."
+
 #: templates/alertrix/unit_detail.html
 msgctxt "verb"
 msgid "alert"

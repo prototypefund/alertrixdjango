@@ -77,7 +77,7 @@ class Handler(
             event,
     ):
         app_service = await sync_to_async(self.__getattribute__)('application_service')
-        as_client: nio.AsyncClient = await app_service.get_matrix_client()
+        as_client: nio.AsyncClient = await app_service.aget_matrix_client()
         joined_members_resp = await as_client.joined_members(
             event['room_id'],
         )
@@ -100,7 +100,7 @@ class Handler(
             )
             return
         device = await user.device_set.afirst()
-        client = await user.get_client()
+        client = await user.aget_client()
         if event['type'] == 'm.room.message' and event['content']['body'] == 'ping':
             yield MatrixAction(
                 client=client,
@@ -212,22 +212,22 @@ class Handler(
             user,
         ):
             yield matrix_action
-        client: nio.AsyncClient = await user.get_client()
+        client: nio.AsyncClient = await user.aget_client()
         if 'is_direct' in event['content'] and event['content']['is_direct']:
             try:
                 app_service: ApplicationServiceRegistration = await sync_to_async(getattr)(
                     await MainApplicationServiceKey.objects.aget(id=1),
                     'service',
                 )
-                main_user = await app_service.get_user()
+                main_user = await app_service.aget_user()
             except (
                     ApplicationServiceRegistration.DoesNotExist,
                     MainApplicationServiceKey.DoesNotExist,
             ):
                 main_user = None
             if user != main_user:
-                device = await user.get_device()
-                client: nio.AsyncClient = await user.get_client()
+                device = await user.aget_device()
+                client: nio.AsyncClient = await user.aget_client()
                 ma = MatrixAction(
                     client=client,
                     args=nio.Api.room_send(
@@ -269,7 +269,7 @@ class Handler(
                 responsible_user=user,
             )
             await dm.asave()
-        device = await user.get_device()
+        device = await user.aget_device()
 
     async def on_room_leave(
             self,
@@ -303,7 +303,7 @@ class Handler(
                 await MainApplicationServiceKey.objects.aget(id=1),
                 'service',
             )
-            main_user = await app_service.get_user()
+            main_user = await app_service.aget_user()
             dm_user = await sync_to_async(getattr)(
                 dm,
                 'responsible_user',

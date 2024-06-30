@@ -6,6 +6,11 @@
 {% if not user.is_authenticated %}
 <div class="center">
     {% with profile_information=main_user.get_profile_information %}
+    {% if profile_information.avatar_url %}
+    <div class="center">
+        <img src="{% mxc_to_http main_user.homeserver.url profile_information.avatar_url 128 128 %}" alt="" height="128" width="128">
+    </div>
+    {% endif %}
     <div class="center">
     {% blocktranslate with matrix_id=main_user url="https://matrix.to/#/{{ matrix_id }}" trimmed %}
     send <code>start</code> to <a href="{{ url }}">{{ matrix_id }}</a> in a direct message

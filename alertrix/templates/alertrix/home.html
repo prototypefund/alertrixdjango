@@ -12,7 +12,7 @@
     </div>
     {% endif %}
     <div class="center">
-    {% blocktranslate with matrix_id=main_user url="https://matrix.to/#/{{ matrix_id }}" trimmed %}
+    {% blocktranslate with matrix_id=main_user url="https://matrix.to/#/"|add:main_user.user_id trimmed %}
     send <code>start</code> to <a href="{{ url }}">{{ matrix_id }}</a> in a direct message
     {% endblocktranslate %}
     </div>

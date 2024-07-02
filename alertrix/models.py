@@ -121,18 +121,18 @@ class Handler(
             # Create the widget
             room_id = event['room_id']
             event_type = 'im.vector.modular.widgets'
+            widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
+                'room': slugify(room_id),
+                'user': slugify(event['sender']),
+                'tms': int(timezone.now().timestamp()),
+                'random': secrets.token_urlsafe(128),
+            }
             content = {
                 'type': 'm.custom',
                 'url': request.META['HTTP_X_FORWARDED_PROTO'] + '://' + request.get_host(),
                 'name': request.get_host(),
                 'data': {
                 },
-            }
-            widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
-                'room': slugify(room_id),
-                'user': slugify(event['sender']),
-                'tms': int(timezone.now().timestamp()),
-                'random': secrets.token_urlsafe(128),
             }
             widget = Widget(
                 id=widget_id,

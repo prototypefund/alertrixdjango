@@ -134,6 +134,7 @@ class Handler(
                     'scheme': request.META['HTTP_X_FORWARDED_PROTO'],
                     'host': request.get_host(),
                     'args': urlencode({
+                        'widgetId': widget_id,
                     }),
                 },
                 'name': request.get_host(),

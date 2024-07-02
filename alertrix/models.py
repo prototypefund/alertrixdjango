@@ -130,7 +130,12 @@ class Handler(
             }
             content = {
                 'type': 'm.custom',
-                'url': request.META['HTTP_X_FORWARDED_PROTO'] + '://' + request.get_host(),
+                'url': '%(scheme)s://%(host)s/?%(args)s' % {
+                    'scheme': request.META['HTTP_X_FORWARDED_PROTO'],
+                    'host': request.get_host(),
+                    'args': urlencode({
+                    }),
+                },
                 'name': request.get_host(),
                 'data': {
                 },

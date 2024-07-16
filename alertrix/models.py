@@ -305,3 +305,17 @@ class MainApplicationServiceKey(
 
     def delete(self, *args, **kwargs):
         pass
+
+
+class MainUserKey(
+    models.Model,
+):
+    service: ApplicationServiceRegistration = models.OneToOneField(
+        ApplicationServiceRegistration,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    user: MatrixUser = models.OneToOneField(
+        MatrixUser,
+        on_delete=models.CASCADE,
+    )

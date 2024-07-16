@@ -1,3 +1,4 @@
+import matrixappservice
 from django.shortcuts import render
 
 from . import appservice

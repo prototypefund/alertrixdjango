@@ -47,25 +47,8 @@ class DetailApplicationService(
         cd['check'] = self.check()
         return cd
 
-    def check_handler(self):
-        failed = False
-        try:
-            if self.object.handler is None:
-                failed = True
-        except AttributeError:
-            failed = True
-        if failed:
-            messages.error(
-                self.request,
-                _('<a href="%(url)s">you need to add a handler</a>') % {
-                    'url': '',
-                },
-                extra_tags='safe',
-            )
-
     def check(self):
         return {
-            'handler': self.check_handler(),
         }
 
     def get(self, request, *args, **kwargs):

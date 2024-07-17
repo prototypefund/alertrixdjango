@@ -45,3 +45,32 @@ class UserIsUserOfThisObjectMixin(
     UserIsInGroupForThisObjectMixin,
 ):
     group_attribute_name = 'users'
+
+
+class UserHasSpecificMembershipForThisMatrixRoom(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+):
+    allow_admins = True
+    valid_room_membership_states = [
+        'invite',
+        'join',
+    ]
+
+    def test_func(self):
+        if self.request.user.is_superuser:
+            return True
+        try:
+            assert self.object
+        except AttributeError:
+            self.object = self.get_object(self.get_queryset())
+        try:
+            mas_models.Event.objects.get(
+                room__room_id=self.object.matrix_room_id,
+                content__membership__in=self.valid_room_membership_states,
+                state_key=self.request.user.matrix_id,
+            )
+            return True
+        except mas_models.Event.DoesNotExist:
+            pass
+        return False

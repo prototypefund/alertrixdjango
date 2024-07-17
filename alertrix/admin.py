@@ -10,10 +10,6 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 admin.site.register(
-    models.Handler,
-)
-
-admin.site.register(
     models.MainApplicationServiceKey,
 )
 

@@ -166,6 +166,13 @@ class CreateCompany(
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+        data['form'].fields['application_service']: django.forms.fields.ChoiceField
+        data['form'].fields['application_service'].choices = [
+            (application_service.pk, application_service)
+            for application_service in models.ApplicationServiceRegistration.objects.filter(
+                users__in=self.request.user.groups.all(),
+            )
+        ]
         return data
 
 

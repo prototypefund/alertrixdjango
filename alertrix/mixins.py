@@ -3,6 +3,7 @@ import abc
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse
+from matrixappservice import models as mas_models
 
 
 class ContextActionsMixin:

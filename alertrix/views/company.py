@@ -255,7 +255,7 @@ class InviteUser(
             room_id,
     ):
         mx_user = await sync_to_async(self.object.__getattribute__)('responsible_user')
-        client = await mx_user.get_client()
+        client = await mx_user.aget_client()
         resp = await client.room_invite(
             room_id,
             user_id,
@@ -286,7 +286,7 @@ class InviteUser(
             power_level,
     ):
         mx_user = await sync_to_async(self.object.__getattribute__)('responsible_user')
-        client = await mx_user.get_client()
+        client = await mx_user.aget_client()
         resp: nio.RoomGetStateResponse | nio.RoomGetStateError = await client.room_get_state(
             room_id,
         )
@@ -368,7 +368,7 @@ class UpdateCompany(
             content: dict,
     ):
         user = self.object.responsible_user
-        client: nio.AsyncClient = await user.get_client()
+        client: nio.AsyncClient = await user.aget_client()
         response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
             self.object.matrix_room_id,
             event_type,

@@ -86,7 +86,7 @@ class CreateMatrixRoom(
             self,
             **kwargs,
     ):
-        client: nio.AsyncClient = await self.object.responsible_user.get_client()
+        client: nio.AsyncClient = await self.object.responsible_user.aget_client()
         response: nio.RoomCreateResponse = await client.room_create(
             **kwargs
         )
@@ -110,7 +110,7 @@ class CreateMatrixRoom(
     ):
         matrix_room = await models.MatrixRoom.objects.aget(matrix_room_id=room_id)
         user = await sync_to_async(getattr)(matrix_room, 'responsible_user')
-        client: nio.AsyncClient = await user.get_client()
+        client: nio.AsyncClient = await user.aget_client()
         if client is not None:
             response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
                 room_id=room_id,

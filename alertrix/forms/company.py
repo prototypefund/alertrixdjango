@@ -20,41 +20,8 @@ class CompanyForm(
         fields = [
             'name',
             'description',
-            'handler',
             'matrix_room_id',
         ]
-
-    def clean_handler(self):
-        raw_selection = self.data['handler']
-        if not raw_selection:
-            if 'handler' not in self.errors:
-                self.add_error(
-                    'handler',
-                    _('handler cannot be empty'),
-                )
-            return
-        try:
-            handler_id = models.Handler._meta.get_field('id').to_python(raw_selection)
-        except ValidationError:
-            if 'handler' not in self.errors:
-                self.add_error(
-                    'handler',
-                    _('invalid handler id'),
-                )
-            return
-        handler = models.Handler.objects.get(
-            id=handler_id,
-        )
-        if self.user.groups.filter(id=handler.users.id).count() < 1:
-            if 'handler' not in self.errors:
-                self.add_error(
-                    'handler',
-                    _('you are not allowed to use this %(object)s') % {
-                        'object': models.Handler.Meta.verbose_name,
-                    },
-                )
-            return
-        return handler
 
 
 class CompanyCreateForm(
@@ -103,6 +70,12 @@ class CompanyCreateForm(
         ),
         required=False,
     )
+    application_service = forms.ChoiceField(
+        choices=[
+            (application_service.pk, application_service)
+            for application_service in models.ApplicationServiceRegistration.objects.all()
+        ],
+    )
 
     def clean_slug(self):
         slug = self.data.get('slug') or slugify(self.data.get('name'))
@@ -140,18 +113,22 @@ class CompanyCreateForm(
                 )
         return admin_group_name
 
+    def clean_application_service(self):
+        service = mas_models.ApplicationServiceRegistration.objects.get(
+            pk=self.data.get('application_service'),
+        )
+        return service
+
     def clean_responsible_user(self):
-        handler = self.clean_handler()
-        if handler is None:
+        application_service = self.cleaned_data.get('application_service') or self.clean_application_service()
+        if application_service is None:
             return
         user_namespaces = mas_models.Namespace.objects.filter(
-            app_service=handler.application_service,
+            app_service=application_service,
             scope=mas_models.Namespace.ScopeChoices.users,
         )
         # Create a synapse instance to check if its application service is interested in the generated user id
-        syn: synapse.appservice.ApplicationService = async_to_sync(
-            handler.application_service.get_synapse_application_service
-        )()
+        syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
         if not self.data['responsible_user']:
             # Prepare the user_id variable
             user_id = self.clean_slug()
@@ -167,7 +144,7 @@ class CompanyCreateForm(
                     )
                     interested_check_against = '@%(localpart)s:%(server_name)s' % {
                         'localpart': localpart,
-                        'server_name': handler.application_service.homeserver.server_name,
+                        'server_name': application_service.homeserver.server_name,
                     }
                     if not syn.is_interested_in_user(
                             user_id=interested_check_against,
@@ -192,7 +169,7 @@ class CompanyCreateForm(
                 self.add_error(
                     'responsible_user',
                     _('%(app_service)s is not interested in %(user_id)s') % {
-                        'app_service': handler.application_service,
+                        'app_service': application_service,
                         'user_id': user_id,
                     },
                 )
@@ -229,7 +206,7 @@ class CompanyCreateForm(
                         )
             return mu
         else:
-            account_info = async_to_sync(handler.application_service.request)(
+            account_info = async_to_sync(application_service.request)(
                 method='GET',
                 path='/_matrix/client/v3/profile/%(user_id)s' % {
                     'user_id': user_id,
@@ -244,8 +221,8 @@ class CompanyCreateForm(
                 )
         return mas_models.User(
             user_id=user_id,
-            homeserver=handler.application_service.homeserver,
-            app_service=handler.application_service,
+            homeserver=application_service.homeserver,
+            app_service=application_service,
         )
 
 

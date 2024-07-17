@@ -2,6 +2,7 @@ import secrets
 
 import nio
 from django.conf import settings
+from django.utils import timezone
 from matrixappservice import MatrixClient
 
 from .. import models

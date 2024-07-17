@@ -177,7 +177,7 @@ class CreateCompany(
 
 
 class DetailCompany(
-    mixins.UserIsAdminForThisObjectMixin,
+    mixins.UserHasSpecificMembershipForThisMatrixRoom,
     mixins.ContextActionsMixin,
     DetailView,
 ):

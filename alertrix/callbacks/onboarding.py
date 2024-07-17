@@ -57,6 +57,38 @@ async def on_room_invite(
             )
 
 
+async def ensure_encryption(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMessage,
+):
+    if not settings.ALERTRIX_ENFORCE_ENCRYPTION:
+        # This alertrix instance does not enforce encryption
+        return
+    if client.rooms[room.room_id].encrypted:
+        # This room already is encrypted
+        return
+    if event.source['content'].get('net.alertrix.request_encryption') is not None:
+        # This request likely comes from us or another alertrix bot
+        return
+    enable_encryption_event = nio.EnableEncryptionBuilder().as_dict()
+    room_put_state_response = await client.room_put_state(
+        room_id=room.room_id,
+        event_type=enable_encryption_event.pop('type'),
+        **enable_encryption_event,
+    )
+    if type(room_put_state_response) is nio.RoomPutStateError:
+        await client.room_send(
+            room_id=room.room_id,
+            message_type='m.room.message',
+            content={
+                'net.alertrix.request_encryption': '',
+                'msgtype': 'm.notice',
+                'body': _('please enable encryption'),
+            }
+        )
+
+
 async def add_widget_to_chat(
         client: MatrixClient,
         room: nio.MatrixRoom,

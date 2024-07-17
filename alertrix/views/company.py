@@ -159,13 +159,6 @@ class CreateCompany(
         )
         if not self.object.responsible_user:
             mu: mas_models.User = form.cleaned_data['responsible_user']
-            if not mu.registered_timestamp:
-                try:
-                    async_to_sync(mu.register)()
-                except matrixappservice.exceptions.MUserInUse:
-                    logging.error(
-                        '%(user_id)s already exists on server, but is not known to the database',
-                    )
             mu.save()
             self.object.responsible_user = mu
         return super().form_valid(form=form)

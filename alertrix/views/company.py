@@ -164,6 +164,10 @@ class CreateCompany(
             self.object.responsible_user = mu
         return super().form_valid(form=form)
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        return data
+
 
 class DetailCompany(
     mixins.UserIsAdminForThisObjectMixin,

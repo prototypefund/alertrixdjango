@@ -68,7 +68,7 @@ class CreateCompany(
     def get_success_url(self):
         return reverse('comp.detail', kwargs={'slug': self.object.slug})
 
-    def get_matrix_room_args(self, form):
+    def get_matrix_room_args(self, form, **kwargs):
         alias_namespaces = mas_models.Namespace.objects.filter(
             app_service=self.object.handler.application_service,
             scope=mas_models.Namespace.ScopeChoices.aliases,

@@ -1,5 +1,6 @@
 import abc
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse
 

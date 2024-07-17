@@ -5,6 +5,7 @@
 {% block content %}
 {% if not user.is_authenticated %}
 <div class="center">
+    {% if main_user %}
     {% with profile_information=main_user.get_profile_information %}
     {% if profile_information.avatar_url %}
     <div class="center">
@@ -17,6 +18,9 @@
     {% endblocktranslate %}
     </div>
     {% endwith %}
+    {% else %}
+    {% translate "further configuration is required, please contact the admins" %}
+    {% endif %}
 </div>
 {% endif %}
 {% endblock %}

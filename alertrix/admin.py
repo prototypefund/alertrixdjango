@@ -25,3 +25,7 @@ admin.site.register(
 admin.site.register(
     models.Unit,
 )
+
+admin.site.register(
+    models.MainUserKey,
+)

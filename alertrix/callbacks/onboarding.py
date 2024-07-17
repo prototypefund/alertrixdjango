@@ -55,3 +55,76 @@ async def on_room_invite(
                     matrix_id=event.sender,
                 ),
             )
+
+
+async def add_widget_to_chat(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMessage,
+):
+    if event.source['content']['body'].startswith('start'):
+        # verify that this happens in the primary direct message
+        dm = await models.DirectMessage.objects.aget(
+            responsible_user__user_id=client.user_id,
+            with_user=event.sender,
+        )
+        if dm.matrix_room_id == room.room_id:
+            # Create the widget
+            room_id = room.room_id
+            event_type = 'im.vector.modular.widgets'
+            widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
+                'room': slugify(room_id),
+                'user': slugify(event.sender),
+                'tms': int(timezone.now().timestamp()),
+                'random': secrets.token_urlsafe(128),
+            }
+            content = {
+                'type': 'm.custom',
+                'url': '%(scheme)s://%(host)s/?%(args)s' % {
+                    'scheme': settings.ALERTRIX_WIDGET_SCHEME,
+                    'host': settings.ALERTRIX_WIDGET_HOST,
+                    'args': urlencode({
+                        'widgetId': widget_id,
+                    }),
+                },
+                'name': settings.ALERTRIX_WIDGET_HOST,
+                'data': {
+                },
+            }
+            widget = models.Widget(
+                id=widget_id,
+                room=await models.MatrixRoom.objects.aget(matrix_room_id=room.room_id),
+                user_id=event.sender,
+            )
+            await widget.asave()
+            await client.room_put_state(
+                room_id=room_id,
+                event_type=event_type,
+                content=content,
+                state_key=widget_id,
+            )
+            # Set the room layout
+            content = {
+                'widgets': {
+                    widget_id: {
+                        'container': 'top',
+                    },
+                },
+            }
+            await client.room_put_state(
+                room_id=room_id,
+                event_type='io.element.widgets.layout',
+                content=content,
+                state_key='',
+            )
+        else:
+            await client.room_send(
+                room_id=room.room_id,
+                event_type='m.room.message',
+                content={
+                    'msgtype': 'm.notice',
+                    'body': 'https://matrix.to/#/%(room_id)s' % {
+                        'room_id': dm.matrix_room_id,
+                    },
+                },
+            )

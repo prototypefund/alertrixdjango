@@ -33,7 +33,7 @@ async def on_room_invite(
             # … direct the user to that room …
             await client.room_send(
                 room_id=room.room_id,
-                event_type='m.room.message',
+                message_type='m.room.message',
                 body={
                     'msgtype': 'm.text',
                     'body': 'https://matrix.to/#/%(room_id)s' % {
@@ -152,7 +152,7 @@ async def add_widget_to_chat(
         else:
             await client.room_send(
                 room_id=room.room_id,
-                event_type='m.room.message',
+                message_type='m.room.message',
                 content={
                     'msgtype': 'm.notice',
                     'body': 'https://matrix.to/#/%(room_id)s' % {

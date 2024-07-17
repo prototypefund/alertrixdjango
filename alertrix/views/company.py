@@ -69,23 +69,22 @@ class CreateCompany(
         return reverse('comp.detail', kwargs={'slug': self.object.slug})
 
     def get_matrix_room_args(self, form, **kwargs):
+        application_service = self.object.responsible_user.app_service
         alias_namespaces = mas_models.Namespace.objects.filter(
-            app_service=self.object.handler.application_service,
+            app_service=application_service,
             scope=mas_models.Namespace.ScopeChoices.aliases,
         )
         # Prepare the alias variable
         alias = None
         # Create a synapse instance to check if its application service is interested in the generated user id
-        syn: synapse.appservice.ApplicationService = async_to_sync(
-            self.object.handler.application_service.get_synapse_application_service
-        )()
+        syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
         for namespace in alias_namespaces:
             if '*' not in namespace.regex:
                 continue
             localpart = namespace.regex.lstrip('@').replace('*', self.object.slug)
             interested_check_against = '@%(localpart)s:%(server_name)s' % {
                 'localpart': localpart,
-                'server_name': self.object.handler.application_service.homeserver.server_name,
+                'server_name': application_service.homeserver.server_name,
             }
             if not syn.is_interested_in_user(
                     user_id=interested_check_against,

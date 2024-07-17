@@ -1,3 +1,4 @@
+import matrixappservice.exceptions
 from django.core.exceptions import ValidationError
 import synapse.appservice
 from asgiref.sync import async_to_sync

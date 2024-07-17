@@ -220,11 +220,21 @@ class CompanyCreateForm(
                         'user_id': user_id,
                     },
                 )
-        return mas_models.User(
+        mu = mas_models.User(
             user_id=user_id,
             homeserver=application_service.homeserver,
             app_service=application_service,
         )
+        try:
+            mu.save()
+            return mu
+        except matrixappservice.exceptions.MUserInUse:
+            self.add_error(
+                'responsible_user',
+                _('%(user_id)s already exists on the homeserver') % {
+                    'user_id': user_id,
+                },
+            )
 
 
 class InviteUser(

@@ -16,7 +16,6 @@ from django.utils import timezone
 from django.utils.http import urlencode
 
 from matrixappservice import exceptions as exc
-from matrixappservice.matrix.action import MatrixAction
 from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import User as MatrixUser
 from django.contrib.auth import get_user_model

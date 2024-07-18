@@ -212,15 +212,11 @@ class MatrixRoom(
         )
 
     async def leave(self):
-        client: nio.AsyncClient = await self.responsible_user.aget_client()
-        ma = MatrixAction(
-            client=client,
-            args=nio.Api.room_leave(
-                access_token=client.access_token,
-                room_id=self.matrix_room_id,
-            )
+        responsible_user = await sync_to_async(getattr)(self, 'responsible_user')
+        client: nio.AsyncClient = await responsible_user.aget_client()
+        await client.room_leave(
+            room_id=str(self.matrix_room_id),
         )
-        yield ma
 
     def __str__(self):
         return self.get_name() or super().__str__()

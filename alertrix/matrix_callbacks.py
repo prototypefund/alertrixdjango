@@ -1,4 +1,5 @@
 import nio
+from django.conf import settings
 
 from . import callbacks
 

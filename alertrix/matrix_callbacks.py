@@ -7,4 +7,5 @@ matrix_callbacks = [
     (callbacks.encryption.verify_all_devices, nio.RoomMemberEvent),
     (callbacks.onboarding.on_room_invite, nio.InviteMemberEvent),
     (callbacks.onboarding.add_widget_to_chat, nio.RoomMessageText),
+    (callbacks.directmessage.on_left_direct_message, nio.RoomMemberEvent),
 ]

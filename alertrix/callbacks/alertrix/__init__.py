@@ -1,0 +1,3 @@
+
+alertrix_callbacks = (
+)

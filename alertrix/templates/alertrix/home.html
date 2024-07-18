@@ -32,6 +32,24 @@
 {% endif %}
 <div>
     <div>
+        <h1>{% translate "units" %}</h1>
+        <div>
+            {% for unit in units %}
+            {% include "alertrix/matrixroom.html" with room=unit %}
+            {% empty %}
+            {% if not user.is_authenticated %}
+            {% blocktranslate with service_name=service_name count n=n_total_units trimmed %}
+            there is {{ n }} unit on {{ service_name }}
+            {% plural %}
+            there are {{ n }} units on {{ service_name }}
+            {% endblocktranslate %}
+            {% else %}
+            you have not joined any unit yet
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div>
         <h1>{% translate "companies" %}</h1>
         <div>
             {% for company in companies %}

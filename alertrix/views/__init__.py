@@ -33,6 +33,14 @@ def home(request):
         'alertrix/home.html',
         context={
             'main_user': main_user,
+            'units': models.Unit.objects.filter(
+                matrix_room_id__in=mas_models.Event.objects.filter(
+                    type='m.room.member',
+                    content__membership='join',
+                    state_key=request.user.matrix_id,
+                ).values_list('room_id', flat=True),
+            ) if request.user.is_authenticated else list(),
+            'n_total_units': models.Unit.objects.all().count(),
             'companies': models.Company.objects.filter(
                 matrix_room_id__in=mas_models.Event.objects.filter(
                     type='m.room.member',

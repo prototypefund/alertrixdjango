@@ -165,5 +165,10 @@ async def add_widget_to_chat(
                     'body': 'https://matrix.to/#/%(room_id)s' % {
                         'room_id': dm.matrix_room_id,
                     },
+                    'm.relates_to': {
+                        'm.in_reply_to': {
+                            'event_id': event.event_id,
+                        },
+                    },
                 },
             )

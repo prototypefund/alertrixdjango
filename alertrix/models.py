@@ -1,5 +1,4 @@
 import logging
-import secrets
 import traceback
 
 import matrixappservice.exceptions

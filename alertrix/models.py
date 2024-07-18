@@ -3,7 +3,6 @@ import traceback
 
 import matrixappservice.exceptions
 import nio
-from django.http import HttpResponse
 from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.conf import settings

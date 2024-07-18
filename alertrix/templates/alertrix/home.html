@@ -31,5 +31,23 @@
 <br>
 {% endif %}
 <div>
+    <div>
+        <h1>{% translate "companies" %}</h1>
+        <div>
+            {% for company in companies %}
+            {% include "alertrix/matrixroom.html" with room=company %}
+            {% empty %}
+            {% if not user.is_authenticated %}
+            {% blocktranslate with service_name=service_name count n=n_total_companies trimmed %}
+            there is {{ n }} company on {{ service_name }}
+            {% plural %}
+            there are {{ n }} companies on {{ service_name }}
+            {% endblocktranslate %}
+            {% else %}
+            you have not joined any company yet
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

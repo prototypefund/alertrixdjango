@@ -11,7 +11,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.utils.text import slugify
 
 from matrixappservice import exceptions as exc
 from matrixappservice.models import ApplicationServiceRegistration

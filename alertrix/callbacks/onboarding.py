@@ -96,10 +96,14 @@ async def add_widget_to_chat(
 ):
     if event.source['content']['body'].startswith('start'):
         # verify that this happens in the primary direct message
-        dm = await models.DirectMessage.objects.aget(
-            responsible_user__user_id=client.user_id,
-            with_user=event.sender,
-        )
+        try:
+            dm = await models.DirectMessage.objects.aget(
+                responsible_user__user_id=client.user_id,
+                with_user=event.sender,
+            )
+        except models.DirectMessage.DoesNotExist:
+            # We likely joined the room, but it did not get registered as direct message in the first place
+            return
         if dm.matrix_room_id == room.room_id:
             # Create the widget
             room_id = room.room_id

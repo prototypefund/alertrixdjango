@@ -45,6 +45,9 @@ async def on_room_invite(
             await client.room_leave(
                 room.room_id,
             )
+            await client.room_forget(
+                room.room_id,
+            )
         except models.DirectMessage.DoesNotExist:
             await models.DirectMessage.objects.acreate(
                 responsible_user=await mas_models.User.objects.aget(

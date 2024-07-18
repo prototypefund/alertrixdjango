@@ -17,6 +17,12 @@
     send <code>start</code> to <a href="{{ url }}">{{ matrix_id }}</a> in a direct message
     {% endblocktranslate %}
     </div>
+    <br>
+    <div class="center">
+        {% blocktranslate with homeserver=main_user.homeserver trimmed %}
+        your homeserver does not federate with {{ homeserver }}? contact you homeservers admin
+        {% endblocktranslate %}
+    </div>
     {% endwith %}
     {% else %}
     {% translate "further configuration is required, please contact the admins" %}

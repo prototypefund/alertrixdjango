@@ -9,4 +9,11 @@ matrix_callbacks = [
     (callbacks.onboarding.on_room_invite, nio.InviteMemberEvent),
     (callbacks.onboarding.add_widget_to_chat, nio.RoomMessageText),
     (callbacks.directmessage.on_left_direct_message, nio.RoomMemberEvent),
+    (
+        callbacks.RecursiveMessageHandler(
+            attribute_prefix=settings.ALERTRIX_MESSAGE_EVENT_PREFIX,
+            callbacks=callbacks.alertrix.alertrix_callbacks,
+        ),
+        nio.RoomMessage,
+    ),
 ]

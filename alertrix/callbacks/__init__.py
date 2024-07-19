@@ -54,6 +54,8 @@ class RecursiveMessageHandler:
                             kwargs = {}
                             if 'attribute' in callback.__annotations__:
                                 kwargs['attribute'] = attribute
+                            if 'pattern' in callback.__annotations__:
+                                kwargs['pattern'] = pattern
                             cb_response = callback(
                                 *args,
                                 **kwargs,

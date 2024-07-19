@@ -8,8 +8,7 @@ async def verify_all_devices(
         room: nio.MatrixRoom,
         event: nio.RoomMemberEvent,
 ):
-    if event.membership == 'join':
-        for device_id, device in client.device_store[event.sender].items():
-            await sync_to_async(client.verify_device)(
-                device,
-            )
+    for device_id, device in client.device_store[event.sender].items():
+        await sync_to_async(client.verify_device)(
+            device,
+        )

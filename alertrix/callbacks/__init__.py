@@ -46,10 +46,15 @@ class RecursiveMessageHandler:
                     attribute_processed = True
                     if callable(callback):
                         try:
-                            cb_response = callback(
+                            args = (
                                 client,
                                 room,
                                 event,
+                            )
+                            kwargs = {}
+                            cb_response = callback(
+                                *args,
+                                **kwargs,
                             )
                             if inspect.isawaitable(cb_response):
                                 await cb_response

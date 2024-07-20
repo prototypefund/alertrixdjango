@@ -108,14 +108,53 @@ async def add_widget_to_chat(
     if event.source['content']['body'].startswith('start'):
         # verify that this happens in the primary direct message
         try:
-            dm = await models.DirectMessage.objects.aget(
-                responsible_user__user_id=client.user_id,
-                with_user=event.sender,
+            mu = await models.MainUserKey.objects.aget(
+                service=await mas_models.User.objects.filter(
+                    user_id=client.user_id,
+                ).values_list('app_service', flat=True).aget(),
             )
-        except models.DirectMessage.DoesNotExist:
-            # We likely joined the room, but it did not get registered as direct message in the first place
+            our_direct_messages = mas_models.Event.objects.filter(
+                state_key=mu.user_id,
+                unsigned__prev_content__is_direct=True,
+                content__membership='join',
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            )
+            their_direct_messages = mas_models.Event.objects.filter(
+                state_key=event.sender,
+                content__membership='join',
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            )
+            dm = await mas_models.Room.objects.aget(
+                room_id__in=our_direct_messages.intersection(their_direct_messages),
+            )
+        except models.MainUserKey.DoesNotExist:
+            app_service = await mas_models.User.objects.aget(
+                user_id=client.user_id,
+            )
+            mu = await models.MainUserKey.objects.aget(
+                service=app_service,
+            )
+            await client.room_send(
+                room_id=room.room_id,
+                message_type='m.room.message',
+                content={
+                    'msgtype': 'm.notice',
+                    'body': 'https://matrix.to/#/%(user_id)s' % {
+                        'user_id': mu.user_id,
+                    },
+                    'm.relates_to': {
+                        'm.in_reply_to': {
+                            'event_id': event.event_id,
+                        },
+                    },
+                }
+            )
             return
-        if dm.matrix_room_id == room.room_id:
+        if dm.room_id == room.room_id:
             # Create the widget
             room_id = room.room_id
             event_type = 'im.vector.modular.widgets'
@@ -171,7 +210,7 @@ async def add_widget_to_chat(
                 content={
                     'msgtype': 'm.notice',
                     'body': 'https://matrix.to/#/%(room_id)s' % {
-                        'room_id': dm.matrix_room_id,
+                        'room_id': dm.room_id,
                     },
                     'm.relates_to': {
                         'm.in_reply_to': {

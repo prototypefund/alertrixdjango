@@ -26,9 +26,25 @@ async def on_room_invite(
     if event.content.get('is_direct', False):
         try:
             # Check if there already is a direct message room for this combination of users…
-            dm = await models.DirectMessage.objects.aget(
-                responsible_user__user_id=client.user_id,
-                with_user=event.sender,
+            our_direct_messages = mas_models.Event.objects.filter(
+                state_key=client.user_id,
+                unsigned__prev_content__is_direct=True,
+                content__membership='join',
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            )
+            their_direct_messages = mas_models.Event.objects.filter(
+                state_key=event.sender,
+                unsigned__prev_content__is_direct=True,
+                content__membership='join',
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            )
+            dm = await mas_models.Room.objects.aget(
+                room_id__in=await our_direct_messages.intersection(their_direct_messages).aget(),
+                room_is__ne=room.room_id,
             )
             # … direct the user to that room …
             await client.room_send(
@@ -48,16 +64,8 @@ async def on_room_invite(
             await client.room_forget(
                 room.room_id,
             )
-        except models.DirectMessage.DoesNotExist:
-            await models.DirectMessage.objects.acreate(
-                responsible_user=await mas_models.User.objects.aget(
-                    user_id=client.user_id,
-                ),
-                matrix_room_id=room.room_id,
-                with_user=await models.User.objects.aget(
-                    matrix_id=event.sender,
-                ),
-            )
+        except mas_models.Event.DoesNotExist:
+            pass
 
 
 async def ensure_encryption(

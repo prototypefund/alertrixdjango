@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from matrixappservice import exceptions as exc
 from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import User as MatrixUser
+from matrixappservice.models import Room
 from django.contrib.auth import get_user_model
 
 

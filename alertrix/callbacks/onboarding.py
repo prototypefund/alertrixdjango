@@ -132,7 +132,7 @@ async def add_widget_to_chat(
             }
             widget = models.Widget(
                 id=widget_id,
-                room=await models.MatrixRoom.objects.aget(matrix_room_id=room.room_id),
+                room=await mas_models.Room.objects.aget(room_id=room.room_id),
                 user_id=event.sender,
             )
             await widget.asave()

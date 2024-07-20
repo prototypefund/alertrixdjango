@@ -259,7 +259,7 @@ class Widget(
         primary_key=True,
     )
     room = models.ForeignKey(
-        MatrixRoom,
+        Room,
         on_delete=models.CASCADE,
     )
     user_id = models.TextField(

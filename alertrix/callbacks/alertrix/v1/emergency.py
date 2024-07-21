@@ -52,6 +52,13 @@ async def alert_callback(
         if room_id is None:
             continue
         try:
+            if room_id not in client.rooms:
+                room = await Room.objects.aget(
+                    room_id=room_id,
+                )
+                client.rooms[room_id] = await room.aget_nio_room(
+                    own_user_id=client.user_id,
+                )
             await client.room_send(
                 room_id=room_id,
                 message_type='m.room.message',

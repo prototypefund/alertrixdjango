@@ -7,7 +7,6 @@ from django.views.generic import DetailView
 
 from . import matrixroom
 from .. import forms
-from .. import models
 from .. import mixins
 
 

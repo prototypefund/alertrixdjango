@@ -3,7 +3,7 @@ from django import forms
 
 
 class MatrixRoomForm(
-    forms.ModelForm
+    forms.Form,
 ):
     class Meta:
         fields = [

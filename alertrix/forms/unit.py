@@ -9,8 +9,7 @@ from .. import models
 class UnitForm(
     matrixroom.MatrixRoomForm,
 ):
-    class Meta(matrixroom.MatrixRoomForm.Meta):
-        model = models.Unit
+    pass
 
 
 class UnitCreateForm(
@@ -30,11 +29,11 @@ class UnitCreateForm(
             ],
         ]
     companies = forms.MultipleChoiceField(
-        label=models.Company._meta.verbose_name_plural,
+        label=_('companies'),
         widget=forms.CheckboxSelectMultiple,
     )
     responsible_user = forms.ChoiceField(
-        label=models.MatrixRoom._meta.get_field('responsible_user').verbose_name,
+        label=_('responsible_user'),
         required=False,
     )
 

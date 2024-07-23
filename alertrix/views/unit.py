@@ -13,9 +13,8 @@ from .. import mixins
 
 class CreateUnit(
     matrixroom.CreateMatrixRoom,
-    CreateView,
+    FormView,
 ):
-    model = models.Unit
     form_class = forms.unit.UnitCreateForm
     template_name = 'alertrix/form.html'
     success_url = reverse_lazy('comp.list')
@@ -98,4 +97,4 @@ class UnitDetailView(
     mixins.UserHasSpecificMembershipForThisMatrixRoom,
     DetailView,
 ):
-    model = models.Unit
+    model = models.Room

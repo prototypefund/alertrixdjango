@@ -51,7 +51,7 @@ class CreateMatrixRoom(
             power_level_override=(
                 {
                     'users': {
-                        self.object.responsible_user.user_id: 100,
+                        form.cleaned_data.get('responsible_user').user_id: 100,
                         str(self.request.user.matrix_id): 100,
                     },
                 }
@@ -61,32 +61,11 @@ class CreateMatrixRoom(
             **kwargs,
         )
 
-    def ensure_matrix_room_id(self, form):
-        """
-        Make sure this object has a valid matrix room associated
-        :return:
-        """
-        if not self.object.matrix_room_id:
-            matrix_space_id = async_to_sync(self.create_matrix_room)(
-                **self.get_matrix_room_args(
-                    form=form,
-                ),
-            )
-            if matrix_space_id:
-                if self.request.user.matrix_id:
-                    messages.success(
-                        self.request,
-                        _('%(user_id)s has been invited') % {
-                            'user_id': self.request.user.matrix_id,
-                        },
-                    )
-            self.object.matrix_room_id = matrix_space_id
-
     async def create_matrix_room(
             self,
             **kwargs,
     ):
-        client: nio.AsyncClient = await self.object.responsible_user.aget_client()
+        client: nio.AsyncClient = await self.form.cleaned_data.get('responsible_user').aget_client()
         response: nio.RoomCreateResponse = await client.room_create(
             **kwargs
         )
@@ -120,17 +99,11 @@ class CreateMatrixRoom(
             )
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.responsible_user = form.cleaned_data['responsible_user']
-        self.ensure_matrix_room_id(
-            form=form,
-        )
-        for state_event in self.get_matrix_state_events(
-                form=form,
-        ):
-            async_to_sync(self.room_put_state)(
-                event_type=state_event.pop('type'),
-                **state_event,
+        self.form = form
+        if not form.cleaned_data.get('room_id'):
+            async_to_sync(self.create_matrix_room)(
+                **self.get_matrix_room_args(
+                    form=form,
+                ),
             )
-        self.object.save()
         return HttpResponseRedirect(self.get_success_url())

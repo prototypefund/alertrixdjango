@@ -16,11 +16,10 @@ class CompanyForm(
     matrixroom.MatrixRoomForm,
 ):
     class Meta(matrixroom.MatrixRoomForm.Meta):
-        model = models.Company
         fields = [
             'name',
             'description',
-            'matrix_room_id',
+            'room_id',
         ]
 
 
@@ -30,29 +29,13 @@ class CompanyCreateForm(
     class Meta(CompanyForm.Meta):
         title = _('new company')
         fields = CompanyForm.Meta.fields + [
-            'slug',
         ]
         optional = CompanyForm.Meta.optional + [
-            'slug',
         ]
         advanced = CompanyForm.Meta.advanced + [
             'federate',
             'responsible_user',
-            'slug',
-            'admin_group_name',
         ]
-    admin_group_name = forms.CharField(
-        label=_('admin group name'),
-        widget=forms.Textarea(
-            attrs={
-                'rows': 1,
-                'style': ';'.join([
-                    'resize: none',
-                ]),
-            },
-        ),
-        required=False,
-    )
     federate = forms.BooleanField(
         label=_('federate'),
         initial=True,
@@ -77,42 +60,6 @@ class CompanyCreateForm(
         ],
     )
 
-    def clean_slug(self):
-        slug = self.data.get('slug') or slugify(self.data.get('name'))
-        if not slug:
-            if 'slug' not in self.errors:
-                self.add_error(
-                    'slug',
-                    _('%(field)s cannot be empty') % {
-                        'field': self.fields['slug'].label,
-                    },
-                )
-        return slug
-
-    def clean_admin_group_name(self):
-        admin_group_name = self.data.get('admin_group_name') or '%s_admins' % self.clean_slug()
-        if not admin_group_name:
-            if 'admin_group_name' not in self.errors:
-                self.add_error(
-                    'admin_group_name',
-                    _('%(field)s cannot be empty') % {
-                        'field': self.fields['admin_group_name'].label,
-                    },
-                )
-        if self.user.groups.filter(
-                name=admin_group_name,
-        ).exists():
-            return admin_group_name
-        else:
-            if Group.objects.filter(
-                name=admin_group_name,
-            ).exists():
-                self.add_error(
-                    'admin_group_name',
-                    _('group already exists'),
-                )
-        return admin_group_name
-
     def clean_application_service(self):
         service = mas_models.ApplicationServiceRegistration.objects.get(
             pk=self.data.get('application_service'),
@@ -131,7 +78,7 @@ class CompanyCreateForm(
         syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
         if not self.data['responsible_user']:
             # Prepare the user_id variable
-            user_id = self.clean_slug()
+            user_id = slugify(self.data['name'])
             if not syn.is_interested_in_user(
                     user_id=user_id,
             ):
@@ -190,20 +137,6 @@ class CompanyCreateForm(
                             'user_id': user_id,
                         },
                     )
-            if models.Company.objects.filter(
-                    responsible_user=mu,
-            ).exists():
-                comp = models.Company.objects.get(
-                    responsible_user=mu,
-                )
-                if comp.responsible_user.user_id != user_id:
-                    if 'responsible_user' not in self.errors:
-                        self.add_error(
-                            'responsible_user',
-                            _('%(field)s already taken') % {
-                                'field': self.fields['responsible_user'].label,
-                            },
-                        )
             return mu
         else:
             account_info = async_to_sync(application_service.request)(

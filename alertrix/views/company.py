@@ -30,12 +30,15 @@ class ListCompanies(
     LoginRequiredMixin,
     ListView,
 ):
-    model = models.Company
     template_name = 'alertrix/company_list.html'
 
     def get_queryset(self):
-        queryset = self.model.objects.filter(
-            admins__in=self.request.user.groups.all(),
+        queryset = querysets.companies.filter(
+            room_id__in=mas_models.Event.objects.filter(
+                type='m.room.member',
+                content__membership__in=['invite', 'join'],
+                state_key=self.request.user.matrix_id,
+            ).values_list('room_id', flat=True),
         )
         ordering = self.get_ordering()
         if ordering:
@@ -49,10 +52,9 @@ class CreateCompany(
     PermissionRequiredMixin,
     mixins.ContextActionsMixin,
     matrixroom.CreateMatrixRoom,
-    CreateView,
+    FormView,
 ):
     permission_required = 'alertrix.add_company'
-    model = models.Company
     form_class = forms.company.CompanyCreateForm
     template_name = 'alertrix/form.html'
     http_method_names = [
@@ -64,54 +66,19 @@ class CreateCompany(
     ]
 
     def get_success_url(self):
-        return reverse('comp.detail', kwargs={'slug': self.object.slug})
+        return reverse('comp.list')
 
-    def get_matrix_room_args(self, form, **kwargs):
-        application_service = self.object.responsible_user.app_service
-        alias_namespaces = mas_models.Namespace.objects.filter(
-            app_service=application_service,
-            scope=mas_models.Namespace.ScopeChoices.aliases,
-        )
-        # Prepare the alias variable
-        alias = None
-        # Create a synapse instance to check if its application service is interested in the generated user id
-        syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
-        for namespace in alias_namespaces:
-            if '*' not in namespace.regex:
-                continue
-            localpart = namespace.regex.lstrip('@').replace('*', self.object.slug)
-            interested_check_against = '@%(localpart)s:%(server_name)s' % {
-                'localpart': localpart,
-                'server_name': application_service.homeserver.server_name,
-            }
-            if not syn.is_interested_in_user(
-                    user_id=interested_check_against,
-            ):
-                continue
-            # Overwrite user_id variable
-            alias = interested_check_against
-            messages.info(
-                self.request,
-                _('the matrix room alias has automatically been set to \"%(alias)s\"') % {
-                    'alias': alias,
-                },
-            )
-            break
-        args = {
-            **super().get_matrix_room_args(form=form),
-            'alias': alias,
-        }
-        args['initial_state'] = args['initial_state'] + [
+    def get_matrix_state_events(self, form):
+        return [
             {
                 'type': 'm.room.member',
                 'content': {
                     'membership': 'join',
                     'displayname': form.data['name'],
                 },
-                'state_key': self.object.responsible_user.user_id,
+                'state_key': form.cleaned_data.get('responsible_user').user_id,
             },
         ]
-        return args
 
     def form_invalid(self, form):
         """
@@ -135,30 +102,8 @@ class CreateCompany(
         return self.render_to_response(self.get_context_data(form=new_form))
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        group_name = form.cleaned_data['admin_group_name']
-        if self.request.user.groups.filter(
-                name=group_name,
-        ).exists():
-            group = Group.objects.get(
-                name=group_name,
-            )
-        else:
-            group, is_new = Group.objects.get_or_create(
-                name=group_name,
-            )
-            self.request.user.groups.add(
-                group,
-            )
-        self.object.admins = group
-        messages.success(
-            self.request,
-            _('user has been added to group'),
-        )
-        if not self.object.responsible_user:
-            mu: mas_models.User = form.cleaned_data['responsible_user']
-            mu.save()
-            self.object.responsible_user = mu
+        mu: mas_models.User = form.cleaned_data['responsible_user']
+        mu.save()
         return super().form_valid(form=form)
 
     def get_context_data(self, **kwargs):
@@ -178,31 +123,16 @@ class DetailCompany(
     mixins.ContextActionsMixin,
     DetailView,
 ):
-    model = models.Company
-    query_pk_and_slug = False
+    model = mas_models.Room
+    pk_url_kwarg = 'room_id'
+    template_name = 'alertrix/company_detail.html'
 
     def get_context_actions(self):
         return [
             {'url': reverse('comp.list'), 'label': _('list')},
-            {'url': reverse('comp.edit', kwargs=dict(slug=self.object.pk)), 'label': _('edit')},
+            {'url': reverse('comp.edit', kwargs=dict(room_id=self.object.room_id)), 'label': _('edit')},
         ]
 
-    def check_matrix_room_id(self):
-        if not self.object.matrix_room_id:
-            messages.error(
-                self.request,
-                _('no matrix space associated with this %(object)s') % {
-                    'object': type(self.object)._meta.verbose_name,
-                },
-            )
-
-    def check(self):
-        self.check_matrix_room_id()
-
-    def get(self, request, *args, **kwargs):
-        res = super().get(request, *args, **kwargs)
-        self.check()
-        return res
 
 
 class InviteUser(
@@ -212,14 +142,13 @@ class InviteUser(
     SingleObjectMixin,
     FormView,
 ):
-    model = models.Company
     form_class = forms.company.InviteUser
     template_name = 'alertrix/form.html'
 
     def get_context_actions(self):
         return [
             {'url': reverse('comp.list'), 'label': _('list')},
-            {'url': reverse('comp.detail', kwargs=dict(slug=self.object.pk)), 'label': _('back')},
+            {'url': reverse('comp.detail', kwargs=dict(room_id=self.object.room_id)), 'label': _('back')},
         ]
 
     def get(self, request, *args, **kwargs):
@@ -231,7 +160,7 @@ class InviteUser(
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        room_id = self.object.matrix_room_id
+        room_id = self.object.room_id
         user_id = form.data['matrix_id']
         async_to_sync(self.invite_user)(
             user_id,
@@ -338,9 +267,8 @@ class InviteUser(
 
 class UpdateCompany(
     mixins.ContextActionsMixin,
-    UpdateView,
+    FormView,
 ):
-    model = models.Company
     form_class = forms.company.CompanyForm
     template_name = 'alertrix/form.html'
 

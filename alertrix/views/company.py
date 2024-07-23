@@ -23,7 +23,6 @@ from matrixappservice import models as mas_models
 from . import matrixroom
 from .. import forms
 from .. import mixins
-from .. import models
 
 
 class ListCompanies(

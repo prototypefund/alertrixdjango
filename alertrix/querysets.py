@@ -17,3 +17,22 @@ direct_messages = Room.objects.filter(
         flat=True,
     ),
 )
+
+
+def get_direct_message_for(
+        *users: str,
+) -> Room:
+    queryset = direct_messages
+    for user in users:
+        queryset = queryset.intersection(
+            direct_messages.filter(
+                room_id__in=Event.objects.filter(
+                    content__membership__in=['invite', 'join'],
+                    state_key=user,
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ),
+            )
+        )
+    return queryset.get()

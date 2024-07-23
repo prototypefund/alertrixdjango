@@ -36,3 +36,16 @@ def get_direct_message_for(
             )
         )
     return queryset.get()
+
+
+companies = Room.objects.filter(
+    room_id__in=Event.objects.filter(
+        type='%(prefix)s.company' % {
+            'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+        },
+        state_key__isnull=False,
+    ).values_list(
+        'room__room_id',
+        flat=True,
+    ),
+)

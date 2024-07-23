@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from matrixappservice import models as mas_models
+from matrixappservice import models
 from . import matrixroom
 from .. import widgets
 
@@ -60,7 +60,7 @@ class CompanyCreateForm(
     )
 
     def clean_application_service(self):
-        service = mas_models.ApplicationServiceRegistration.objects.get(
+        service = models.ApplicationServiceRegistration.objects.get(
             pk=self.data.get('application_service'),
         )
         return service
@@ -69,9 +69,9 @@ class CompanyCreateForm(
         application_service = self.cleaned_data.get('application_service') or self.clean_application_service()
         if application_service is None:
             return
-        user_namespaces = mas_models.Namespace.objects.filter(
+        user_namespaces = models.Namespace.objects.filter(
             app_service=application_service,
-            scope=mas_models.Namespace.ScopeChoices.users,
+            scope=models.Namespace.ScopeChoices.users,
         )
         # Create a synapse instance to check if its application service is interested in the generated user id
         syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
@@ -119,13 +119,13 @@ class CompanyCreateForm(
                         'user_id': user_id,
                     },
                 )
-        if mas_models.User.objects.filter(
+        if models.User.objects.filter(
                 user_id=user_id,
         ).exists():
-            mu = mas_models.User.objects.get(
+            mu = models.User.objects.get(
                 user_id=user_id,
             )
-            devices = mas_models.Device.objects.filter(
+            devices = models.Device.objects.filter(
                 user=mu,
             )
             if devices.count() < 1:
@@ -151,7 +151,7 @@ class CompanyCreateForm(
                         'user_id': user_id,
                     },
                 )
-        mu = mas_models.User(
+        mu = models.User(
             user_id=user_id,
             homeserver=application_service.homeserver,
             app_service=application_service,

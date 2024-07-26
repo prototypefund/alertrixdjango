@@ -107,7 +107,6 @@ class CreateMatrixRoom(
             content,
             state_key: str = "",
     ):
-        matrix_room = await models.MatrixRoom.objects.aget(matrix_room_id=room_id)
         client: nio.AsyncClient = await self.responsible_user.aget_client()
         if client is not None:
             response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(

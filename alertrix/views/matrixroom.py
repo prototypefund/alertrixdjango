@@ -30,6 +30,9 @@ class CreateMatrixRoom(
     def get_matrix_state_events(self, form):
         return []
 
+    def get_invites(self, form) -> QuerySet:
+        return QuerySet()
+
     def get_matrix_room_args(
             self,
             form,
@@ -52,6 +55,17 @@ class CreateMatrixRoom(
                     str(self.request.user.matrix_id)
                 ]
                 if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else list()
+            ) + list(
+                self.get_invites(
+                    form,
+                ).filter(
+                    ~Q(
+                        user_id=self.responsible_user.user_id,
+                    ),
+                ).values_list(
+                    'user_id',
+                    flat=True,
+                )
             ),
             power_level_override=(
                 {

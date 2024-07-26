@@ -8,6 +8,7 @@ from django import views
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 

@@ -33,6 +33,9 @@ class CreateMatrixRoom(
     def get_matrix_state_events(self, form):
         return []
 
+    async def aget_secondary_matrix_state_events(self, form, room_id):
+        yield
+
     def get_invites(self, form) -> QuerySet:
         return QuerySet()
 
@@ -100,6 +103,61 @@ class CreateMatrixRoom(
                 },
             )
             return None
+        async for state_event in self.aget_secondary_matrix_state_events(
+                self.form,
+                room_id=response.room_id,
+        ):
+            if state_event.get('room_id') != response.room_id:
+                room = models.Room(state_event.get('room_id'))
+                try:
+                    power_levels = (await room.aget_power_levels()).content.get('users')
+                    users = models.User.objects.filter(
+                        Q(
+                            user_id__in=models.Event.objects.filter(
+                                type='m.room.member',
+                                room_id=state_event.get('room_id'),
+                                content__membership='join',
+                            ).values_list(
+                                'state_key',
+                                flat=True,
+                            ),
+                        ),
+                        Q(
+                            user_id__in=power_levels.keys(),
+                        ),
+                        Q(
+                            user_id__in=Account.objects.filter(
+                                account__isnull=False,
+                            ).values_list(
+                                'user_id',
+                                flat=True,
+                            ),
+                        ),
+                    )
+                    user = sorted(
+                        await sync_to_async(list)(users),
+                        key=lambda x: power_levels[x.user_id],
+                    )[0]
+                except models.Event.DoesNotExist:
+                    user = await models.User.objects.aget(
+                        user_id=await models.Event.objects.aget(
+                            type='m.room.create',
+                            room=room,
+                        ).content.get('creator'),
+                    )
+                c = await user.aget_client()
+            else:
+                c = client
+            response: nio.RoomPutStateResponse = await c.room_put_state(
+                event_type=state_event.pop('type'),
+                **state_event,
+            )
+            if type(response) is nio.RoomPutStateError:
+                logging.error(response)
+                messages.error(
+                    self.request,
+                    response,
+                )
         return response.room_id
 
     async def room_put_state(

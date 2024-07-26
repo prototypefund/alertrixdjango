@@ -120,6 +120,7 @@ class CreateMatrixRoom(
     @abc.abstractmethod
     def form_valid(self, form):
         self.form = form
+        self.responsible_user: models.User
         if not form.cleaned_data.get('room_id'):
             async_to_sync(self.create_matrix_room)(
                 **self.get_matrix_room_args(

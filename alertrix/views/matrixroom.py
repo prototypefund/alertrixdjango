@@ -49,7 +49,7 @@ class CreateMatrixRoom(
                 [
                     str(self.request.user.matrix_id)
                 ]
-                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else list()
             ),
             power_level_override=(
                 {

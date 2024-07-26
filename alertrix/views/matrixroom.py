@@ -117,6 +117,7 @@ class CreateMatrixRoom(
                 state_key=state_key,
             )
 
+    @abc.abstractmethod
     def form_valid(self, form):
         self.form = form
         if not form.cleaned_data.get('room_id'):

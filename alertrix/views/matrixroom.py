@@ -102,6 +102,7 @@ class CreateMatrixRoom(
                     'error': response.message,
                 },
             )
+            await client.close()
             return None
         async for state_event in self.aget_secondary_matrix_state_events(
                 self.form,
@@ -158,6 +159,9 @@ class CreateMatrixRoom(
                     self.request,
                     response,
                 )
+            if c != client:
+                await c.close()
+        await client.close()
         return response.room_id
 
     async def room_put_state(

@@ -15,7 +15,6 @@ from matrixappservice.models import User as MatrixUser
 from . import forms
 from . import models
 from . import utils
-from ..models import DirectMessage
 from ..models import MainApplicationServiceKey
 
 

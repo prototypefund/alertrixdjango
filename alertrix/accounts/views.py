@@ -17,6 +17,7 @@ from . import forms
 from . import models
 from . import utils
 from ..models import MainApplicationServiceKey
+from ..querysets import get_direct_message_for
 
 
 class CreateRegistrationToken(

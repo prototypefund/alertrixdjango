@@ -107,6 +107,19 @@ async def add_widget_to_chat(
         room: nio.MatrixRoom,
         event: nio.RoomMessage,
 ):
+    try:
+        await get_user_model().objects.aget(matrix_id=event.sender)
+    except get_user_model().DoesNotExist:
+        await client.room_send(
+            room.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': _('user not registered'),
+            },
+            ignore_unverified_devices=True,
+        )
+        return
     if event.source['content']['body'].startswith('start'):
         # verify that this happens in the primary direct message
         try:

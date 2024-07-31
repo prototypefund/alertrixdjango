@@ -45,13 +45,20 @@ class UnitCreateForm(
             *args, **kwargs
         )
         if user.is_superuser:
-            qs_companies = models.Company.objects.all()
+            qs_companies = querysets.companies.all()
         else:
-            qs_companies = models.Company.objects.filter(
-                admins__in=user.groups.all(),
+            qs_companies = querysets.companies.filter(
+                room_id__in=models.Event.objects.filter(
+                    type='m.room.member',
+                    content__membership__in=['invite', 'join'],
+                    state_key=user.matrix_id,
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ),
             )
         self.fields['companies'].choices = [
-            (c.slug, str(c))
+            (c.room_id, str(c.get_name().content['name']))
             for c in qs_companies
         ]
 

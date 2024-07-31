@@ -20,8 +20,11 @@ async def on_left_direct_message(
     except models.Room.DoesNotExist:
         # This room does not seem to be a direct message
         return
-    if dm.with_user.matrix_id != event.sender:
-        # Somebody other than the person this dm if set up for left the room
+    if await models.Event.objects.filter(
+        room=dm,
+        type='m.room.membership',
+        content__membership='join',
+    ).acount() > 1:
         return
     await client.room_leave(
         room.room_id,

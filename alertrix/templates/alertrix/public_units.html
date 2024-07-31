@@ -1,0 +1,12 @@
+{% extends 'alertrix/base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% for object in object_list %}
+{% include "alertrix/unit.html" with room=object show_topic=True %}
+{% empty %}
+{% blocktranslate with service_name=service_name trimmed %}
+there are no public units on {{ service_name }}
+{% endblocktranslate %}
+{% endfor %}
+{% endblock %}

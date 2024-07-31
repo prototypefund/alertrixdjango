@@ -14,7 +14,7 @@
 <h1>
     {{ object.get_name.content.name }}
 </h1>
-<a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
+<a href="element://vector/webapp/#/room/{{ object.room_id }}">{{ object.room_id }}</a>
 {% for data in object.get_room_info %}
 {% if data.type == 'm.room.topic' %}
 <div>

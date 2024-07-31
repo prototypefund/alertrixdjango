@@ -1,5 +1,6 @@
 import nio
 from matrixappservice import MatrixClient
+from matrixappservice import models
 
 
 

@@ -197,15 +197,15 @@ class CreateMatrixRoom(
                 c = await user.aget_client()
             else:
                 c = client
-            response: nio.RoomPutStateResponse = await c.room_put_state(
+            room_put_state_response: nio.RoomPutStateResponse = await c.room_put_state(
                 event_type=state_event.pop('type'),
                 **state_event,
             )
-            if type(response) is nio.RoomPutStateError:
-                logging.error(response)
+            if type(room_put_state_response) is nio.RoomPutStateError:
+                logging.error(room_put_state_response)
                 messages.error(
                     self.request,
-                    response,
+                    room_put_state_response,
                 )
             if c != client:
                 await c.close()

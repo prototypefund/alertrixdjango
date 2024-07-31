@@ -44,7 +44,15 @@ def get_direct_message_for(
                 ),
             )
         )
-    return queryset.get()
+    try:
+        return queryset.get()
+    except Room.MultipleObjectsReturned as e:
+        logging.error(
+            'returned too many rooms: %(room_list)s' % {
+                'room_list': str(queryset),
+            },
+        )
+        raise e
 
 
 async def aget_direct_message_for(

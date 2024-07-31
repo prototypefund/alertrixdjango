@@ -48,7 +48,6 @@ class UserIsUserOfThisObjectMixin(
 
 
 class UserHasSpecificMembershipForThisMatrixRoom(
-    LoginRequiredMixin,
     UserPassesTestMixin,
 ):
     allow_admins = True

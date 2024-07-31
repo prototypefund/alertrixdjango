@@ -39,6 +39,12 @@ def get_direct_message_for(
     return queryset.get()
 
 
+async def aget_direct_message_for(
+        *users: str,
+) -> Room:
+    return await sync_to_async(get_direct_message_for)(*users)
+
+
 companies = Room.objects.filter(
     room_id__in=Event.objects.filter(
         type='%(prefix)s.company' % {

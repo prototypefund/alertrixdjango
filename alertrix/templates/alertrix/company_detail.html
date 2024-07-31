@@ -26,7 +26,7 @@
         {% include "alertrix/matrixroom.html" with room=child %}
         {% endif %}
         {% endfor %}
-        <a href="{% url 'unit.new' %}?companies={{ object.slug }}">
+        <a href="{% url 'unit.new' %}?companies={{ object.pk }}">
             <div class="unit">
             <img src="{% static 'alertrix/icons/new.svg' %}" height="128">
             <div>

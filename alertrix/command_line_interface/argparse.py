@@ -80,3 +80,45 @@ class Parser(
                 pass
             else:
                 self._defaults.update(defaults)
+
+    # =====================
+    # Help-printing methods
+    # =====================
+    def print_usage(self, file=None):
+        if file is None:
+            file = _sys.stdout
+        self._print_message(self.format_usage(), file)
+
+    def print_help(self, file=None):
+        if file is None:
+            file = _sys.stdout
+        self._print_message(self.format_help(), file)
+
+    def _print_message(self, message, file=None):
+        if message:
+            file = file or _sys.stderr
+            try:
+                file.write(message)
+            except (AttributeError, OSError):
+                pass
+
+    # ===============
+    # Exiting methods
+    # ===============
+    def exit(self, status=0, message=None):
+        if message:
+            self._print_message(message, _sys.stderr)
+        _sys.exit(status)
+
+    def error(self, message):
+        """error(message: string)
+
+        Prints a usage message incorporating the message to stderr and
+        exits.
+
+        If you override this in a subclass, it should not return -- it
+        should either exit or raise an exception.
+        """
+        self.print_usage(_sys.stderr)
+        args = {'prog': self.prog, 'message': message}
+        self.exit(2, _('%(prog)s: error: %(message)s\n') % args)

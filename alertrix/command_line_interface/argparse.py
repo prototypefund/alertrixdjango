@@ -29,7 +29,7 @@ class Parser(
             conflict_handler='error',
             add_help=True,
             allow_abbrev=True,
-            exit_on_error=True,
+            exit_on_error=False,
     ):
         super(_argparse.ArgumentParser, self).__init__(
             description=description,

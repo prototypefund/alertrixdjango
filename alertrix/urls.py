@@ -9,9 +9,9 @@ urlpatterns = [
     path('comp/', include([
         path('', views.company.ListCompanies.as_view(), name='comp.list'),
         path('new', views.company.CreateCompany.as_view(), name='comp.new'),
-        path('<slug:slug>', views.company.DetailCompany.as_view(), name='comp.detail'),
-        path('<slug:slug>/invite', views.company.InviteUser.as_view(), name='comp.invite'),
-        path('<slug:slug>/edit', views.company.UpdateCompany.as_view(), name='comp.edit'),
+        path('<str:pk>', views.company.DetailCompany.as_view(), name='comp.detail'),
+        path('<str:pk>/invite', views.company.InviteUser.as_view(), name='comp.invite'),
+        path('<str:pk>/edit', views.company.UpdateCompany.as_view(), name='comp.edit'),
     ])),
     path('unit/', include([
         path('new', views.unit.CreateUnit.as_view(), name='unit.new'),

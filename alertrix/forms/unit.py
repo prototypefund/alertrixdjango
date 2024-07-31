@@ -70,33 +70,3 @@ class UnitCreateForm(
             )
             return
         return self.data.getlist('companies')
-
-    def clean_responsible_user(self):
-        companies = self.clean_companies()
-        if not companies:
-            self.add_error(
-                'responsible_user',
-                _('cannot select responsible user as not valid company is selected'),
-            )
-            return
-        relevant_companies = models.Company.objects.filter(
-            slug__in=[ident for ident, _ in self.fields['companies'].choices],
-        ).filter(
-            slug__in=self.clean_companies(),
-        )
-        if self.data['responsible_user']:
-            if not relevant_companies.filter(
-                    responsible_user__user_id=self.data['responsible_user'],
-            ).exists():
-                self.add_error(
-                    'responsible_user',
-                    _('this choice is not valid'),
-                )
-            return matrixappservice.models.User.objects.get(
-                user_id=self.data['responsible_user'],
-            )
-        else:
-            first_company = relevant_companies.first()
-            return matrixappservice.models.User.objects.get(
-                user_id=first_company.responsible_user,
-            )

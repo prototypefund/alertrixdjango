@@ -56,7 +56,11 @@ async def cli(
     )
     if room.room_id not in client.rooms:
         client.rooms[room.room_id] = await room.aget_nio_room(bot.user_id)
-    await parsed_args.func(
+    try:
+        callback = parsed_args.func
+    except AttributeError:
+        return NotImplementedError.__name__
+    await callback(
         client=client,
         room=client.rooms[room.room_id],
         event=nio.Event(json.loads(parsed_args.event)),

@@ -13,10 +13,11 @@ async def on_left_direct_message(
     if event.membership != 'leave':
         return
     try:
-        dm: models.DirectMessage = await models.DirectMessage.objects.aget(
-            matrix_room_id=room.room_id,
+        dm: models.Room = await querysets.aget_direct_message_for(
+            event.sender,
+            client.user_id,
         )
-    except models.DirectMessage.DoesNotExist:
+    except models.Room.DoesNotExist:
         # This room does not seem to be a direct message
         return
     if dm.with_user.matrix_id != event.sender:

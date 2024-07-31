@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic import FormView
+from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from matrixappservice import models
 from matrixappservice.database import models as database

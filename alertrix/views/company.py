@@ -126,13 +126,12 @@ class DetailCompany(
     DetailView,
 ):
     model = mas_models.Room
-    pk_url_kwarg = 'room_id'
     template_name = 'alertrix/company_detail.html'
 
     def get_context_actions(self):
         return [
             {'url': reverse('comp.list'), 'label': _('list')},
-            {'url': reverse('comp.edit', kwargs=dict(room_id=self.object.room_id)), 'label': _('edit')},
+            {'url': reverse('comp.edit', kwargs=dict(pk=self.object.room_id)), 'label': _('edit')},
         ]
 
 

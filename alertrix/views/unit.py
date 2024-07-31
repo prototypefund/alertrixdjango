@@ -47,6 +47,37 @@ class CreateUnit(
         }
         return initial
 
+    def get_relevant_users(self, form):
+        relevant_users = models.User.objects.filter(
+            Q(  # check if usable account data is present
+                user_id__in=database.Account.objects.filter(
+                    account__isnull=False,
+                ).values_list(
+                    'user_id',
+                    flat=True,
+                ),
+            ),
+            Q(  # filter for users that are registered as inbox for one of the selected companies
+                user_id__in=models.Event.objects.filter(
+                    Q(
+                        room__room_id__in=form.cleaned_data.get('companies'),
+                    ),
+                    Q(
+                        room__in=querysets.companies,
+                    ),
+                    type='%(prefix)s.company' % {
+                        'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+                    },
+                    content__inbox__isnull=False,
+                    state_key='',
+                ).values_list(
+                    'content__inbox',
+                    flat=True,
+                ),
+            ),
+        )
+        return relevant_users
+
     def get_matrix_room_args(
             self,
             form,

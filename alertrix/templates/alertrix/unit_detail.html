@@ -15,80 +15,8 @@
     {% include "alertrix/matrixroom.html" with room=company %}
     {% endfor %}
 </div>
-<table>
-    <tr>
-        <td>
-            <img src="{% mxc_to_http object.responsible_user.homeserver.url object.get_room_avatar 128 128 %}" alt="" height="128">
-        </td>
-        <td>
 <h1>
-    {{ object }}
 </h1>
-            <div>
-                <button class="alarm-button" disabled="disabled" title="{% trans 'this feature is not available yet' %}">{% trans 'alert' context "verb" %}</button>
-            </div>
-<a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
-        </td>
-    </tr>
-</table>
-{% for data in object.get_room_info %}
-{% if data.type == 'm.room.topic' %}
 <div>
-    {{ data.content.topic }}
-</div>
-{% endif %}
-{% endfor %}
-<div>
-    {% if object.get_children|length %}
-    <h2>{% trans 'subordinate' %}</h2>
-    <div class="main-list">
-        {% for child in object.get_children %}
-        {% if child.responsible_user %}
-        {% if child.unit %}
-        <div class="unit" onclick="window.location.href = '{% url 'unit.detail' pk=child.matrix_room_id %}'">
-        {% else %}
-        <div class="unit">
-        {% endif %}
-            {% if child.company or child.unit %}
-            {% if child.get_room_avatar %}
-            <img src="{% if child.get_room_avatar %}{% mxc_to_http child.responsible_user.homeserver.url child.get_room_avatar 128 128 %}{% endif %}" alt="" height="128">
-            {% else %}
-            <img src="" height="128">
-            {% endif %}
-            {% endif %}
-            <div>
-                <div class="object-title">{{ child }}</div>
-                {% if child.get_description %}
-                <div class="object-description">{{ child.get_description }}</div>
-                {% endif %}
-                <div>
-                    <span>💬 {{ child.get_children|length }}</span>
-                    <span>🧑 {{ child.get_joined_members|length }}</span>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="uncontrolled-matrix-room">
-            {{ child.matrix_room_id }}
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
-</div>
-<div>
-    <h2>{% trans 'members' %}</h2>
-    <table>
-        <thead><td>{% trans 'user id' %}</td><td>{% trans 'display name' %}</td><td>{% trans 'power level' %}</td></thead>
-        <tbody>
-        {% for data in object.get_room_info %}
-        {% if data.type == 'm.room.member' %}
-        {% if data.content.membership != 'leave' %}
-        <tr><td>{{ data.state_key }}</td><td>{{ data.content.displayname }}</td><td>{% for pl in object.get_room_info %}{% if pl.type == 'm.room.power_levels' %}{% for user, level in pl.content.users.items %}{% if user == data.state_key %}{{ level }}{% endif %}{% endfor %}{% endif %}{% endfor %}</td></tr>
-        {% endif %}
-        {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
 </div>
 {% endblock %}

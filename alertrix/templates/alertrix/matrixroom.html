@@ -13,8 +13,10 @@
         <img src="{% if room.get_avatar.content.url %}{% mxc_to_http room.get_avatar.sender.homeserver.url room.get_avatar.content.url 128 128 %}{% endif %}" alt="" height="128" width="128">
         <div>
             <div class="object-title">{% if room|is_company and emoticon_company %}{{ emoticon_company }} {% endif %}{% if room|is_unit and emoticon_unit %}{{ emoticon_unit }} {% endif %}{{ room.get_name.content.name }}</div>
-            {% if room.get_description %}
-            <div>{{ room.get_description }}</div>
+            {% if show_topic %}
+            {% if room.get_topic %}
+            <div>{{ room.get_topic.content.topic }}</div>
+            {% endif %}
             {% endif %}
             <div>
                 <span>💬 {{ room.get_children|length }}</span>

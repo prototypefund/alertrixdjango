@@ -5,6 +5,12 @@ from gettext import gettext as _
 import sys as _sys
 
 
+class _HelpAction(_argparse._HelpAction):
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        parser.print_help()
+
+
 class Parser(
     _argparse.ArgumentParser,
 ):

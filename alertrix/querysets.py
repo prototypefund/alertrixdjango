@@ -25,13 +25,19 @@ direct_messages = Room.objects.filter(
 
 def get_direct_message_for(
         *users: str,
+        valid_memberships: List[str] = None,
 ) -> Room:
+    if valid_memberships is None:
+        valid_memberships = [
+            'invite',
+            'join',
+        ]
     queryset = direct_messages
     for user in users:
         queryset = queryset.intersection(
             direct_messages.filter(
                 room_id__in=Event.objects.filter(
-                    content__membership__in=['invite', 'join'],
+                    content__membership__in=valid_memberships,
                     state_key=user,
                 ).values_list(
                     'room__room_id',
@@ -44,8 +50,12 @@ def get_direct_message_for(
 
 async def aget_direct_message_for(
         *users: str,
+        valid_memberships: List[str] = None,
 ) -> Room:
-    return await sync_to_async(get_direct_message_for)(*users)
+    return await sync_to_async(get_direct_message_for)(
+        *users,
+        valid_memberships=valid_memberships,
+    )
 
 
 companies = Room.objects.filter(

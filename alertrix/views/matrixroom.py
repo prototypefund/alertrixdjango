@@ -39,6 +39,15 @@ class CreateMatrixRoom(
     def get_invites(self, form) -> QuerySet:
         return QuerySet()
 
+    def get_permission_levels(self):
+        permission_levels = {
+        }
+        return {
+            k: permission_levels[k]
+            for k in permission_levels.keys()
+            if permission_levels[k] not in [None, {}]
+        }
+
     def get_matrix_room_args(
             self,
             form,
@@ -73,15 +82,7 @@ class CreateMatrixRoom(
                     flat=True,
                 )
             ),
-            power_level_override=(
-                {
-                    'users': {
-                        self.responsible_user.user_id: 100,
-                        str(self.request.user.matrix_id): 100,
-                    },
-                }
-                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
-            ),
+            power_level_override=self.get_permission_levels(),
             space=True,
             **kwargs,
         )

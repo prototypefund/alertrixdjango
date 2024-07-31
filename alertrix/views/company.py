@@ -115,7 +115,7 @@ class CreateCompany(
     def form_valid(self, form):
         mu: mas_models.User = form.cleaned_data['responsible_user']
         mu.save()
-        self.responsible_user = self.form.cleaned_data.get('responsible_user')
+        self.responsible_user = form.cleaned_data.get('responsible_user')
         return super().form_valid(form=form)
 
     def get_context_data(self, **kwargs):

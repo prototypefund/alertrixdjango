@@ -31,6 +31,7 @@ class Parser(
             add_help=True,
             allow_abbrev=True,
             exit_on_error=False,
+            help_print_file=None,
     ):
         super(_argparse.ArgumentParser, self).__init__(
             description=description,
@@ -51,6 +52,7 @@ class Parser(
         self.add_help = add_help
         self.allow_abbrev = allow_abbrev
         self.exit_on_error = exit_on_error
+        self.help_print_file = help_print_file or io.StringIO()
 
         add_group = self.add_argument_group
         self._positionals = add_group(_('positional arguments'))
@@ -86,17 +88,17 @@ class Parser(
     # =====================
     def print_usage(self, file=None):
         if file is None:
-            file = _sys.stdout
+            file = self.help_print_file
         self._print_message(self.format_usage(), file)
 
     def print_help(self, file=None):
         if file is None:
-            file = _sys.stdout
+            file = self.help_print_file
         self._print_message(self.format_help(), file)
 
     def _print_message(self, message, file=None):
         if message:
-            file = file or _sys.stderr
+            file = file or self.help_print_file
             try:
                 file.write(message)
             except (AttributeError, OSError):
@@ -107,7 +109,7 @@ class Parser(
     # ===============
     def exit(self, status=0, message=None):
         if message:
-            self._print_message(message, _sys.stderr)
+            self._print_message(message, self.help_print_file)
         _sys.exit(status)
 
     def error(self, message):
@@ -119,6 +121,6 @@ class Parser(
         If you override this in a subclass, it should not return -- it
         should either exit or raise an exception.
         """
-        self.print_usage(_sys.stderr)
+        self.print_usage(self.help_print_file)
         args = {'prog': self.prog, 'message': message}
         self.exit(2, _('%(prog)s: error: %(message)s\n') % args)

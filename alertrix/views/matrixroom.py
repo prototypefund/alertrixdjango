@@ -46,10 +46,14 @@ class CreateMatrixRoom(
     def get_events_permission_level(self) -> Optional[dict[str, int]]:
         return
 
+    def get_events_default_permission_level(self) -> Optional[int]:
+        return
+
     def get_permission_levels(self):
         permission_levels = {
             'ban': self.get_ban_permission_level(),
             'events': self.get_events_permission_level(),
+            'events_default': self.get_events_default_permission_level(),
         }
         return {
             k: permission_levels[k]

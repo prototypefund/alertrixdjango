@@ -94,6 +94,36 @@ class CreateUnit(
             }: 100,
         }
 
+    async def aget_secondary_matrix_state_events(self, form, room_id):
+        for c in form.cleaned_data['companies']:
+            company = await models.Room.objects.aget(room_id=c)
+            via = models.Event.objects.filter(
+                room__room_id=c,
+                type='m.room.member',
+                content__membership='join',
+            ).values_list(
+                'sender__homeserver__server_name',
+                flat=True,
+            )
+            yield {
+                'room_id': company.room_id,
+                'type': 'm.space.child',
+                'content': {
+                    'via': await sync_to_async(list)(via),
+                },
+                'state_key': room_id,
+            }
+            yield {
+                'room_id': company.room_id,
+                'type': '%(prefix)s.company.unit' % {
+                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+                },
+                'content': {
+                    'version': '0',
+                },
+                'state_key': room_id,
+            }
+
     def get_matrix_room_args(
             self,
             form,

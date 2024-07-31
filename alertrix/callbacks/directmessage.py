@@ -2,6 +2,7 @@ import nio
 from matrixappservice import MatrixClient
 from matrixappservice import models
 
+from .. import querysets
 
 
 async def on_left_direct_message(

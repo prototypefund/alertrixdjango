@@ -141,7 +141,7 @@ class CreateUnit(
                     'allow': [
                         {
                             'type': 'm.room_membership',
-                            'room_id': models.Company.objects.get(slug=company).matrix_room_id,
+                            'room_id': company,
                         }
                         for company in form.cleaned_data['companies']
                     ]

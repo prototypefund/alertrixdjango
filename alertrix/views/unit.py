@@ -4,6 +4,7 @@ from asgiref.sync import sync_to_async
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DetailView
+from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import matrixroom

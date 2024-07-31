@@ -136,6 +136,9 @@ class DetailCompany(
 
     def get_context_data(self, **kwargs):
         cd = super().get_context_data(**kwargs)
+        cd['units'] = querysets.get_units_for_company(
+            company=self.object,
+        )
         return cd
 
 

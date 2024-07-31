@@ -21,6 +21,9 @@
 <div>
     <h2>{% trans 'units' %}</h2>
     <div class="main-list">
+        {% for unit in units %}
+        {% include "alertrix/matrixroom.html" with room=unit %}
+        {% endfor %}
         <a href="{% url 'unit.new' %}?companies={{ object.pk }}">
             <div class="unit">
             <img src="{% static 'alertrix/icons/new.svg' %}" height="128">

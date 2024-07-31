@@ -29,7 +29,6 @@ def get_direct_message_for(
 ) -> Room:
     if valid_memberships is None:
         valid_memberships = [
-            'invite',
             'join',
         ]
     queryset = direct_messages

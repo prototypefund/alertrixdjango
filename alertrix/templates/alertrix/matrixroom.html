@@ -10,9 +10,7 @@
 <a>
 {% endif %}
     <div class="main-list-item matrix-room-card">
-        {% if room.company or room.unit %}
-        <img src="{% if room.get_room_avatar %}{% mxc_to_http room.responsible_user.homeserver.url room.get_room_avatar 128 128 %}{% endif %}" alt="" height="128" width="128">
-        {% endif %}
+        <img src="{% if room.get_avatar.content.url %}{% mxc_to_http room.get_avatar.sender.homeserver.url room.get_avatar.content.url 128 128 %}{% endif %}" alt="" height="128" width="128">
         <div>
             <div class="object-title">{% if room.company and emoticon_company %}{{ emoticon_company }} {% endif %}{% if room.unit and emoticon_unit %}{{ emoticon_unit }} {% endif %}{{ room }}</div>
             {% if room.get_description %}

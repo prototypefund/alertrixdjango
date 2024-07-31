@@ -58,6 +58,9 @@ class CreateMatrixRoom(
     def get_notifications_permission_level(self) -> Optional[dict[str, int]]:
         return
 
+    def get_redact_permission_level(self) -> Optional[int]:
+        return
+
     def get_permission_levels(self):
         permission_levels = {
             'ban': self.get_ban_permission_level(),
@@ -66,6 +69,7 @@ class CreateMatrixRoom(
             'invite': self.get_invite_permission_level(),
             'kick': self.get_kick_permission_level(),
             'notifications': self.get_notifications_permission_level(),
+            'redact': self.get_redact_permission_level(),
         }
         return {
             k: permission_levels[k]

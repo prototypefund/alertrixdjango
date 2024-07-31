@@ -1,5 +1,6 @@
 import io
 import json
+import logging
 import nio
 from django.utils.translation import gettext as _
 from matrixappservice import models

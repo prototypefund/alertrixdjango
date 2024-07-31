@@ -64,6 +64,15 @@ class CreateMatrixRoom(
     def get_state_default_permission_level(self) -> Optional[int]:
         return
 
+    def get_users_permission_level(self) -> Optional[dict[str, int]]:
+        return {
+            **{
+                self.responsible_user.user_id: 100
+                if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
+            },
+            str(self.request.user.matrix_id): 100,
+        }
+
     def get_permission_levels(self):
         permission_levels = {
             'ban': self.get_ban_permission_level(),
@@ -74,6 +83,7 @@ class CreateMatrixRoom(
             'notifications': self.get_notifications_permission_level(),
             'redact': self.get_redact_permission_level(),
             'state_default': self.get_state_default_permission_level(),
+            'users': self.get_users_permission_level(),
         }
         return {
             k: permission_levels[k]

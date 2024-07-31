@@ -1,4 +1,5 @@
 import argparse as _argparse
+import io
 import os as _os
 from gettext import gettext as _
 

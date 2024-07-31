@@ -176,7 +176,7 @@ class CreateUnit(
 
 
 class UnitDetailView(
-    mixins.UserHasSpecificMembershipForThisMatrixRoom,
+    mixins.MemberOrPublic,
     DetailView,
 ):
     model = models.Room

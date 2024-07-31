@@ -2,7 +2,7 @@
 {% load alertrix_roles %}
 
 
-{% if room.company %}
+{% if room|is_company %}
 <a href="{% url 'comp.detail' pk=room.room_id %}">
 {% elif room.unit %}
 <a href="{% url 'unit.detail' pk=room.room_id %}">

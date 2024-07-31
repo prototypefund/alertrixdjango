@@ -24,8 +24,18 @@ class CreateUnit(
     success_url = reverse_lazy('comp.list')
 
     def get_initial(self):
-        preselected_companies = models.Company.objects.filter(
-            slug__in=self.request.GET.getlist('companies'),
+        preselected_companies = querysets.companies.filter(
+            Q(
+                room_id__in=self.request.GET.getlist('companies')
+            ) & Q(
+                room_id__in=models.Event.objects.filter(
+                    type='m.room.member',
+                    content__membership__in=['invite', 'join'],
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ),
+            ),
         )
         initial = {
             **super().get_initial(),

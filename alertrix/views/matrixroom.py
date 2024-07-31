@@ -40,8 +40,12 @@ class CreateMatrixRoom(
     def get_invites(self, form) -> QuerySet:
         return QuerySet()
 
+    def get_ban_permission_level(self) -> Optional[int]:
+        return
+
     def get_permission_levels(self):
         permission_levels = {
+            'ban': self.get_ban_permission_level(),
         }
         return {
             k: permission_levels[k]

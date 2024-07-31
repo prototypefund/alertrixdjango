@@ -180,3 +180,4 @@ class UnitDetailView(
     DetailView,
 ):
     model = models.Room
+    template_name = 'alertrix/unit_detail.html'

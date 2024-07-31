@@ -110,7 +110,12 @@ class Parser(
     def exit(self, status=0, message=None):
         if message:
             self._print_message(message, self.help_print_file)
-        _sys.exit(status)
+        raise Exception(
+            '%(status)s: %(message)s' % {
+                'status': status,
+                'message': message,
+            },
+        )
 
     def error(self, message):
         """error(message: string)
@@ -122,5 +127,10 @@ class Parser(
         should either exit or raise an exception.
         """
         self.print_usage(self.help_print_file)
-        args = {'prog': self.prog, 'message': message}
-        self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+        args = {
+            'prog': self.prog,
+            'message': message,
+        }
+        raise Exception(
+            _('%(prog)s: error: %(message)s\n') % args,
+        )

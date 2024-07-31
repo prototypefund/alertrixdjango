@@ -123,7 +123,7 @@ class CreateCompany(
         data['form'].fields['application_service']: django.forms.fields.ChoiceField
         data['form'].fields['application_service'].choices = [
             (application_service.pk, application_service)
-            for application_service in models.ApplicationServiceRegistration.objects.filter(
+            for application_service in mas_models.ApplicationServiceRegistration.objects.filter(
                 users__in=self.request.user.groups.all(),
             )
         ]

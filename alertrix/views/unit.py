@@ -149,10 +149,14 @@ class CreateUnit(
             },
         ]
         for c in form.cleaned_data['companies']:
-            via = models.Company.objects.filter(
-                slug__in=form.cleaned_data['companies']
+            via = models.User.objects.filter(
+                user_id__in=models.Event.objects.filter(
+                    type='m.room.member',
+                    content__membership='join',
+                    room__room_id__in=form.cleaned_data['companies'],
+                ),
             ).values_list(
-                'responsible_user__homeserver__server_name',
+                'homeserver__server_name',
                 flat=True,
             )
             args['initial_state'].append({

@@ -45,26 +45,6 @@ class CreateUnit(
         }
         return initial
 
-    def get_matrix_state_events(self, form):
-        state_events = []
-        for c in form.cleaned_data['companies']:
-            company = models.Company.objects.get(slug=c)
-            via = models.Company.objects.filter(
-                slug__in=form.cleaned_data['companies']
-            ).values_list(
-                'responsible_user__homeserver__server_name',
-                flat=True,
-            )
-            state_events.append({
-                'room_id': company.matrix_room_id,
-                'type': 'm.space.child',
-                'content': {
-                    'via': list(via),
-                },
-                'state_key': self.object.matrix_room_id,
-            })
-        return state_events
-
     def get_matrix_room_args(
             self,
             form,

@@ -66,7 +66,7 @@ class UserHasSpecificMembershipForThisMatrixRoom(
             self.object = self.get_object(self.get_queryset())
         try:
             mas_models.Event.objects.get(
-                room__room_id=self.object.matrix_room_id,
+                room__room_id=self.object.room_id,
                 content__membership__in=self.valid_room_membership_states,
                 state_key=self.request.user.matrix_id,
             )

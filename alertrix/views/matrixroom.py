@@ -73,6 +73,9 @@ class CreateMatrixRoom(
             str(self.request.user.matrix_id): 100,
         }
 
+    def get_users_default_permission_level(self) -> Optional[int]:
+        return
+
     def get_permission_levels(self):
         permission_levels = {
             'ban': self.get_ban_permission_level(),
@@ -84,6 +87,7 @@ class CreateMatrixRoom(
             'redact': self.get_redact_permission_level(),
             'state_default': self.get_state_default_permission_level(),
             'users': self.get_users_permission_level(),
+            'users_default': self.get_users_default_permission_level(),
         }
         return {
             k: permission_levels[k]

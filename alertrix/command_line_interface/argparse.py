@@ -39,6 +39,10 @@ class Parser(
             argument_default=argument_default,
             conflict_handler=conflict_handler,
         )
+        registry = self._registries.setdefault('action', {})
+        if 'action' in registry:
+            del registry['action']
+        self.register('action', 'help', _HelpAction)
 
         # default setting for prog
         if prog is None:

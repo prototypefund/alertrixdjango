@@ -73,3 +73,20 @@ class UserHasSpecificMembershipForThisMatrixRoom(
         except mas_models.Event.DoesNotExist:
             pass
         return False
+
+
+class MemberOrPublic(
+    UserHasSpecificMembershipForThisMatrixRoom,
+):
+    def test_func(self):
+        self.object = self.get_object(self.get_queryset())
+        try:
+            mas_models.Event.objects.get(
+                room__room_id=self.object.room_id,
+                type='m.room.join_rules',
+                content__join_rule='public',
+                state_key__isnull=False,
+            )
+            return True
+        except mas_models.Event.DoesNotExist:
+            return super().test_func()

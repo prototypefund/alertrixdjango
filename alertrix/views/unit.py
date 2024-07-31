@@ -181,3 +181,7 @@ class UnitDetailView(
 ):
     model = models.Room
     template_name = 'alertrix/unit_detail.html'
+
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data(**kwargs)
+        return cd

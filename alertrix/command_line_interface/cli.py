@@ -61,8 +61,12 @@ async def cli(
         callback = parsed_args.func
     except AttributeError:
         return NotImplementedError.__name__
-    await callback(
-        client=client,
-        room=client.rooms[room.room_id],
-        event=nio.Event(json.loads(parsed_args.event)),
+    res = callback(
+        client,
+        client.rooms[room.room_id],
+        nio.Event(json.loads(parsed_args.event)),
     )
+    if inspect.isawaitable(res):
+        return await res
+    else:
+        return res

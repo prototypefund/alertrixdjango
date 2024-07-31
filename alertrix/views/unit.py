@@ -149,7 +149,6 @@ class CreateUnit(
             },
         ]
         for c in form.cleaned_data['companies']:
-            company = models.Company.objects.get(slug=c)
             via = models.Company.objects.filter(
                 slug__in=form.cleaned_data['companies']
             ).values_list(
@@ -158,7 +157,7 @@ class CreateUnit(
             )
             args['initial_state'].append({
                 'type': 'm.space.parent',
-                'state_key': company.matrix_room_id,
+                'state_key': c,
                 'content': {
                     'via': list(via),
                 }

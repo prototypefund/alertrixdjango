@@ -15,6 +15,7 @@
     {% include "alertrix/matrixroom.html" with room=company %}
     {% endfor %}
 </div>
+<img src="{% if room.get_avatar.content.url %}{% mxc_to_http room.get_avatar.sender.homeserver.url room.get_avatar.content.url 128 128 %}{% endif %}" alt="" height="128" width="128">
 <h1>
 </h1>
 <div>

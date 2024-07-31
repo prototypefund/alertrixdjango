@@ -168,6 +168,12 @@ class CreateUnit(
             })
         return args
 
+    def form_valid(self, form):
+        self.responsible_user = models.User.objects.filter(
+            user_id__in=self.get_relevant_users(form),
+        ).first()
+        return super().form_valid(form)
+
 
 class UnitDetailView(
     mixins.UserHasSpecificMembershipForThisMatrixRoom,

@@ -162,6 +162,8 @@ class CreateMatrixRoom(
                 self.form,
                 room_id=response.room_id,
         ):
+            if state_event is None:
+                continue
             if state_event.get('room_id') != response.room_id:
                 room = models.Room(state_event.get('room_id'))
                 try:

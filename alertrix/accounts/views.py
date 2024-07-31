@@ -103,7 +103,7 @@ class CreateRegistrationToken(
             # There could be a room creation process here, but that could be used to spam users using the primary
             # application services account.
             return
-        client: nio.AsyncClient = await app_service.get_matrix_client()
+        client: nio.AsyncClient = await app_service.aget_matrix_client()
         # send the token
         room_send_response: nio.RoomSendResponse | nio.RoomSendError = await client.room_send(
             dm.matrix_room_id,

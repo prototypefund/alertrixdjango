@@ -80,7 +80,7 @@ class CreateRegistrationToken(
                 user_id=form.data['valid_for_matrix_id'],
                 token=self.object.token,
             )
-        except DirectMessage.DoesNotExist:
+        except Room.DoesNotExist:
             success = False
         if success:
             self.request.session[self.registration_user_selected_cookie_name] = form.data['valid_for_matrix_id']
@@ -95,11 +95,11 @@ class CreateRegistrationToken(
     ):
         try:
             # Save the direct message object
-            dm = await DirectMessage.objects.aget(
-                with_user=user_id,
-                responsible_user=await app_service.get_user(),
+            dm = await get_direct_message_for(
+                user_id,
+                app_service.get_user().user_id,
             )
-        except DirectMessage.DoesNotExist:
+        except Room.DoesNotExist:
             # There could be a room creation process here, but that could be used to spam users using the primary
             # application services account.
             return

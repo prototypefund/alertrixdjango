@@ -12,7 +12,7 @@
 {{ block.super }}
 <img src="{% if room.get_avatar.content.url %}{% mxc_to_http room.get_avatar.sender.homeserver.url room.get_avatar.content.url 128 128 %}{% endif %}" alt="" height="128" width="128">
 <h1>
-    {{ object }}
+    {{ object.get_name.content.name }}
 </h1>
 <a href="element://vector/webapp/#/room/{{ object.matrix_room_id }}">{{ object.matrix_room_id }}</a>
 {% for data in object.get_room_info %}

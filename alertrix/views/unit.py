@@ -13,6 +13,7 @@ from .. import mixins
 
 
 class CreateUnit(
+    LoginRequiredMixin,
     matrixroom.CreateMatrixRoom,
     FormView,
 ):

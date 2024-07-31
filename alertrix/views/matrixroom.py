@@ -1,5 +1,6 @@
 import abc
 import logging
+from typing import Optional
 
 import nio
 from asgiref.sync import async_to_sync

@@ -35,6 +35,12 @@ class CreateMatrixRoom(
         return []
 
     async def aget_secondary_matrix_state_events(self, form, room_id):
+        """
+
+        :param form: This views form.
+        :param room_id: The room_id of the newly created room.
+        :return: Yields state events.
+        """
         yield
 
     def get_invites(self, form) -> QuerySet:

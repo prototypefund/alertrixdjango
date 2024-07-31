@@ -72,6 +72,8 @@ class UserHasSpecificMembershipForThisMatrixRoom(
             return True
         except mas_models.Event.DoesNotExist:
             pass
+        except AttributeError:
+            pass
         return False
 
 

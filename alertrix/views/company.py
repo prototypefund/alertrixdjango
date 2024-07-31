@@ -134,6 +134,9 @@ class DetailCompany(
             {'url': reverse('comp.edit', kwargs=dict(pk=self.object.room_id)), 'label': _('edit')},
         ]
 
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data(**kwargs)
+        return cd
 
 
 class InviteUser(

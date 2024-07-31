@@ -189,3 +189,21 @@ class UnitDetailView(
             unit=self.object,
         )
         return cd
+
+
+class PublicUnits(
+    ListView,
+):
+    template_name = 'alertrix/public_units.html'
+
+    def get_queryset(self):
+        qs = querysets.units.filter(
+            room_id__in=models.Event.objects.filter(
+                type='m.room.join_rules',
+                content__join_rule='public',
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
+        return qs

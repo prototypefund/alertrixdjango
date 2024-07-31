@@ -38,17 +38,12 @@ class CreateRegistrationToken(
         # Make sure, all the required dependencies are set up
         try:
             main_service = MainApplicationServiceKey.objects.get(id=1).service
-            user_id = '@%(localpart)s:%(server_name)s' % {
-                'localpart': main_service.sender_localpart,
-                'server_name': main_service.homeserver.server_name,
-            }
-            responsible_user = MatrixUser.objects.get(
-                app_service=main_service,
-                user_id=user_id,
-            )
-            DirectMessage.objects.get(
-                responsible_user=responsible_user,
-                with_user=form.data.get('valid_for_matrix_id'),
+            responsible_user = MainUserKey.objects.get(
+                service=main_service,
+            ).user
+            get_direct_message_for(
+                str(responsible_user.user_id),
+                form.data.get('valid_for_matrix_id'),
             )
         except MainApplicationServiceKey.DoesNotExist:
             messages.error(
@@ -62,7 +57,7 @@ class CreateRegistrationToken(
                 _('this service is not set up to send messages'),
             )
             return self.form_invalid(form)
-        except DirectMessage.DoesNotExist:
+        except Room.DoesNotExist:
             messages.error(
                 self.request,
                 _('invite <a href="https://matrix.to/#/%(user_id)s">%(user_id)s</a> to a direct message first') % {

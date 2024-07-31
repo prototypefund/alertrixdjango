@@ -1,3 +1,4 @@
+from typing import Optional
 from asgiref.sync import sync_to_async
 from django.urls import reverse_lazy
 from django.views.generic import DetailView

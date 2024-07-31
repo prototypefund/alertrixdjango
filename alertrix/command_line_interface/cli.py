@@ -4,3 +4,56 @@ import nio
 from django.utils.translation import gettext as _
 from matrixappservice import models
 from .argparse import Parser
+
+
+async def cli(
+        args=None,
+        override_args: dict = None,
+        sender: str = None,
+):
+    output_file = io.StringIO()
+
+    class PC(
+        Parser,
+    ):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # Make the parser write its output to this in-memory file
+            self.help_print_file = output_file
+
+    parser = PC(
+        '',
+    )
+    subparsers = parser.add_subparsers(
+        title='commands',
+        help=_('these are the commands you can execute'),
+    )
+
+    try:
+        parsed_args = parser.parse_args(
+            args,
+        )
+    except TypeError:
+        return _('invalid command')
+    except Exception as e:
+        return ''.join(type(e).__name__)
+    for key, value in override_args.items():
+        setattr(parsed_args, key, value)
+    parser.help_print_file.seek(0)
+    help_info = parser.help_print_file.read()
+    if help_info:
+        return help_info
+    bot = await models.User.objects.aget(
+        user_id=parsed_args.bot,
+    )
+    client = await bot.aget_client()
+    room = await models.Room.objects.aget(
+        room_id=parsed_args.room
+    )
+    if room.room_id not in client.rooms:
+        client.rooms[room.room_id] = await room.aget_nio_room(bot.user_id)
+    await parsed_args.func(
+        client=client,
+        room=client.rooms[room.room_id],
+        event=nio.Event(json.loads(parsed_args.event)),
+    )

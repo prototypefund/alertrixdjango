@@ -32,10 +32,6 @@ class UnitCreateForm(
         label=_('companies'),
         widget=forms.CheckboxSelectMultiple,
     )
-    responsible_user = forms.ChoiceField(
-        label=_('responsible_user'),
-        required=False,
-    )
 
     def __init__(
             self,
@@ -58,15 +54,6 @@ class UnitCreateForm(
             (c.slug, str(c))
             for c in qs_companies
         ]
-        responsible_users = [
-            (None, '---'),
-        ] + [
-            (responsible_user, str(matrixappservice.models.User.objects.get(user_id=responsible_user)))
-            for responsible_user in qs_companies.values_list('responsible_user', flat=True)
-        ]
-        self.fields['responsible_user'].choices = (
-            responsible_users
-        )
 
     def clean_companies(self):
         if 'companies' not in self.data:

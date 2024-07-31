@@ -78,6 +78,12 @@ class CreateUnit(
         )
         return relevant_users
 
+    def get_invites(self, form):
+        invites = self.get_relevant_users(
+            form,
+        )
+        return invites
+
     def get_matrix_room_args(
             self,
             form,

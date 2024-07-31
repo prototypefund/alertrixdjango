@@ -84,6 +84,16 @@ class CreateUnit(
         )
         return invites
 
+    def get_events_permission_level(self) -> Optional[dict[str, int]]:
+        return {
+            '%(prefix)s.company' % {
+                'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+            }: 100,
+            '%(prefix)s.company.unit' % {
+                'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+            }: 100,
+        }
+
     def get_matrix_room_args(
             self,
             form,

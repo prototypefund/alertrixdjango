@@ -12,7 +12,7 @@
 <h1>{% trans 'companies' %}</h1>
 <div class="main-list">
     {% for obj in object_list %}
-    {% include "alertrix/matrixroom.html" with room=obj %}
+    {% include "alertrix/company.html" with room=obj %}
     {% endfor %}
     {% if perms.alertrix.add_company %}
     <a href="{% url 'comp.new' %}" style="min-height: 128">

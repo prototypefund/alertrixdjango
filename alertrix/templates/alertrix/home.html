@@ -35,7 +35,7 @@
         <h1>{% translate "units" %}</h1>
         <div>
             {% for unit in units %}
-            {% include "alertrix/matrixroom.html" with room=unit %}
+            {% include "alertrix/unit.html" with room=unit %}
             {% empty %}
             {% if not user.is_authenticated %}
             {% blocktranslate with service_name=service_name count n=n_total_units trimmed %}
@@ -53,7 +53,7 @@
         <h1>{% translate "companies" %}</h1>
         <div>
             {% for company in companies %}
-            {% include "alertrix/matrixroom.html" with room=company %}
+            {% include "alertrix/company.html" with room=company %}
             {% empty %}
             {% if not user.is_authenticated %}
             {% blocktranslate with service_name=service_name count n=n_total_companies trimmed %}

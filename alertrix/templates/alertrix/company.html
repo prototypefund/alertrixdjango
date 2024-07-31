@@ -1,0 +1,5 @@
+{% extends 'alertrix/matrixroom.html' %}
+
+{% block url_detail %}{% url 'comp.detail' pk=room.room_id %}{% endblock %}
+
+{% block name_prefix %}{{ emoticon_company }} {% endblock %}

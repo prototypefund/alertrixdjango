@@ -2,17 +2,11 @@
 {% load alertrix_roles %}
 
 
-{% if room|is_company %}
-<a href="{% url 'comp.detail' pk=room.room_id %}">
-{% elif room|is_unit %}
-<a href="{% url 'unit.detail' pk=room.room_id %}">
-{% else %}
-<a>
-{% endif %}
+<a href="{% block url_detail %}{% endblock %}">
     <div class="main-list-item matrix-room-card">
         <img src="{% if room.get_avatar.content.url %}{% mxc_to_http room.get_avatar.sender.homeserver.url room.get_avatar.content.url 128 128 %}{% endif %}" alt="" height="128" width="128">
         <div>
-            <div class="object-title">{% if room|is_company and emoticon_company %}{{ emoticon_company }} {% endif %}{% if room|is_unit and emoticon_unit %}{{ emoticon_unit }} {% endif %}{{ room.get_name.content.name }}</div>
+            <div class="object-title">{% block name_prefix %}{% endblock %}{{ room.get_name.content.name }}</div>
             {% if show_topic %}
             {% if room.get_topic %}
             <div>{{ room.get_topic.content.topic }}</div>

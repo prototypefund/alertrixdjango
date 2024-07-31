@@ -128,23 +128,9 @@ async def add_widget_to_chat(
                     user_id=client.user_id,
                 ).values_list('app_service', flat=True).aget(),
             )
-            our_direct_messages = mas_models.Event.objects.filter(
-                state_key=mu.user_id,
-                unsigned__prev_content__is_direct=True,
-                content__membership='join',
-            ).values_list(
-                'room__room_id',
-                flat=True,
-            )
-            their_direct_messages = mas_models.Event.objects.filter(
-                state_key=event.sender,
-                content__membership='join',
-            ).values_list(
-                'room__room_id',
-                flat=True,
-            )
-            dm = await mas_models.Room.objects.aget(
-                room_id__in=our_direct_messages.intersection(their_direct_messages),
+            dm = await querysets.aget_direct_message_for(
+                event.sender,
+                mu.user_id,
             )
         except models.MainUserKey.DoesNotExist:
             app_service = await mas_models.User.objects.aget(

@@ -1,7 +1,6 @@
 import nio
 from matrixappservice import MatrixClient
 
-from .. import models
 
 
 async def on_left_direct_message(

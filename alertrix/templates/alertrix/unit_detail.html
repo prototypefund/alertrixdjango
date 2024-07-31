@@ -11,6 +11,9 @@
 {% block content %}
 {{ block.super }}
 <div>
+    {% for company in companies %}
+    {% include "alertrix/matrixroom.html" with room=company %}
+    {% endfor %}
 </div>
 <table>
     <tr>

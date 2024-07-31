@@ -184,4 +184,7 @@ class UnitDetailView(
 
     def get_context_data(self, **kwargs):
         cd = super().get_context_data(**kwargs)
+        cd['companies'] = querysets.get_companies_for_unit(
+            unit=self.object,
+        )
         return cd

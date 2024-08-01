@@ -77,6 +77,8 @@ async def cli(
         client.rooms[room.room_id],
         nio.Event(json.loads(parsed_args.event)),
     ]
+    if callback.__code__.co_argcount > len(callback_args):
+        callback_args.append(parsed_args)
     res = callback(
         *callback_args,
     )

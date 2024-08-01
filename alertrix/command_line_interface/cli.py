@@ -12,6 +12,7 @@ from matrixappservice import MatrixClient
 from matrixappservice import models
 
 from .argparse import Parser
+from .. import querysets
 
 
 async def cli(

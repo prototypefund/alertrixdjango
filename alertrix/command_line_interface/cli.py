@@ -15,6 +15,7 @@ async def cli(
         args=None,
         override_args: dict = None,
         sender: str = None,
+        program_name: str = None,
 ):
     output_file = io.StringIO()
 
@@ -27,7 +28,7 @@ async def cli(
             self.help_print_file = output_file
 
     parser = PC(
-        '',
+        program_name or getattr(settings, 'ALERTRIX_COMMAND_PREFIX') or '',
     )
     subparsers = parser.add_subparsers(
         title='commands',

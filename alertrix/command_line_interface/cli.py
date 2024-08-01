@@ -38,6 +38,13 @@ async def cli(
     )
 
     try:
+        user = await get_user_model().objects.aget(
+            matrix_id=sender,
+        )
+    except get_user_model().DoesNotExist:
+        user = None
+
+    try:
         parsed_args = parser.parse_args(
             args,
         )

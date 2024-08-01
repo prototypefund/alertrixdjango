@@ -51,6 +51,7 @@ async def cli(
     except TypeError:
         return _('invalid command')
     except Exception as e:
+        logging.error(''.join(traceback.format_exception(e)))
         return ''.join(type(e).__name__)
     for key, value in override_args.items():
         setattr(parsed_args, key, value)

@@ -88,3 +88,72 @@ async def cli(
         return await res
     else:
         return res
+
+
+async def chat_cli(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMessageText,
+):
+    if event.sender == client.user_id:
+        return
+
+    args = event.body.split()
+
+    # commands either need to be sent to the users direct message with an organisations bot account or be prefixed
+    prefix_needed = False
+    try:
+        dm = await querysets.aget_direct_message_for(
+            event.sender,
+            client.user_id,
+        )
+        if dm.room_id != room.room_id:
+            prefix_needed = True
+    except models.Room.DoesNotExist:
+        # No direct message set up for this user, so this chat cannot be a direct message
+        prefix_needed = True,
+    prefix = getattr(settings, 'ALERTRIX_COMMAND_PREFIX') or '!'
+    program_name = getattr(settings, 'ALERTRIX_COMMAND_NAME') or 'alertrix'
+    if prefix_needed:
+        if args[0] != prefix + (program_name or ''):
+            # This command is not meant for us
+            return
+        args.pop(0)
+    else:
+        if args[0] == prefix + (program_name or ''):
+            # The request includes the command prefix and name, so we remove them
+            args.pop(0)
+
+    # Since this is the chat interface we do not want the user to have access to everything
+    override_args = {
+        'event': json.dumps(event.source),  # do not allow passing custom events
+        'room': room.room_id,  # do not allow acting in other rooms
+        'bot': client.user_id,  # do not allow the use of another bot
+    }
+    # prevent impersonating for non-admins
+    try:
+        user = await get_user_model().objects.aget(
+            matrix_id=event.sender,
+        )
+    except get_user_model().DoesNotExist:
+        user = None
+    if user is None or not user.is_superuser:
+        override_args['user'] = event.sender
+
+    # call the command line interface function
+    response_text = await cli(
+        args=args,
+        override_args=override_args,
+        sender=event.sender,
+        program_name=program_name,
+    )
+    if response_text:
+        await client.room_send(
+            room.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': response_text,
+            },
+            ignore_unverified_devices=True,
+        )

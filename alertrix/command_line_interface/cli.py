@@ -147,13 +147,17 @@ async def chat_cli(
         sender=event.sender,
         program_name=program_name,
     )
+    if type(response_text) is str:
+        content = {
+            'msgtype': 'm.text',
+            'body': response_text,
+        }
+    else:
+        content = None
     if response_text:
         await client.room_send(
             room.room_id,
             'm.room.message',
-            {
-                'msgtype': 'm.text',
-                'body': response_text,
-            },
+            content,
             ignore_unverified_devices=True,
         )

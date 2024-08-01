@@ -32,7 +32,7 @@ async def cli(
             self.help_print_file = output_file
 
     parser = PC(
-        program_name or getattr(settings, 'ALERTRIX_COMMAND_PREFIX') or '',
+        program_name or getattr(settings, 'ALERTRIX_COMMAND_NAME') or '',
     )
     subparsers = parser.add_subparsers(
         title='commands',

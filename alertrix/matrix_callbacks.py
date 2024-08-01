@@ -2,6 +2,7 @@ import nio
 from django.conf import settings
 
 from . import callbacks
+from alertrix.command_line_interface.cli import chat_cli
 
 matrix_callbacks = [
     (callbacks.onboarding.ensure_encryption, nio.RoomMessage),

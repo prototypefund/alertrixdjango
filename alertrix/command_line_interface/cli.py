@@ -50,6 +50,9 @@ async def cli(
     account_parser = subparsers.add_parser(
         _('account'),
     )
+    account_parser.set_defaults(
+        func=callbacks.account.account,
+    )
     account_actions = account_parser.add_subparsers(
         parser_class=PC,
         help=_('manage your account'),

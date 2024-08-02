@@ -46,6 +46,13 @@ async def cli(
     except get_user_model().DoesNotExist:
         user = None
 
+    account_parser = subparsers.add_parser(
+        _('account'),
+    )
+    account_actions = account_parser.add_subparsers(
+        parser_class=PC,
+        help=_('manage your account'),
+    )
     try:
         parsed_args = parser.parse_args(
             args,

@@ -76,13 +76,40 @@ class CreateRegistration(
             return cleaned_matrix_id
 
 
+class UserCreationForm(
+    forms.ModelForm,
+):
+
+    class Meta:
+        title = _('create user')
+        model = get_user_model()
+        fields = [
+            'matrix_id',
+        ]
+
+    def clean_matrix_id(self):
+        matrix_id = self.cleaned_data.get('matrix_id')
+        if (
+            matrix_id
+            and self._meta.model.objects.filter(matrix_id__iexact=matrix_id).exists()
+        ):
+            self.add_error(
+                'matrix_id', _('%(model)s with this matrix id already exists') % {
+                    'model': type(self.instance)._meta.verbose_name,
+                },
+            )
+        else:
+            return matrix_id
+
+
 class CreateFirstUserForm(
     UserCreationForm,
 ):
 
-    class Meta:
+    class Meta(
+        UserCreationForm.Meta,
+    ):
         title = _('create admin account')
-        model = get_user_model()
         fields = [
             'matrix_id',
         ]
@@ -101,9 +128,9 @@ class CreateUserForm(
     token = forms.CharField(
     )
 
-    class Meta:
-        title = _('create user')
-        model = get_user_model()
+    class Meta(
+        UserCreationForm.Meta,
+    ):
         fields = [
             'token',
             'matrix_id',

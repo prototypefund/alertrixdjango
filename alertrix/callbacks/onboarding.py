@@ -71,6 +71,34 @@ async def on_room_invite(
             pass
 
 
+async def on_room_join(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMessage,
+):
+    if event.content['membership'] != 'join':
+        return
+    if not await querysets.companies.filter(
+            room_id=room.room_id,
+    ).aexists():
+        return
+    try:
+        await querysets.aget_direct_message_for(
+            event.sender,
+            client.user_id,
+        )
+        return
+    except mas_models.Room.DoesNotExist:
+        pass
+    room_create_response = await client.room_create(
+        invite=[
+            event.sender,
+        ],
+    )
+    if type(room_create_response) is nio.RoomCreateError:
+        logging.error(room_create_response)
+
+
 async def ensure_encryption(
         client: MatrixClient,
         room: nio.MatrixRoom,

@@ -1,6 +1,7 @@
 import argparse
 import json
 import nio
+from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from matrixappservice import MatrixClient

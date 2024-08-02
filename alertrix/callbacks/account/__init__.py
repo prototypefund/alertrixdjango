@@ -7,6 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from django.template import loader
+from alertrix.accounts.forms import UserCreationForm
 
 
 async def account(

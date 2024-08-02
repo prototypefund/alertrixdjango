@@ -27,6 +27,10 @@ msgid "register"
 msgstr "Registrieren"
 
 #: accounts/forms.py
+msgid "%(model)s with this matrix id already exists"
+msgstr "%(model)s mit dieser Matrix-ID existiert bereits."
+
+#: accounts/forms.py
 msgid "create admin account"
 msgstr "Admin-Account erstellen"
 

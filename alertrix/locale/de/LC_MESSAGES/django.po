@@ -90,6 +90,10 @@ msgstr "%(user)s wurde zu %(group_name)s hinzugefügt."
 msgid "please make sure your password manager works by logging in"
 msgstr "Bitte stelle sicher, dass dein Passwort-Manager funktioniert, indem du dich einloggst."
 
+#: callbacks/account/__init__.py
+msgid "user created"
+msgstr "Nutzer angelegt."
+
 #: forms/company.py
 msgid "handler cannot be empty"
 msgstr "Verhaltensdefinition darf nicht leer sein."

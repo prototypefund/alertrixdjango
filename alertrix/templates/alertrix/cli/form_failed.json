@@ -1,0 +1,6 @@
+{
+  "msgtype": "m.text",
+  "body": "{% for field, errors in form.errors.items %}\n{{ field }}{% for error in errors %}\n\t{{ error }}{% endfor %}{% endfor %}",
+  "format": "org.matrix.custom.html",
+  "formatted_body": "{{ form.errors|addslashes }}"
+}

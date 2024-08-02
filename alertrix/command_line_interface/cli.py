@@ -152,6 +152,8 @@ async def chat_cli(
             'msgtype': 'm.text',
             'body': response_text,
         }
+    elif type(response_text) is dict:
+        content = response_text
     else:
         content = None
     if response_text:

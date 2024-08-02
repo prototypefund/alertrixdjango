@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from matrixappservice import models
 
+from alertrix import callbacks
 from .argparse import Parser
 from .. import querysets
 

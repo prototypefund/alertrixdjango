@@ -30,3 +30,27 @@ async def account(
     except get_user_model().DoesNotExist:
         description = AnonymousUser.__name__
     return description
+
+
+async def create(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMessageText,
+        args: argparse.Namespace,
+):
+    form = UserCreationForm(
+        {
+            'matrix_id': args.user,
+        },
+    )
+    if await sync_to_async(form.is_valid)():
+        await sync_to_async(form.save)()
+        return _('user created')
+    if form.errors:
+        res = loader.render_to_string(
+            'alertrix/cli/form_failed.json',
+            {
+                'form': form,
+            },
+        )
+        return json.loads(res)

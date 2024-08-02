@@ -57,6 +57,13 @@ async def cli(
         parser_class=PC,
         help=_('manage your account'),
     )
+    account_create_parser = account_actions.add_parser(
+        'create',
+        help=_('register'),
+    )
+    account_create_parser.set_defaults(
+        func=callbacks.account.create,
+    )
     try:
         parsed_args = parser.parse_args(
             args,

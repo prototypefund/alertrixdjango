@@ -7,3 +7,4 @@ from django.utils import timezone
 from django.utils.http import urlencode
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
+from matrixappservice import MatrixClient

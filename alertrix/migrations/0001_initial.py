@@ -3,7 +3,6 @@
 import django.contrib.auth.models
 import django.db.models.deletion
 import django.utils.timezone
-import matrixappservice.handler
 from django.db import migrations, models
 
 
@@ -79,7 +78,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'application service',
                 'verbose_name_plural': 'application services',
             },
-            bases=(models.Model, matrixappservice.handler.Handler),
         ),
         migrations.CreateModel(
             name='MainApplicationServiceKey',

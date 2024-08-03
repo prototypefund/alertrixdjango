@@ -9,4 +9,5 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models
+
 from alertrix import models

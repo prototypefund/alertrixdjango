@@ -16,6 +16,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 from matrixappservice import models as mas_models
+from matrixappservice.database import models as database
 
 from . import appservice
 from . import company

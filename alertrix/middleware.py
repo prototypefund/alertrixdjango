@@ -56,14 +56,11 @@ class WidgetWatcher:
             id=widget_id,
         )
         if not widget.first_use_timestamp:
-            widget.first_use_timestamp = timezone.now()
-            widget.save()
-            login(
-                request,
-                get_user_model().objects.get(
-                    matrix_id=widget.user_id,
-                ),
-            )
+            view = views.WidgetActivationView.as_view()(request)
+            if type(view) is HttpResponseRedirect:
+                return view
+            else:
+                return view.render()
         response = self.get_response(request, *args, **kwargs)
         if 'widgetId' in request.GET:
             if (

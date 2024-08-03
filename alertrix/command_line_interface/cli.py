@@ -72,6 +72,8 @@ async def cli(
         parser_class=PC,
         help=_('use a widget to access the web interface'),
     )
+    widget_create_parser = widget_actions.add_parser('create')
+    widget_create_parser.set_defaults(func=callbacks.widget.add_widget_to_chat)
     try:
         parsed_args = parser.parse_args(
             args,

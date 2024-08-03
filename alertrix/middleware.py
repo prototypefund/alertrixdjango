@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 
 from . import models
+from . import views
 
 
 class WidgetWatcher:

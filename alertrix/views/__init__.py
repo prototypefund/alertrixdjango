@@ -14,6 +14,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import FormView
 from matrixappservice import models as mas_models
 
 from . import appservice

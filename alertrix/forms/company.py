@@ -53,11 +53,15 @@ class CompanyCreateForm(
         required=False,
     )
     application_service = forms.ChoiceField(
-        choices=[
+        choices=None,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.application_service.choices = [
             (application_service.pk, application_service)
             for application_service in models.ApplicationServiceRegistration.objects.all()
-        ],
-    )
+        ]
 
     def clean_application_service(self):
         service = models.ApplicationServiceRegistration.objects.get(

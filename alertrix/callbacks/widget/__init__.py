@@ -11,3 +11,4 @@ from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models
 
 from alertrix import models
+from alertrix import querysets

@@ -64,6 +64,14 @@ async def cli(
     account_create_parser.set_defaults(
         func=callbacks.account.create,
     )
+
+    widget_parser = subparsers.add_parser(
+        'widget',
+    )
+    widget_actions = widget_parser.add_subparsers(
+        parser_class=PC,
+        help=_('use a widget to access the web interface'),
+    )
     try:
         parsed_args = parser.parse_args(
             args,

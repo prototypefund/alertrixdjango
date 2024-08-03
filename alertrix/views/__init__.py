@@ -4,6 +4,7 @@ import string
 
 import matrixappservice
 import nio
+from asgiref.sync import async_to_sync
 from django.contrib import messages
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _

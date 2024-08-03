@@ -50,6 +50,10 @@ class Widget(
         blank=True,
         null=True,
     )
+    activation_secret = models.CharField(
+        max_length=4,
+        verbose_name=_('activation secret'),
+    )
 
 
 class MainApplicationServiceKey(

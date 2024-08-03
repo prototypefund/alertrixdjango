@@ -1,5 +1,6 @@
 import json
 import secrets
+import string
 import matrixappservice
 from django.contrib import messages
 from django.shortcuts import render

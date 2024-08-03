@@ -8,6 +8,7 @@ from asgiref.sync import async_to_sync
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
+from django.db.models import Q
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from matrixappservice import models as mas_models

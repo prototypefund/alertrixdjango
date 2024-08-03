@@ -6,3 +6,4 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.http import urlencode
 from django.utils.text import slugify
+from django.utils.translation import gettext as _

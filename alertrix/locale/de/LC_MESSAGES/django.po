@@ -50,6 +50,10 @@ msgstr "Kein gültiges Token"
 msgid "invalid activation secret"
 msgstr "Ungültiger Aktivierungs-Code"
 
+#: accounts/middleware.py
+msgid "the activation secret for this widget has been sent to %(user_id)s"
+msgstr "Der Aktivierungs-Code für dieses Widget wurde an %(user_id)s versendet."
+
 #: accounts/views.py
 msgid "no main application service registration has been specified yet"
 msgstr "Es wurde noch kein Anwendungsdienst registriert."

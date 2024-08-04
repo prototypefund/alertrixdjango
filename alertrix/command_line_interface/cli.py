@@ -113,8 +113,10 @@ async def cli(
         *callback_args,
     )
     if inspect.isawaitable(res):
+        await client.close()
         return await res
     else:
+        await client.close()
         return res
 
 

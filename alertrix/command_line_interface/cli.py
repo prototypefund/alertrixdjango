@@ -21,6 +21,7 @@ async def cli(
         override_args: dict = None,
         sender: str = None,
         program_name: str = None,
+        client: MatrixClient = None,
 ):
     output_file = io.StringIO()
 
@@ -92,7 +93,7 @@ async def cli(
     bot = await models.User.objects.aget(
         user_id=parsed_args.bot,
     )
-    client = await bot.aget_client()
+    client = client or await bot.aget_client()
     room = await models.Room.objects.aget(
         room_id=parsed_args.room
     )

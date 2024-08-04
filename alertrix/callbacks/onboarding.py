@@ -90,6 +90,8 @@ async def on_room_join(
             event.sender,
         ],
         is_direct=True,
+        initial_state=[
+        ],
     )
     if type(room_create_response) is nio.RoomCreateError:
         logging.error(room_create_response)

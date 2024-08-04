@@ -46,6 +46,10 @@ msgstr "Kein gültiges token für %(user_id)s"
 msgid "not a valid token"
 msgstr "Kein gültiges Token"
 
+#: accounts/forms.py
+msgid "invalid activation secret"
+msgstr "Ungültiger Aktivierungs-Code"
+
 #: accounts/views.py
 msgid "no main application service registration has been specified yet"
 msgstr "Es wurde noch kein Anwendungsdienst registriert."

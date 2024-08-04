@@ -85,6 +85,7 @@ async def on_room_join(
     except mas_models.Room.DoesNotExist:
         pass
     room_create_response = await client.room_create(
+        preset=nio.RoomPreset.trusted_private_chat,
         invite=[
             event.sender,
         ],

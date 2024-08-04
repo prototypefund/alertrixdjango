@@ -91,6 +91,7 @@ async def on_room_join(
         ],
         is_direct=True,
         initial_state=[
+            nio.EnableEncryptionBuilder().as_dict(),
         ],
     )
     if type(room_create_response) is nio.RoomCreateError:

@@ -58,6 +58,10 @@ msgstr "Der Aktivierungs-Code für dieses Widget wurde an %(user_id)s versendet.
 msgid "activation secret"
 msgstr "Aktivierungs-Code"
 
+#: accounts/templates/alertrix/cli/widget_activation_secret.json
+msgid "use this secret to activate the widget"
+msgstr "Nutze diesen Code, um das Widget zu aktivieren."
+
 #: accounts/views.py
 msgid "no main application service registration has been specified yet"
 msgstr "Es wurde noch kein Anwendungsdienst registriert."

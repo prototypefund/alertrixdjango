@@ -70,7 +70,7 @@ async def on_room_join(
         room: nio.MatrixRoom,
         event: nio.RoomMemberEvent,
 ):
-    if event.content['membership'] != 'join':
+    if event.membership != 'join':
         return
     if not await querysets.companies.filter(
             room_id=room.room_id,

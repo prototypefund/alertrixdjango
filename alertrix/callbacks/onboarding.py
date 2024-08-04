@@ -68,7 +68,7 @@ async def on_room_invite(
 async def on_room_join(
         client: MatrixClient,
         room: nio.MatrixRoom,
-        event: nio.RoomMessage,
+        event: nio.RoomMemberEvent,
 ):
     if event.content['membership'] != 'join':
         return

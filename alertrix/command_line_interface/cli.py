@@ -167,6 +167,7 @@ async def chat_cli(
             args.pop(0)
 
     defaults = {
+        'user': event.sender,
     }
 
     # Since this is the chat interface we do not want the user to have access to everything

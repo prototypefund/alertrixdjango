@@ -66,6 +66,16 @@ class CreateCompany(
         {'name': 'comp.list', 'label': _('list')},
     ]
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields['application_service'].choices = [
+            (application_service.pk, application_service)
+            for application_service in mas_models.ApplicationServiceRegistration.objects.filter(
+                users__in=self.request.user.groups.all(),
+            )
+        ]
+        return form
+
     def get_success_url(self):
         return reverse('comp.list')
 

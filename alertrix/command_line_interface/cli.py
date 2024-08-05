@@ -66,6 +66,10 @@ async def cli(
         func=callbacks.account.create,
     )
 
+    start_parser = subparsers.add_parser(
+        'start',
+    )
+
     widget_parser = subparsers.add_parser(
         'widget',
     )

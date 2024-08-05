@@ -18,6 +18,7 @@ from .. import querysets
 
 async def cli(
         args=None,
+        defaults: dict = None,
         override_args: dict = None,
         sender: str = None,
         program_name: str = None,
@@ -91,6 +92,9 @@ async def cli(
     except Exception as e:
         logging.error(''.join(traceback.format_exception(e)))
         return ''.join(type(e).__name__)
+    for key, value in defaults.items():
+        if not hasattr(parsed_args, key):
+            setattr(parsed_args, key, value)
     for key, value in override_args.items():
         setattr(parsed_args, key, value)
     parser.help_print_file.seek(0)
@@ -162,6 +166,9 @@ async def chat_cli(
             # The request includes the command prefix and name, so we remove them
             args.pop(0)
 
+    defaults = {
+    }
+
     # Since this is the chat interface we do not want the user to have access to everything
     override_args = {
         'event': json.dumps(event.source),  # do not allow passing custom events
@@ -181,6 +188,7 @@ async def chat_cli(
     # call the command line interface function
     response_text = await cli(
         args=args,
+        defaults=defaults,
         override_args=override_args,
         sender=event.sender,
         program_name=program_name,

@@ -19,6 +19,7 @@ async def add_widget_to_chat(
         client: MatrixClient,
         room: nio.MatrixRoom,
         event: nio.RoomMessage,
+        args: argparse.Namespace = None,
 ):
     try:
         await get_user_model().objects.aget(matrix_id=event.sender)

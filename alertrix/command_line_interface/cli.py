@@ -69,6 +69,9 @@ async def cli(
     start_parser = subparsers.add_parser(
         'start',
     )
+    start_parser.set_defaults(
+        func=callbacks.start.start,
+    )
 
     widget_parser = subparsers.add_parser(
         'widget',

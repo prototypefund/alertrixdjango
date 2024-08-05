@@ -58,7 +58,7 @@ class CompanyCreateForm(
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.application_service.choices = [
+        self.fields['application_service'].queryset = [
             (application_service.pk, application_service)
             for application_service in models.ApplicationServiceRegistration.objects.all()
         ]

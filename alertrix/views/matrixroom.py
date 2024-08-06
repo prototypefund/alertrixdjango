@@ -245,4 +245,8 @@ class CreateMatrixRoom(
                     form=form,
                 ),
             )
+        client = self.responsible_user.get_client()
+        async_to_sync(client.sync_n)(
+            n=1,
+        )
         return HttpResponseRedirect(self.get_success_url())

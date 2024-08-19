@@ -8,3 +8,12 @@ from matrixappservice import MatrixClient
 from matrixappservice import models
 
 from . import test
+
+
+class EncryptionTests(
+    test.AppserviceSetup,
+    IsolatedAsyncioTestCase,
+):
+    """
+    Test aspects of encryped matrix communication for alertrix.
+    """

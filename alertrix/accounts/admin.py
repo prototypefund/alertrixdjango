@@ -30,9 +30,13 @@ class UserChangeForm(
 class AlertrixUserAdmin(UserAdmin):
     add_form = UserCreationForm
     forms = UserChangeForm
+    form = UserChangeForm
     model = User
     list_display = [
         'matrix_id',
+        'first_name',
+        'last_name',
+        'is_staff',
     ]
     fieldsets = (
         (None, {"fields": ("matrix_id", "password")}),
@@ -50,6 +54,20 @@ class AlertrixUserAdmin(UserAdmin):
             },
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("matrix_id", "password1", "password2"),
+            },
+        ),
+    )
+    search_fields = (
+        'matrix_id',
+        'first_name',
+        'last_name',
     )
     ordering = [
         'matrix_id',

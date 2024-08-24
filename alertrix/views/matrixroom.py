@@ -73,10 +73,10 @@ class CreateMatrixRoom(
     def get_users_permission_level(self) -> Optional[dict[str, int]]:
         return {
             **{
-                self.responsible_user.user_id: 100
+                self.request.user.matrix_id: 100
                 if self.request.user.groups.filter(name=settings.MATRIX_VALIDATED_GROUP_NAME).exists() else None
             },
-            str(self.request.user.matrix_id): 100,
+            str(self.responsible_user.user_id): 100,
         }
 
     def get_users_default_permission_level(self) -> Optional[int]:

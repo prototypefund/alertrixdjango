@@ -151,7 +151,7 @@ class CreateFirstUser(
     model = get_user_model()
     form_class = forms.CreateFirstUserForm
     template_name = 'alertrix/form.html'
-    success_url = reverse_lazy('login')
+    success_url = '/'
 
     def form_valid(self, form):
         resp = super().form_valid(form)

@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from matrixappservice import models
 
 from . import models as alertrix
+from .views.company import CreateCompany
 
 
 class AppserviceSetup(

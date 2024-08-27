@@ -46,6 +46,7 @@ class AppserviceSetup(
             as_token='<as_token>',
             hs_token='<hs_token>',
             admins=admins,
+            users=self.validated_matrix_id_group,
             rate_limited=False,
         )
         if new:

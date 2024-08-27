@@ -25,6 +25,21 @@ class AppserviceSetup(
         )
         if new:
             admins.save()
+        self.validated_matrix_id_group, new = Group.objects.get_or_create(
+            name=settings.MATRIX_VALIDATED_GROUP_NAME,
+        )
+        if new:
+            content_type, new = ContentType.objects.get_or_create(
+                app_label=alertrix.Company.__module__.split('.')[0],
+                model=alertrix.Company.__name__,
+            )
+            permission, new = Permission.objects.get_or_create(
+                codename=CreateCompany.permission_required.split('.')[-1],
+                content_type=content_type
+            )
+            self.validated_matrix_id_group.permissions.add(
+                permission,
+            )
         self.app_service, new = models.ApplicationServiceRegistration.objects.get_or_create(
             homeserver=self.homeserver,
             id_homeserver='alertrix',

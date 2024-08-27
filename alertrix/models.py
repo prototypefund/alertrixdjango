@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from matrixappservice import exceptions as exc
 from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import User as MatrixUser
+from matrixappservice.models import Event
 from matrixappservice.models import Room
 from django.contrib.auth import get_user_model
 
@@ -28,6 +29,33 @@ class User(
 
     def __str__(self):
         return str(self.__getattribute__(self.USERNAME_FIELD))
+
+
+class CompanyManager(
+    models.Manager,
+):
+
+    def get_queryset(self):
+        return Room.objects.filter(
+            room_id__in=Event.objects.filter(
+                type='%(prefix)s.company' % {
+                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+                },
+                state_key__isnull=False,
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
+
+
+class Company(
+    Room,
+):
+    objects = CompanyManager()
+
+    class Meta:
+        proxy = True
 
 
 class Widget(

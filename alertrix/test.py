@@ -57,3 +57,6 @@ class AppserviceSetup(
             exclusive=True,
             regex='@alertrix_*',
         )
+        main_as_key, new = alertrix.MainApplicationServiceKey.objects.get_or_create(
+            service=self.app_service,
+        )

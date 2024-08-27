@@ -170,6 +170,10 @@ class CreateFirstUser(
         group.user_set.add(self.object)
         group.save()
         self.object.save()
+        login(
+            self.request,
+            self.object,
+        )
         server_name = self.object.matrix_id.split(':')[1]
         server_info = async_to_sync(utils.get_server_well_known)(server_name)
         hs = Homeserver(

@@ -2,6 +2,7 @@ import abc
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
 from matrixappservice import models
 
 

@@ -31,6 +31,33 @@ class User(
         return str(self.__getattribute__(self.USERNAME_FIELD))
 
 
+class CompanyManager(
+    models.Manager,
+):
+
+    def get_queryset(self):
+        return Room.objects.filter(
+            room_id__in=Event.objects.filter(
+                type='%(prefix)s.company' % {
+                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+                },
+                state_key__isnull=False,
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
+
+
+class Company(
+    Room,
+):
+    objects = CompanyManager()
+
+    class Meta:
+        proxy = True
+
+
 class Widget(
     models.Model,
 ):

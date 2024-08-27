@@ -3,6 +3,7 @@ from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from django.test import AsyncClient
 from django.urls import reverse
+from matrixappservice import models as mas_models
 from .test import AppserviceSetup
 
 

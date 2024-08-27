@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from matrixappservice import models
+
 from . import models as alertrix
 
 

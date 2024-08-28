@@ -90,3 +90,55 @@ class MatrixRoomTest(
             ).room_id,
             'User has not received an invite to a room with the correct name',
         )
+        resp = await client.get(
+            reverse('unit.new'),
+        )
+        self.assertEqual(
+            resp.status_code,
+            200,
+        )
+        unit_initial_data = {
+            'name': 'OrganisationTest test create organisation and unit Unit',
+            'description': 'Hello, World!',
+            'companies': [
+                company.room_id,
+            ],
+        }
+        resp = await client.post(
+            reverse('unit.new'),
+            data=unit_initial_data,
+        )
+        self.assertEqual(
+            resp.status_code,
+            302,
+        )
+        await mx_client.sync_n(
+            n=1,
+        )
+        # since we have the special case of managing the users matrix account using the application service, they
+        # already joined the room
+        units = models.Unit.objects.filter(
+            room_id__in=mas_models.Event.objects.filter(
+                type='m.room.name',
+                content__name=unit_initial_data['name'],
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
+        unit = await units.aget()
+        self.assertIn(
+            unit.room_id,
+            await sync_to_async(list)(
+                mas_models.Event.objects.filter(
+                    type='m.room.member',
+                    state_key=user.matrix_id,
+                    content__membership='join',
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ).distinct(
+                ),
+            ),
+            'User has not received an invite to a room with the correct name',
+        )

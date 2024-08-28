@@ -58,6 +58,35 @@ class Company(
         proxy = True
 
 
+class UnitManager(
+    models.Manager,
+):
+
+    def get_queryset(self):
+        return Room.objects.filter(
+            room_id__in=Event.objects.filter(
+                type='%(prefix)s.company.unit' % {
+                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+                },
+                content__isnull=False,
+                state_key__isnull=False,
+                room__in=Company.objects.all(),
+            ).values_list(
+                'state_key',
+                flat=True,
+            ),
+        )
+
+
+class Unit(
+    Room,
+):
+    objects = UnitManager()
+
+    class Meta:
+        proxy = True
+
+
 class Widget(
     models.Model,
 ):

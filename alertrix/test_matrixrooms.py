@@ -65,18 +65,17 @@ class MatrixRoomTest(
         )
         # since we have the special case of managing the users matrix account using the application service, they
         # already joined the room
+        company = await models.Company.objects.aget(
+            room_id__in=mas_models.Event.objects.filter(
+                type='m.room.name',
+                content__name=company_initial_data['name'],
+            ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
         self.assertEqual(
-            (
-                await models.Company.objects.aget(
-                    room_id__in=mas_models.Event.objects.filter(
-                        type='m.room.name',
-                        content__name=company_initial_data['name'],
-                    ).values_list(
-                        'room__room_id',
-                        flat=True,
-                    ),
-                )
-            ).room_id,
+            company.room_id,
             (
                 await mas_models.Room.objects.aget(
                     room_id__in=mas_models.Event.objects.filter(

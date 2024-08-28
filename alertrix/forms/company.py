@@ -79,7 +79,7 @@ class CompanyCreateForm(
         )
         # Create a synapse instance to check if its application service is interested in the generated user id
         syn: synapse.appservice.ApplicationService = application_service.get_synapse_application_service()
-        if 'responsible_user' not in self.data or self.data.get('responsible_user') is None:
+        if 'responsible_user' not in self.data or not self.data['responsible_user']:
             # Prepare the user_id variable
             user_id = slugify(self.data['name'])
             if not syn.is_interested_in_user(

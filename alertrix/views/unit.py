@@ -28,7 +28,7 @@ class CreateUnit(
     success_url = reverse_lazy('comp.list')
 
     def get_initial(self):
-        preselected_companies = querysets.companies.filter(
+        preselected_companies = alertrix.Company.objects.filter(
             Q(
                 room_id__in=self.request.GET.getlist('companies')
             ) & Q(

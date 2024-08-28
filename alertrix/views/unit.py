@@ -15,6 +15,7 @@ from . import matrixroom
 from .. import forms
 from .. import mixins
 from .. import querysets
+from .. import models as alertrix
 
 
 class CreateUnit(

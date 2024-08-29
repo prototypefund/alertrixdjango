@@ -60,7 +60,7 @@ class CreateUnit(
                 ),
             ),
             Q(  # filter for users that are registered as inbox for one of the selected companies
-                user_id__in=models.Event.objects.filter(
+                user_id__in=list(models.Event.objects.filter(
                     Q(
                         room__room_id__in=form.cleaned_data.get('companies'),
                     ),
@@ -75,7 +75,7 @@ class CreateUnit(
                 ).values_list(
                     'content__inbox',
                     flat=True,
-                ),
+                )),
             ),
         )
         return relevant_users

@@ -119,3 +119,5 @@ class EncryptionTests(
         )
         await client1.close()
         await client2.close()
+        del client1
+        del client2

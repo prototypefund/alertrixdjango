@@ -121,3 +121,47 @@ class EncryptionTests(
         await client2.close()
         del client1
         del client2
+        # Set up a new client for user1
+        client1b: MatrixClient = await user1.aget_client()
+        client1b.rooms[room_join_response.room_id] = await room.aget_nio_room(
+            client1b.user_id,
+        )
+        client1b.add_event_callback(receive_event, nio.RoomMessage)
+        # Set up a new client for user2
+        client2b: MatrixClient = await user2.aget_client()
+        client2b.rooms[room_join_response.room_id] = await room.aget_nio_room(
+            client2b.user_id,
+        )
+        client2b.add_event_callback(receive_event, nio.RoomMessage)
+
+        message_body_2 = '2_' + ''.join([secrets.choice(string.printable) for _ in range(16)])
+        room_send_response = await client1b.room_send(
+            room_create_response.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': message_body_2,
+            },
+        )
+        self.assertIs(
+            type(room_send_response),
+            nio.RoomSendResponse,
+            'Sending a message to the room failed',
+        )
+        await client1b.sync_n(
+            n=3,
+            timeout=1,
+        )
+        await client2b.sync_n(
+            n=3,
+            timeout=1,
+        )
+        self.assertEqual(
+            message_body_2,
+            received_events[client2b.user_id][-1][1]['content']['body'],
+            'message not received or decrypted',
+        )
+        await client1b.close()
+        await client2b.close()
+        del client1b
+        del client2b

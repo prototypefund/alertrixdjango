@@ -10,9 +10,12 @@ from ..forms.emergency import alert
 
 class AlertView(
     FormView,
+    mixins.ContextActionsMixin,
 ):
     form_class = alert.AlertForm
     template_name = 'alertrix/form.html'
+    context_actions = [
+    ]
 
     def get_success_url(self):
         return reverse('home')

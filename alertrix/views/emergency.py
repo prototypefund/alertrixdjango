@@ -15,6 +15,7 @@ class AlertView(
     form_class = alert.AlertForm
     template_name = 'alertrix/form.html'
     context_actions = [
+        {'name': 'comp.list', 'label': _('companies')},
     ]
 
     def get_success_url(self):

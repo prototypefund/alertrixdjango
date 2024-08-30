@@ -39,3 +39,24 @@ class CoordinateWidget(
                 continue
             d.append(float(data.get(key)))
         return d
+
+
+class CoordinateField(
+    _fields.MultiValueField,
+):
+    widget = CoordinateWidget
+
+    def __init__(self, fields=None, *args, **kwargs):
+        super().__init__(
+            fields or tuple(
+                _fields.FloatField(
+                    min_value=-180,
+                    max_value=180,
+                )
+                for _ in range(2)
+            ),
+            *args, **kwargs
+        )
+
+    def compress(self, data_list):
+        return data_list

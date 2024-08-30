@@ -194,6 +194,10 @@ msgstr "Einladen"
 msgid "address"
 msgstr "Adresse"
 
+#: forms/emergency/alert.py
+msgid "you need to specify any of the following fields: %(field_labels)s"
+msgstr "Du musst mindestens eines der folgenden Felder ausfüllen: %(field_labels)s"
+
 #: forms/matrixroom.py
 msgid "name"
 msgstr "Name"

@@ -190,6 +190,10 @@ msgstr "Nutzer einladen"
 msgid "invite"
 msgstr "Einladen"
 
+#: forms/emergency/alert.py
+msgid "address"
+msgstr "Adresse"
+
 #: forms/matrixroom.py
 msgid "name"
 msgstr "Name"

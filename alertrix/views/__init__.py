@@ -20,6 +20,7 @@ from matrixappservice.database import models as database
 
 from . import appservice
 from . import company
+from . import emergency
 from . import unit
 from .. import forms
 from .. import models

@@ -60,3 +60,52 @@ class CoordinateField(
 
     def compress(self, data_list):
         return data_list
+
+
+class AlertForm(
+    forms.Form,
+):
+    code = forms.CharField(
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(
+        ),
+        required=False,
+    )
+    units = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+    )
+    location = CoordinateField(
+        required=False,
+    )
+    address = forms.CharField(
+        label=gettext('address'),
+        required=False,
+        widget=forms.Textarea(
+        ),
+    )
+
+    class Meta:
+        require_one_of = [
+            ('location', 'address'),
+        ]
+
+    def clean(self):
+        for group in self.Meta.require_one_of:
+            if not any([self.cleaned_data.get(key) for key in group]):
+                self.add_error(
+                    '__all__',
+                    _('you need to specify any of the following fields: %(field_labels)s') % {
+                        'field_labels': ', '.join([
+                            self.fields[key].label or key
+                            for key in group
+                        ])
+                    },
+                    )
+        return super().clean()
+
+    def clean_location(self):
+        return (
+            float(self.data.get('location_0')),
+            float(self.data.get('location_1')),
+        )

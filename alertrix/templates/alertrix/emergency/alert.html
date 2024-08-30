@@ -6,3 +6,6 @@
     {{ alert.description }}
 </p>
 {% endif %}
+{% if alert.location %}
+<a href="geo:{{alert.location.0|safe}},{{alert.location.1|safe}}">{% if alert.address %}{{ alert.address }}{% else %}{{alert.location.0|safe}},{{alert.location.1|safe}}{% endif %}</a>
+{% endif %}

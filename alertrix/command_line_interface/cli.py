@@ -2,6 +2,7 @@ import inspect
 import io
 import json
 import logging
+import shlex
 import traceback
 
 import nio

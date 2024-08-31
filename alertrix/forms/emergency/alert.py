@@ -37,7 +37,10 @@ class CoordinateWidget(
                 continue
             if not re.match(r'_\d+', key[len(name):]):
                 continue
-            d.append(float(data.get(key)))
+            try:
+                d.append(float(data.get(key)))
+            except ValueError:
+                d.append(None)
         return d
 
 
@@ -107,6 +110,6 @@ class AlertForm(
 
     def clean_location(self):
         return (
-            float(self.data.get('location_0')),
-            float(self.data.get('location_1')),
+            float(self.data.get('location_0')) if self.data.get('location_0') else None,
+            float(self.data.get('location_1')) if self.data.get('location_1') else None,
         )

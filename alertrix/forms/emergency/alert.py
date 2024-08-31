@@ -73,6 +73,7 @@ class AlertForm(
         required=False,
     )
     units = forms.MultipleChoiceField(
+        label=gettext('units'),
         widget=forms.CheckboxSelectMultiple,
     )
     location = CoordinateField(

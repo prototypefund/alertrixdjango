@@ -19,6 +19,8 @@ urlpatterns = [
         path('<pk>', views.unit.UnitDetailView.as_view(), name='unit.detail'),
     ])),
     path('emergency/', include([
+        path('alert/', include([
+        ])),
     ])),
     path('appservice/', include([
         path('', views.appservice.ListApplicationServices.as_view(), name='appservice.list'),

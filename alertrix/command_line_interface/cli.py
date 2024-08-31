@@ -141,7 +141,7 @@ async def chat_cli(
     if event.sender == client.user_id:
         return
 
-    args = event.body.split()
+    args = shlex.split(event.body)
 
     # commands either need to be sent to the users direct message with an organisations bot account or be prefixed
     prefix_needed = False

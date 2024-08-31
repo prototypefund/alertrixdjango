@@ -20,6 +20,7 @@ urlpatterns = [
     ])),
     path('emergency/', include([
         path('alert/', include([
+            path('new', views.emergency.AlertView.as_view(), name='alert.new'),
         ])),
     ])),
     path('appservice/', include([

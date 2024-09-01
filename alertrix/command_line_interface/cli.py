@@ -84,6 +84,41 @@ async def cli(
     )
     widget_create_parser = widget_actions.add_parser('create')
     widget_create_parser.set_defaults(func=callbacks.widget.add_widget_to_chat)
+
+    alert_parser = subparsers.add_parser(
+        'alert',
+    )
+    alert_actions = alert_parser.add_subparsers(
+        parser_class=PC,
+        help=_('manage alerts'),
+    )
+    alert_create_parser = alert_actions.add_parser('new')
+    alert_create_parser.add_argument(
+        'code',
+        action='store',
+    )
+    alert_create_parser.add_argument(
+        '-u', '--unit',
+        action='append',
+        nargs='+',
+    )
+    alert_create_parser.add_argument(
+        '-d', '--description',
+        action='store',
+    )
+    alert_create_parser.add_argument(
+        '-a', '--address',
+        action='store',
+        help=_('postal address'),
+    )
+    alert_create_parser.add_argument(
+        '-l', '--location',
+        action='store',
+        type=float,
+        nargs=2,
+        help=_('specify the exact coordinates separated by a comma')
+    )
+    alert_create_parser.set_defaults(func=callbacks.emergency.alert.add)
     try:
         parsed_args = parser.parse_args(
             args,

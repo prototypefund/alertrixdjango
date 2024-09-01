@@ -10,3 +10,4 @@ from django.contrib.messages.storage import default_storage
 from django.http import HttpRequest
 from django.template import loader
 from matrixappservice import MatrixClient
+from ...views.emergency import AlertView

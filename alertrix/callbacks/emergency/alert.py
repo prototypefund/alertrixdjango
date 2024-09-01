@@ -56,7 +56,25 @@ async def add(
     if response.status_code in [
         302,
     ]:
-        yield 'ok'
+        messages = get_messages(request)
+        if messages:
+            for message in messages:
+                yield {
+                    'msgtype': 'm.notice',
+                    'body': '%(level)s: %(message)s' % {
+                        'level': DEFAULT_MESSAGE_TAGS.get(message.level).upper()
+                        if message.level in DEFAULT_MESSAGE_TAGS else
+                        message.level,
+                        'message': message.message,
+                    },
+                    'm.relates_to': {
+                        'm.in_reply_to': {
+                            'event_id': event.event_id,
+                        },
+                    },
+                }
+        else:
+            yield 'ok'
     else:
         form = await sync_to_async(view.get_form)()
         if form.errors:

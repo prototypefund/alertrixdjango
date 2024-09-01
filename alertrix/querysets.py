@@ -84,13 +84,23 @@ companies = Room.objects.filter(
 
 
 def get_companies_for_unit(
-        unit: Room,
+        unit: [
+            Room,
+        ],
 ):
     return companies.filter(
         room_id__in=Event.objects.filter(
             type='%(prefix)s.company.unit' % {
                 'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
             },
+            **(
+                dict(
+                    state_key=unit.room_id,
+                )
+                if type(unit) is Room
+                else
+                dict()
+            ),
         ).values_list(
             'room__room_id',
             flat=True,

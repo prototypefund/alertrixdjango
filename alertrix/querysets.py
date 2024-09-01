@@ -86,6 +86,7 @@ companies = Room.objects.filter(
 def get_companies_for_unit(
         unit: [
             Room,
+            models.Unit,
         ],
 ):
     return companies.filter(

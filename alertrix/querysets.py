@@ -4,6 +4,7 @@ from typing import List
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from matrixappservice.models import *
 
 

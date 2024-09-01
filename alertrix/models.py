@@ -32,6 +32,36 @@ class User(
         return str(self.__getattribute__(self.USERNAME_FIELD))
 
 
+class DirectMessageManager(
+    models.Manager,
+):
+
+    def get_queryset(self):
+        return Room.objects.filter(
+            room_id__in=Event.objects.filter(
+                Q(
+                    content__membership='invite',
+                    content__is_direct=True,
+                ) | Q(
+                    content__membership='join',
+                    unsigned__prev_content__is_direct=True,
+                ),
+                ).values_list(
+                'room__room_id',
+                flat=True,
+            ),
+        )
+
+
+class DirectMessage(
+    Room,
+):
+    objects = DirectMessageManager()
+
+    class Meta:
+        proxy = True
+
+
 class CompanyManager(
     models.Manager,
 ):

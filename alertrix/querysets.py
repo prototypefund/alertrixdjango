@@ -87,6 +87,7 @@ def get_companies_for_unit(
         unit: [
             Iterable,
             List[str],
+            QuerySet,
             Room,
             models.Unit,
         ],
@@ -106,6 +107,14 @@ def get_companies_for_unit(
                     state_key__in=unit,
                 )
                 if '__iter__' in dir(unit)
+                else
+                dict(
+                    state_key__in=unit.values_list(
+                        'state_key',
+                        flat=True,
+                    ),
+                )
+                if type(unit) is QuerySet
                 else
                 dict()
             ),

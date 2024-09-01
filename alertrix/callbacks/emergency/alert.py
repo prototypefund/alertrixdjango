@@ -6,3 +6,4 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.contrib.messages.constants import DEFAULT_TAGS as DEFAULT_MESSAGE_TAGS
+from django.contrib.messages.storage import default_storage

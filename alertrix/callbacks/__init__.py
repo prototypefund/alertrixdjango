@@ -10,6 +10,7 @@ from matrixappservice import MatrixClient
 from . import account
 from . import alertrix
 from . import directmessage
+from . import emergency
 from . import encryption
 from . import onboarding
 from . import start

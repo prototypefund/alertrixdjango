@@ -85,6 +85,7 @@ companies = Room.objects.filter(
 
 def get_companies_for_unit(
         unit: [
+            Iterable,
             Room,
             models.Unit,
         ],
@@ -99,6 +100,11 @@ def get_companies_for_unit(
                     state_key=unit.room_id,
                 )
                 if type(unit) is Room
+                else
+                dict(
+                    state_key__in=unit,
+                )
+                if '__iter__' in dir(unit)
                 else
                 dict()
             ),

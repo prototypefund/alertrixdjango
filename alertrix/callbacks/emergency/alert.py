@@ -9,3 +9,4 @@ from django.contrib.messages.constants import DEFAULT_TAGS as DEFAULT_MESSAGE_TA
 from django.contrib.messages.storage import default_storage
 from django.http import HttpRequest
 from django.template import loader
+from matrixappservice import MatrixClient

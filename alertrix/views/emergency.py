@@ -40,4 +40,7 @@ class AlertView(
         return form
 
     def form_valid(self, form):
+        return async_to_sync(self.aform_valid)(form)
+
+    async def aform_valid(self, form):
         return super().form_valid(form)

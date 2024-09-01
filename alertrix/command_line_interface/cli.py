@@ -188,13 +188,51 @@ async def chat_cli(
         override_args['user'] = event.sender
 
     # call the command line interface function
-    response_text = await cli(
+    response = await cli(
         args=args,
         defaults=defaults,
         override_args=override_args,
         sender=event.sender,
         program_name=program_name,
     )
+
+    if inspect.isgenerator(response):
+        for v in response:
+            await process_response(
+                client,
+                room,
+                v,
+            )
+    elif inspect.isasyncgen(response):
+        async for v in response:
+            await process_response(
+                client,
+                room,
+                v,
+            )
+    elif type(response) is str:
+        for v in [
+            response,
+        ]:
+            await process_response(
+                client,
+                room,
+                v,
+            )
+    else:
+        raise ValueError(
+            'unknown response type from callback %(type)s: %(response)s' % {
+                'type': type(response),
+                'response': response,
+            },
+        )
+
+
+async def process_response(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        response_text,
+):
     if type(response_text) is str:
         content = {
             'msgtype': 'm.text',

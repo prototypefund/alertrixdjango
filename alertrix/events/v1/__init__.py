@@ -53,8 +53,8 @@ class Alert(
     location: tuple[float, float] = (None, None)  # latitude and longitude
     address: str = None
 
-    def __str__(self):
-        res = loader.render_to_string(
+    def get_content(self):
+        res = json.loads(loader.render_to_string(
             'alertrix/cli/emergency/alert.json',
             {
                 'alert': self,
@@ -65,5 +65,5 @@ class Alert(
                     },
                 )),
             },
-        )
+        ))
         return res

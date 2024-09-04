@@ -18,6 +18,7 @@ from ..forms.emergency import alert
 
 class AlertView(
     FormView,
+    LoginRequiredMixin,
     mixins.ContextActionsMixin,
 ):
     form_class = alert.AlertForm

@@ -67,3 +67,22 @@ class Alert(
             },
         ))
         return res
+
+
+@dataclass
+class AlertrixCompany(
+    Event,
+):
+    type = '%(prefix)s.company' % {
+        'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+    }
+    inbox: str = None  # the matrix id of an alertrix compatible account
+    state_key = ''
+
+    def get_content(self):
+        return {
+            **super().get_content(),
+            **{
+                'inbox': self.inbox,
+            },
+        }

@@ -12,6 +12,7 @@ from matrixappservice import models as mas_models
 from alertrix import models
 from .. import mixins
 from .. import querysets
+from ..events import v1 as events
 from ..forms.emergency import alert
 
 

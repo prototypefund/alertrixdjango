@@ -46,6 +46,7 @@ class Event(
 class Alert(
     Event,
 ):
+    type = 'm.room.message'
     code: str  # alarm keyword
     description: str = None
     units: list[str] = None  # list of the units matrix room ids

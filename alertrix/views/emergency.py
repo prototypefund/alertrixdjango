@@ -33,6 +33,9 @@ class AlertView(
     def get_initial(self):
         return {
             **super().get_initial(),
+            'units': [
+                self.request.GET.get('units'),
+            ],
         }
 
     def get_form(self, form_class=None):

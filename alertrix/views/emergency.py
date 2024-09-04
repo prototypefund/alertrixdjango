@@ -30,6 +30,11 @@ class AlertView(
     def get_success_url(self):
         return reverse('home')
 
+    def get_initial(self):
+        return {
+            **super().get_initial(),
+        }
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
         form.fields['units'].choices = [

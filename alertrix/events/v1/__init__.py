@@ -86,3 +86,16 @@ class AlertrixCompany(
                 'inbox': self.inbox,
             },
         }
+
+
+@dataclass
+class AlertrixCompanyUnit(
+    Event,
+):
+    type = '%(prefix)s.company.unit' % {
+        'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+    }
+    child_room_id: str = None
+
+    def get_state_key(self):
+        return self.child_room_id

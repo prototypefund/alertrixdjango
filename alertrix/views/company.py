@@ -90,16 +90,9 @@ class CreateCompany(
                 },
                 'state_key': form.cleaned_data.get('responsible_user').user_id,
             },
-            {
-                'type': '%(prefix)s.company' % {
-                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
-                },
-                'content': {
-                    'version': settings.ALERTRIX_VERSION,
-                    'inbox': form.cleaned_data.get('responsible_user').user_id
-                },
-                'state_key': '',
-            },
+            events.AlertrixCompany(
+                inbox=form.cleaned_data.get('responsible_user').user_id,
+            ).get_matrix_data(),
         ]
 
     def form_invalid(self, form):

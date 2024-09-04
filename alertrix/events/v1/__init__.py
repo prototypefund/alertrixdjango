@@ -44,6 +44,7 @@ class Event(
 
 @dataclass
 class Alert(
+    Event,
 ):
     code: str  # alarm keyword
     description: str = None

@@ -36,7 +36,7 @@ def get_direct_message_for(
         valid_memberships = [
             'join',
         ]
-    queryset = direct_messages
+    queryset = models.DirectMessage.objects.get_queryset()
     for user in users:
         queryset = queryset.intersection(
             direct_messages.filter(

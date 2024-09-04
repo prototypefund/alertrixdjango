@@ -25,6 +25,7 @@ from . import matrixroom
 from .. import forms
 from .. import mixins
 from .. import querysets
+from ..events import v1 as events
 
 
 class ListCompanies(

@@ -127,9 +127,33 @@ async def add_widget_to_chat(
             },
         },
     }
-    await client.room_put_state(
+    room_put_state_response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
         room_id=room_id,
         event_type='io.element.widgets.layout',
         content=layout_content,
         state_key='',
     )
+    if type(room_put_state_response) is nio.RoomPutStateResponse:
+        widget_notice_response: nio.RoomSendResponse | nio.RoomSendError = await client.room_send(
+            room_id=room_id,
+            message_type='m.room.message',
+            content={
+                'msgtype': 'm.notice',
+                'body': '%(widget_created_note)s\n\n%(use_browser_note)s: %(url)s' % {
+                    'widget_created_note': _('widget has been created'),
+                    'use_browser_note': _('you can also use the browser instead'),
+                    'url': content['url'],
+                },
+                'format': 'org.matrix.custom.html',
+                'formatted_body': '<p>%(widget_created_note)s</p>\n<p><a href="%(url)s">%(use_browser_note)s</a></p>' % {
+                    'widget_created_note': _('widget has been created'),
+                    'use_browser_note': _('you can also use the browser instead'),
+                    'url': content['url'],
+                },
+            },
+        )
+    else:
+        raise MatrixError(
+            error=room_put_state_response.message,
+            errcode=room_put_state_response.status_code,
+        )

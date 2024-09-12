@@ -176,6 +176,9 @@ async def chat_cli(
     if event.sender == client.user_id:
         return
 
+    if event.source['content']['msgtype'] != 'm.text':
+        return
+
     try:
         args = shlex.split(event.body)
     except ValueError:

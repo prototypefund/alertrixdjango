@@ -155,7 +155,7 @@ class EncryptionTests(
         client2b.add_event_callback(receive_event, nio.RoomMessage)
 
         message_body_2 = '2_' + ''.join([secrets.choice(string.printable) for _ in range(16)])
-        room_send_response = await client1b.room_send(
+        room_send_response = await client2b.room_send(
             room_create_response.room_id,
             'm.room.message',
             {
@@ -178,7 +178,7 @@ class EncryptionTests(
         )
         self.assertEqual(
             message_body_2,
-            received_events[client2b.user_id][-1][1]['content']['body'],
+            received_events[client1b.user_id][-1][1]['content']['body'],
             'message not received or decrypted',
         )
         await client1b.close()

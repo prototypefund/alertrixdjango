@@ -45,7 +45,6 @@ async def create(
     )
     if await sync_to_async(form.is_valid)():
         await sync_to_async(form.save)()
-        return _('user created')
     if form.errors:
         res = loader.render_to_string(
             'alertrix/cli/form_failed.json',
@@ -54,3 +53,4 @@ async def create(
             },
         )
         return json.loads(res)
+    return _('user created')

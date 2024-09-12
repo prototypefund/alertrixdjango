@@ -30,8 +30,38 @@ class MatrixRoomTest(
         mx_user, new = await mas_models.User.objects.aget_or_create(
             user_id='@alertrix_OrganisationTest_test_create_organisation_and_unit-user:synapse.localhost',
             app_service=self.app_service,
+            prevent_automated_responses=True,
         )
+        main_app_service_key = await models.MainApplicationServiceKey.objects.aget()
+        main_user_key = await models.MainUserKey.objects.aget(
+            service=await sync_to_async(getattr)(main_app_service_key, 'service'),
+        )
+        main_user: mas_models.User = await sync_to_async(getattr)(main_user_key, 'user')
+
+        messages = {}
+
+        def store_messages(c, r, e):
+            if c.user_id not in messages:
+                messages[c.user_id] = []
+            messages[c.user_id].append([r, e])
+
         mx_client = await mx_user.aget_client()
+        mx_client.add_event_callback(
+            store_messages,
+            nio.Event,
+        )
+        mx_client.add_event_callback(
+            callbacks.encryption.verify_all_devices,
+            nio.RoomMessage,
+        )
+        mx_client.add_event_callback(
+            callbacks.encryption.verify_all_devices,
+            nio.RoomMemberEvent,
+        )
+        mx_client.add_event_callback(
+            lambda c, r, e: c.join(r.room_id),
+            nio.InviteMemberEvent,
+        )
         client = AsyncClient()
         # Do not allow every user to access the company creation form
         resp = await client.get(
@@ -65,8 +95,6 @@ class MatrixRoomTest(
         await mx_client.sync_n(
             n=1,
         )
-        # since we have the special case of managing the users matrix account using the application service, they
-        # already joined the room
         company = await models.Company.objects.aget(
             room_id__in=mas_models.Event.objects.filter(
                 type='m.room.name',
@@ -117,8 +145,6 @@ class MatrixRoomTest(
         await mx_client.sync_n(
             n=1,
         )
-        # since we have the special case of managing the users matrix account using the application service, they
-        # already joined the room
         units = models.Unit.objects.filter(
             room_id__in=mas_models.Event.objects.filter(
                 type='m.room.name',

@@ -270,7 +270,7 @@ async def process_response(
 ):
     if type(response_text) is str:
         content = {
-            'msgtype': 'm.text',
+            'msgtype': 'm.notice',
             'body': response_text,
         }
     elif type(response_text) is dict:

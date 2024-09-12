@@ -116,7 +116,7 @@ class WidgetActivationView(
                     'user_id',
                     flat=True,
                 ),
-            )
+            ),
         )
         user = users.first()
         client = user.get_client()

@@ -54,8 +54,11 @@ class EncryptionTests(
                 [r.room_id, e.source],
             )
 
-        client1.add_event_callback(receive_event, nio.RoomMessageText)
-        client2.add_event_callback(receive_event, nio.RoomMessageText)
+        for client in [
+            client1,
+            client2,
+        ]:
+            client.add_event_callback(receive_event, nio.RoomMessageText)
         room_create_response = await client1.room_create(
             invite=[
                 client2.user_id,

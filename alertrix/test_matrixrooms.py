@@ -299,4 +299,25 @@ class MatrixRoomTest(
             self.fail(
                 'User has not received an invite to a room with the correct name in time',
             )
+
+        # After joining the company the user should have been invited to a direct message that is used for non-alert
+        # notifications and configuration
+        config_dm = await querysets.aget_direct_message_for(
+            user.matrix_id,
+            (await mas_models.Event.objects.aget(
+                type=events.AlertrixCompany().type,
+                room=company,
+                state_key='',
+            )).content['inbox'],
+        )
+        config_dm_test_message = {
+            'msgtype': 'm.text',
+            'body': '--help',
+        }
+        await mx_client.room_send(
+            config_dm.room_id,
+            'm.room.message',
+            config_dm_test_message,
+            ignore_unverified_devices=True,
+        )
         await mx_client.close()

@@ -122,6 +122,23 @@ class MatrixRoomTest(
         await mx_client.sync_n(
             n=1,
         )
+        start = time.time()
+        end = start + 2
+        while time.time() < end:
+            if await mas_models.Event.objects.filter(
+                    room__room_id=room_create_response.room_id,
+                    type='im.vector.modular.widgets',
+            ).aexists():
+                break
+        else:
+            self.fail(
+                'did not receive widget event in time',
+            )
+        widget_event = await mas_models.Event.objects.aget(
+            room__room_id=room_create_response.room_id,
+            type='im.vector.modular.widgets',
+        )
+        url = widget_event.content['url']
         client = AsyncClient()
         # Do not allow every user to access the company creation form
         resp = await client.get(

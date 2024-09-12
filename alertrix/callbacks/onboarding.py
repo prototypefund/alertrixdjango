@@ -61,6 +61,7 @@ async def on_room_invite(
             await client.room_forget(
                 room.room_id,
             )
+            return
         except mas_models.Event.DoesNotExist:
             pass
 

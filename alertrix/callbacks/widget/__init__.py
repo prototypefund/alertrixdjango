@@ -119,7 +119,7 @@ async def add_widget_to_chat(
         )
         return
     # Set the room layout
-    content = {
+    layout_content = {
         'widgets': {
             widget_id: {
                 'container': 'top',
@@ -129,6 +129,6 @@ async def add_widget_to_chat(
     await client.room_put_state(
         room_id=room_id,
         event_type='io.element.widgets.layout',
-        content=content,
+        content=layout_content,
         state_key='',
     )

@@ -64,6 +64,16 @@ async def on_room_invite(
             return
         except mas_models.Event.DoesNotExist:
             pass
+        await client.room_send(
+            room.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': _('welcome to %(service_name)s') % {
+                    'service_name': settings.SERVICE_NAME,
+                },
+            },
+        )
 
 
 async def on_room_join(

@@ -278,9 +278,11 @@ class MatrixRoomTest(
             ),
         )
         unit = await units.aget()
-        self.assertIn(
-            unit.room_id,
-            await sync_to_async(list)(
+        # Wait for an invitation to the unit space
+        start = time.time()
+        end = start + 10
+        while time.time() < end:
+            room_ids = await sync_to_async(list)(
                 mas_models.Event.objects.filter(
                     type='m.room.member',
                     state_key=mx_client.user_id,
@@ -290,7 +292,11 @@ class MatrixRoomTest(
                     flat=True,
                 ).distinct(
                 ),
-            ),
-            'User has not received an invite to a room with the correct name',
-        )
+            )
+            if unit.room_id in room_ids:
+                break
+        else:
+            self.fail(
+                'User has not received an invite to a room with the correct name in time',
+            )
         await mx_client.close()

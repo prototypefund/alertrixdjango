@@ -6,6 +6,7 @@ from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import Group
 from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from django.template import loader

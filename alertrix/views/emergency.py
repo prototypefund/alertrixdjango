@@ -124,6 +124,7 @@ class AlertView(
                 room_send_response: nio.RoomSendResponse | nio.RoomSendError = await client.room_send(
                     dm.room_id,
                     data.pop('type'),
+                    ignore_unverified_devices=True,
                     **data,
                 )
             messages.info(

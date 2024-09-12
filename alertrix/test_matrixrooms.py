@@ -146,7 +146,7 @@ class MatrixRoomTest(
         )
         self.assertEqual(
             resp.status_code,
-            403,
+            302,
         )
         user = await get_user_model().objects.aget(
             matrix_id=mx_client.user_id,

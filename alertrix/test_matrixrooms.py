@@ -12,6 +12,7 @@ from matrixappservice import models as mas_models
 
 from . import callbacks
 from . import models
+from . import querysets
 from .test import AppserviceSetup
 
 

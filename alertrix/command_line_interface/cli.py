@@ -176,7 +176,15 @@ async def chat_cli(
     if event.sender == client.user_id:
         return
 
-    args = shlex.split(event.body)
+    try:
+        args = shlex.split(event.body)
+    except ValueError:
+        await process_response(
+            client,
+            room,
+            _('unknown command'),
+        )
+        return
 
     # commands either need to be sent to the users direct message with an organisations bot account or be prefixed
     prefix_needed = False

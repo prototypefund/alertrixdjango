@@ -148,6 +148,35 @@ class MatrixRoomTest(
             resp.status_code,
             302,
         )
+        # The activation secret is only set once the widget is used for the first time
+        widget_activation_response = await client.get(
+            url,
+        )
+        widget_activation_page = widget_activation_response.content.decode()
+        widget_activation = BeautifulSoup(widget_activation_page, 'html.parser')
+        input_tag_id = widget_activation.find(
+            'input',
+            attrs={
+                'name': 'id',
+            },
+        )
+        await mx_client.sync_n(
+            n=1,
+        )
+        widget_activation_event = messages[mx_client.user_id][-1][1]
+        self.assertIn(
+            'activation_secret',
+            widget_activation_event.source['content'].keys(),
+            'activation secret has not been received or was not saved',
+        )
+        resp = await client.post(
+            url,
+            data=urlencode({
+                'id': input_tag_id['value'],
+                'activation_secret': widget_activation_event.source['content']['activation_secret'],
+            }),
+            content_type='application/x-www-form-urlencoded',
+        )
         user = await get_user_model().objects.aget(
             matrix_id=mx_client.user_id,
         )

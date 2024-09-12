@@ -26,17 +26,13 @@ class MatrixRoomTest(
     """
 
     async def test_create_organisation_and_unit(self):
-        user, new = await get_user_model().objects.aget_or_create(
-            matrix_id='@alertrix_OrganisationTest_test_create_organisation_and_unit:synapse.localhost',
-        )
         # Create a Matrix-Account for the test user in the scope of the application service
         mx_user, new = await mas_models.User.objects.aget_or_create(
-            user_id=user.matrix_id,
+            user_id='@alertrix_OrganisationTest_test_create_organisation_and_unit-user:synapse.localhost',
             app_service=self.app_service,
         )
         mx_client = await mx_user.aget_client()
         client = AsyncClient()
-        await client.aforce_login(user)
         # Do not allow every user to access the company creation form
         resp = await client.get(
             reverse('comp.new'),
@@ -45,7 +41,6 @@ class MatrixRoomTest(
             resp.status_code,
             403,
         )
-        await sync_to_async(self.validated_matrix_id_group.user_set.add)(user)
         # Allow access to the company creation form now
         resp = await client.get(
             reverse('comp.new'),
@@ -87,7 +82,7 @@ class MatrixRoomTest(
                 await mas_models.Room.objects.aget(
                     room_id__in=mas_models.Event.objects.filter(
                         type='m.room.member',
-                        state_key=user.matrix_id,
+                        state_key=mx_client.user_id,
                         content__membership='join',
                     ).values_list(
                         'room__room_id',
@@ -139,7 +134,7 @@ class MatrixRoomTest(
             await sync_to_async(list)(
                 mas_models.Event.objects.filter(
                     type='m.room.member',
-                    state_key=user.matrix_id,
+                    state_key=mx_client.user_id,
                     content__membership='join',
                 ).values_list(
                     'room__room_id',

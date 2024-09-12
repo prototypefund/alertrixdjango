@@ -62,6 +62,66 @@ class MatrixRoomTest(
             lambda c, r, e: c.join(r.room_id),
             nio.InviteMemberEvent,
         )
+
+        room_create_response = await mx_client.room_create(
+            preset=nio.RoomPreset.trusted_private_chat,
+            invite=(
+                main_user.user_id,
+            ),
+            is_direct=True,
+            initial_state=[
+                nio.EnableEncryptionBuilder().as_dict(),
+            ],
+        )
+        await mx_client.sync_n(
+            n=1,
+        )
+        start = time.time()
+        end = start + 20
+        # waiting for bot to join
+        while time.time() < end:
+            if await mas_models.Event.objects.filter(
+                room__room_id=room_create_response.room_id,
+                type='m.room.member',
+                content__membership='join',
+                state_key=main_user.user_id,
+            ).aexists():
+                break
+            await mx_client.sync_n(
+                n=1,
+            )
+        await sync_to_async(self.assertIn)(
+            ('join', mx_client.user_id),
+            mas_models.Event.objects.filter(
+                room__room_id=room_create_response.room_id,
+                type='m.room.member',
+            ).values_list(
+                'content__membership', 'state_key',
+            ),
+        )
+        await sync_to_async(self.assertIn)(
+            ('join', main_user.user_id),
+            mas_models.Event.objects.filter(
+                room__room_id=room_create_response.room_id,
+                type='m.room.member',
+            ).values_list(
+                'content__membership', 'state_key',
+            ),
+        )
+        await mx_client.sync_n(
+            n=1,
+        )
+        await mx_client.room_send(
+            room_create_response.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': 'start',
+            },
+        )
+        await mx_client.sync_n(
+            n=1,
+        )
         client = AsyncClient()
         # Do not allow every user to access the company creation form
         resp = await client.get(
@@ -70,6 +130,14 @@ class MatrixRoomTest(
         self.assertEqual(
             resp.status_code,
             403,
+        )
+        user = await get_user_model().objects.aget(
+            matrix_id=mx_client.user_id,
+        )
+        self.assertGreater(
+            await user.groups.acount(),
+            0,
+            'user is not part of any group',
         )
         # Allow access to the company creation form now
         resp = await client.get(

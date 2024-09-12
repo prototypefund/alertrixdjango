@@ -23,11 +23,13 @@ class EncryptionTests(
             user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user1:synapse.localhost',
             app_service=self.app_service,
             homeserver=self.homeserver,
+            prevent_automated_responses=True,
         )
         user2 = await models.User.objects.acreate(
             user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user2:synapse.localhost',
             app_service=self.app_service,
             homeserver=self.homeserver,
+            prevent_automated_responses=True,
         )
         client1: MatrixClient = await user1.aget_client()
         client2: MatrixClient = await user2.aget_client()

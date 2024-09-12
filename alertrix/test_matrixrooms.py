@@ -218,10 +218,12 @@ class MatrixRoomTest(
                 flat=True,
             ),
         )
-        self.assertEqual(
-            company.room_id,
-            (
-                await mas_models.Room.objects.aget(
+        # Wait for an invitation to the company space
+        start = time.time()
+        end = start + 10
+        while time.time() < end:
+            room_ids = await sync_to_async(list)(
+                mas_models.Room.objects.filter(
                     room_id__in=mas_models.Event.objects.filter(
                         type='m.room.member',
                         state_key=mx_client.user_id,
@@ -230,10 +232,17 @@ class MatrixRoomTest(
                         'room__room_id',
                         flat=True,
                     ),
-                )
-            ).room_id,
-            'User has not received an invite to a room with the correct name',
-        )
+                ).values_list(
+                    'room_id',
+                    flat=True,
+                ),
+            )
+            if company.room_id in room_ids:
+                break
+        else:
+            self.fail(
+                'User has not received an invite to a room with the correct name in time',
+            )
         resp = await client.get(
             reverse('unit.new'),
         )

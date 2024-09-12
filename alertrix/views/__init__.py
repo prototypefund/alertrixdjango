@@ -154,6 +154,7 @@ class WidgetActivationView(
         kwargs['instance'] = self.object
         # Hide the activation_secret from the form. Showing this here would defy the purpose of this view.
         kwargs['initial']['activation_secret'] = None
+        kwargs['initial']['id'] = self.request.GET.get('widgetId')
         return kwargs
 
     def post(self, request, *args, **kwargs):

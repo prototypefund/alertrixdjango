@@ -19,6 +19,10 @@
 <h1>
     {{ object.get_name.content.name }}
 </h1>
+<form action="{% url 'alert.new' %}">
+    <input type="hidden" name="units" value="{{ object.room_id }}">
+    <input type="submit" class="alarm-button" value="{% trans 'alert' context "verb" %}"/>
+</form>
 <a href="element://vector/webapp/#/room/{{ object.room_id }}">{{ object.room_id }}</a>
 <div>
     {{ room.get_topic.content.topic }}

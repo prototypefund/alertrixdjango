@@ -69,7 +69,7 @@ class AlertView(
             bot = await mas_models.User.objects.aget(
                 user_id=(await mas_models.Event.objects.aget(
                     type=events.AlertrixCompany().get_type(),
-                    state_key__isnull=False,
+                    state_key='',
                     room=company,
                 )).content['inbox'],
             )

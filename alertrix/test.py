@@ -60,3 +60,11 @@ class AppserviceSetup(
         main_as_key, new = alertrix.MainApplicationServiceKey.objects.get_or_create(
             service=self.app_service,
         )
+        main_as_user, new = models.User.objects.get_or_create(
+            user_id='@alertrix_test_main:synapse.localhost',
+            app_service=main_as_key.service,
+        )
+        main_as_user_key, new = alertrix.MainUserKey.objects.get_or_create(
+            service=main_as_key.service,
+            user=main_as_user,
+        )

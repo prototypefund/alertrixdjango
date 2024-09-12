@@ -54,11 +54,26 @@ class EncryptionTests(
                 [r.room_id, e.source],
             )
 
+        async def verify_devices(
+                client,
+                room,
+                event,
+        ):
+            for device_id, device in client.device_store[event.sender].items():
+                print(client.user_id, client.device_id, 'tries to verify', event.sender, device_id)
+                await sync_to_async(client.verify_device)(
+                    device,
+                )
+
         for client in [
             client1,
             client2,
         ]:
             client.add_event_callback(receive_event, nio.RoomMessageText)
+            client.add_event_callback(
+                verify_devices,
+                nio.RoomMessage,
+            )
         room_create_response = await client1.room_create(
             invite=[
                 client2.user_id,

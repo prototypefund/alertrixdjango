@@ -118,13 +118,9 @@ class CreateUnit(
             }
             yield {
                 'room_id': company.room_id,
-                'type': '%(prefix)s.company.unit' % {
-                    'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
-                },
-                'content': {
-                    'version': '0',
-                },
-                'state_key': room_id,
+                **events.AlertrixCompanyUnit(
+                    child_room_id=room_id,
+                ).get_matrix_data(),
             }
 
     def get_matrix_room_args(

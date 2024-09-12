@@ -10,6 +10,7 @@ from django.test import AsyncClient
 from django.urls import reverse
 from matrixappservice import models as mas_models
 
+from . import callbacks
 from . import models
 from .test import AppserviceSetup
 

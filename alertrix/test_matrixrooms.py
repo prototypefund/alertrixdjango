@@ -142,3 +142,4 @@ class MatrixRoomTest(
             ),
             'User has not received an invite to a room with the correct name',
         )
+        await mx_client.close()

@@ -55,4 +55,15 @@ async def create(
             },
         )
         return json.loads(res)
+    # Mark the users matrix is as validated by adding the user to the corresponding group
+    group, new = await Group.objects.aget_or_create(
+        name=settings.MATRIX_VALIDATED_GROUP_NAME,
+    )
+    if new:
+        await group.asave()
+    user = await get_user_model().objects.aget(
+        matrix_id=form.cleaned_data.get('matrix_id'),
+    )
+    await sync_to_async(user.groups.add)(group)
+    await sync_to_async(group.user_set.add)(user)
     return _('user created')

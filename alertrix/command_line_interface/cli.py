@@ -265,6 +265,8 @@ async def chat_cli(
                 room,
                 v,
             )
+    elif response is None:
+        pass
     else:
         raise ValueError(
             'unknown response type from callback %(type)s: %(response)s' % {

@@ -70,12 +70,15 @@ async def add_widget_to_chat(
     # Create the widget
     room_id = room_id
     event_type = 'im.vector.modular.widgets'
-    widget_id = '%(room)s_%(user)s_%(tms)s_%(random)s' % {
+    widget_id_raw = '%(room)s_%(user)s_%(tms)s_' % {
         'room': slugify(room_id),
         'user': slugify(event.sender),
         'tms': int(timezone.now().timestamp()),
-        'random': secrets.token_urlsafe(128),
     }
+    widget_id_max_length = 128
+    widget_id = widget_id_raw[0:min(len(widget_id_raw), 128)]
+    if len(widget_id) < widget_id_max_length:
+        widget_id += secrets.token_urlsafe(widget_id_max_length - len(widget_id))
     content = {
         'type': 'm.custom',
         'url': '%(scheme)s://%(host)s/?%(args)s' % {
@@ -96,12 +99,25 @@ async def add_widget_to_chat(
         activation_secret='',
     )
     await widget.asave()
-    await client.room_put_state(
+    room_put_state_response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
         room_id=room_id,
         event_type=event_type,
         content=content,
         state_key=widget_id,
     )
+    if type(room_put_state_response) is nio.RoomPutStateError:
+        await client.room_send(
+            room_put_state_response.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.notice',
+                'body': '%(status)s: %(message)s' % {
+                    'status': room_put_state_response.status_code,
+                    'message': room_put_state_response.message,
+                },
+            },
+        )
+        return
     # Set the room layout
     content = {
         'widgets': {

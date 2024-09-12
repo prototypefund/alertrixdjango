@@ -16,6 +16,7 @@ from .. import forms
 from .. import mixins
 from .. import querysets
 from .. import models as alertrix
+from ..events import v1 as events
 
 
 class CreateUnit(

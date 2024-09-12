@@ -117,6 +117,7 @@ class WidgetActivationView(
                     flat=True,
                 ),
             ),
+            prevent_automated_responses=False,
         )
         user = users.first()
         client = user.get_client()

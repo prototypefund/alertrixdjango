@@ -103,21 +103,20 @@ async def on_user_joined_company(
             event.sender,
             client.user_id,
         )
-        return
     except mas_models.Room.DoesNotExist:
-        pass
-    room_create_response = await client.room_create(
-        preset=nio.RoomPreset.trusted_private_chat,
-        invite=[
-            event.sender,
-        ],
-        is_direct=True,
-        initial_state=[
-            nio.EnableEncryptionBuilder().as_dict(),
-        ],
-    )
-    if type(room_create_response) is nio.RoomCreateError:
-        logging.error(room_create_response)
+        # There is no direct message for this user and us yet, so we need to create one.
+        room_create_response = await client.room_create(
+            preset=nio.RoomPreset.trusted_private_chat,
+            invite=[
+                event.sender,
+            ],
+            is_direct=True,
+            initial_state=[
+                nio.EnableEncryptionBuilder().as_dict(),
+            ],
+        )
+        if type(room_create_response) is nio.RoomCreateError:
+            logging.error(room_create_response)
 
 
 async def ensure_encryption(

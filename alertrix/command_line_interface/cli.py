@@ -290,7 +290,7 @@ async def process_response(
         content = response_text
     else:
         content = None
-    if response_text:
+    if content:
         await client.room_send(
             room.room_id,
             'm.room.message',

@@ -83,10 +83,21 @@ async def on_room_join(
 ):
     if event.membership != 'join':
         return
-    if not await querysets.companies.filter(
+    if await querysets.companies.filter(
             room_id=room.room_id,
     ).aexists():
-        return
+        await on_user_joined_company(
+            client,
+            room,
+            event,
+        )
+
+
+async def on_user_joined_company(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMemberEvent,
+):
     try:
         await querysets.aget_direct_message_for(
             event.sender,

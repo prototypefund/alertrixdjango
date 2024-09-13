@@ -58,12 +58,15 @@ class Alert(
             'alertrix/cli/emergency/alert.json',
             {
                 'alert': self,
-                'alert_html': json.dumps(loader.render_to_string(
-                    'alertrix/emergency/alert.html',
-                    {
-                        'alert': self,
-                    },
-                )),
+                'alert_html': json.dumps(''.join([
+                    line.strip()
+                    for line in loader.render_to_string(
+                        'alertrix/emergency/alert.html',
+                        {
+                            'alert': self,
+                        },
+                    ).split('\n')
+                ])),
             },
         ))
         return res

@@ -28,13 +28,7 @@ class MatrixRoomForm(
         ]
     name = forms.CharField(
         label=_('name'),
-        widget=forms.Textarea(
-            attrs={
-                'rows': 1,
-                'style': ';'.join([
-                    'resize: none',
-                ]),
-            },
+        widget=forms.TextInput(
         ),
     )
     description = forms.CharField(

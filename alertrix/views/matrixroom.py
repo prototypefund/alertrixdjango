@@ -27,6 +27,10 @@ class CreateMatrixRoom(
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['initial'] = {
+            **kwargs['initial'],
+            **self.request.GET.dict(),
+        }
         return kwargs
 
     def get_matrix_state_events(self, form):

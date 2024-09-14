@@ -22,6 +22,7 @@ class CreateMatrixRoom(
     """
     Parent CreateView to create MatrixRoom objects.
     """
+    template_name = 'alertrix/form.html'
 
     def get_form_kwargs(self):
         kwargs = {

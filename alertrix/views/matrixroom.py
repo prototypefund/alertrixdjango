@@ -25,10 +25,8 @@ class CreateMatrixRoom(
     template_name = 'alertrix/form.html'
 
     def get_form_kwargs(self):
-        kwargs = {
-            'user': self.request.user,
-            **super().get_form_kwargs(),
-        }
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         return kwargs
 
     def get_matrix_state_events(self, form):

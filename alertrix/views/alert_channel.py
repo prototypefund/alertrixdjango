@@ -63,6 +63,7 @@ class CreateAlertChannel(
             'm.room.avatar': 50,
             'm.room.name': 50,
             'm.room.topic': 50,
+            'm.space.parent': 50,
         }
 
     def get_matrix_room_args(

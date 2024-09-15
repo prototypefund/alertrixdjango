@@ -35,19 +35,11 @@ async def add(
         location_1=args.location[1],
     )
 
-    request = HttpRequest()
-    request.method = 'POST'
-    request.POST = alert_form_dict
-
-    # manually applying middleware
-    # https://github.com/django/django/blob/fd1dd767783b5a7ec1a594fcc5885e7e4178dd26/django/contrib/sessions/middleware.py#L18
-    engine = import_module(settings.SESSION_ENGINE)
-    session_store = engine.SessionStore
-    session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
-    request.session = session_store(session_key)
-    # https://github.com/django/django/blob/62039659603ca0fa2df796d1732c4b414549c52b/django/contrib/messages/middleware.py#L12
-    request._messages = default_storage(request)
-    request.user = await get_user_model().objects.aget(matrix_id=args.user)
+    request = utils.get_request(
+        method='POST',
+        POST=alert_form_dict,
+        user=await get_user_model().objects.aget(matrix_id=args.user),
+    )
 
     view = AlertView()
     view.request = request

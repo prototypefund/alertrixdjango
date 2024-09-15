@@ -29,7 +29,7 @@ class ListCompanies(
     template_name = 'alertrix/company_list.html'
 
     def get_queryset(self):
-        queryset = querysets.companies.filter(
+        queryset = models.Company.objects.filter(
             room_id__in=mas_models.Event.objects.filter(
                 type='m.room.member',
                 content__membership__in=['invite', 'join'],

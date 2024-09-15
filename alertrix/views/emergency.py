@@ -113,16 +113,18 @@ class AlertView(
                 flat=True,
             )
             async for recipient in members_of_all_relevant_units_the_bot_can_cover:
-                dm = await querysets.aget_direct_message_for(
+                rooms = await models.AlertChannel.objects.aget_for(
                     client.user_id,
                     recipient,
+                    alert.code,
                 )
-                client.rooms[dm.room_id] = await dm.aget_nio_room(
+                room = await rooms.afirst()
+                client.rooms[room.room_id] = await room.aget_nio_room(
                     own_user_id=client.user_id,
                 )
                 data = alert.get_matrix_data()
                 room_send_response: nio.RoomSendResponse | nio.RoomSendError = await client.room_send(
-                    dm.room_id,
+                    room.room_id,
                     data.pop('type'),
                     ignore_unverified_devices=True,
                     **data,

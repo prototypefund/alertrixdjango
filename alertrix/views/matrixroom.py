@@ -245,6 +245,26 @@ class CreateMatrixRoom(
             )
         await client.close()
 
+    async def aafter_room_creation(
+            self,
+            room_id: str,
+    ):
+        """
+        Child classes can override this method.
+
+        :param room_id: The room_id of the newly created room.
+        :return:
+        """
+        return None
+
+    def after_room_creation(
+            self,
+            room_id: str,
+    ):
+        return async_to_sync(self.aafter_room_creation)(
+            room_id,
+        )
+
     def form_valid(self, form):
         self.form = form
         self.responsible_user: models.User
@@ -258,6 +278,9 @@ class CreateMatrixRoom(
             room_id = form.cleaned_data.get('room_id')
         self.instance = models.Room(
             room_id=room_id,
+        )
+        self.after_room_creation(
+            room_id,
         )
         client = self.responsible_user.get_client()
         async_to_sync(client.sync_n)(

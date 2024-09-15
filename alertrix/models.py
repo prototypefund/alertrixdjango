@@ -53,6 +53,48 @@ class DirectMessageManager(
             ),
         )
 
+    def get_for(
+            self,
+            *users: str,
+            valid_memberships: List[str] = None,
+    ) -> Room:
+        if valid_memberships is None:
+            valid_memberships = [
+                'join',
+            ]
+        queryset = self.get_queryset()
+        for user in users:
+            queryset = queryset.intersection(
+                self.filter(
+                    room_id__in=Event.objects.filter(
+                        content__membership__in=valid_memberships,
+                        state_key=user,
+                    ).values_list(
+                        'room__room_id',
+                        flat=True,
+                    ),
+                )
+            )
+        try:
+            return queryset.get()
+        except Room.MultipleObjectsReturned as e:
+            logging.error(
+                'returned too many rooms: %(room_list)s' % {
+                    'room_list': str(queryset),
+                },
+            )
+            raise e
+
+    async def aget_for(
+            self,
+            *users: str,
+            valid_memberships: List[str] = None,
+    ) -> Room:
+        return await sync_to_async(self.get_for)(
+            *users,
+            valid_memberships=valid_memberships,
+        )
+
 
 class DirectMessage(
     Room,

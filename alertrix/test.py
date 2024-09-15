@@ -29,14 +29,16 @@ class AppserviceSetup(
         self.validated_matrix_id_group, new = Group.objects.get_or_create(
             name=settings.MATRIX_VALIDATED_GROUP_NAME,
         )
-        if new:
+        for model, view in (
+                (alertrix.Company, CreateCompany),
+        ):
             content_type, new = ContentType.objects.get_or_create(
-                app_label=alertrix.Company.__module__.split('.')[0],
-                model=alertrix.Company.__name__,
+                app_label=model.__module__.split('.')[0],
+                model=model.__name__,
             )
             permission, new = Permission.objects.get_or_create(
-                codename=CreateCompany.permission_required.split('.')[-1],
-                content_type=content_type
+                codename=view.permission_required.split('.')[-1],
+                content_type=content_type,
             )
             self.validated_matrix_id_group.permissions.add(
                 permission,

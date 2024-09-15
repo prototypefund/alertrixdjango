@@ -62,6 +62,7 @@ class CreateAlertChannel(
             'im.vector.modular.widgets': 50,
             'm.room.avatar': 50,
             'm.room.name': 50,
+            'm.room.topic': 50,
         }
 
     def get_matrix_room_args(

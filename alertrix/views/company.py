@@ -78,7 +78,12 @@ class CreateCompany(
         return form
 
     def get_success_url(self):
-        return reverse('comp.list')
+        return reverse(
+            'comp.detail',
+            kwargs=dict(
+                pk=self.instance.room_id,
+            ),
+        )
 
     def get_matrix_state_events(self, form):
         return [

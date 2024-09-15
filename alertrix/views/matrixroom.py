@@ -243,6 +243,7 @@ class CreateMatrixRoom(
                 content=content,
                 state_key=state_key,
             )
+        await client.close()
 
     def form_valid(self, form):
         self.form = form

@@ -19,7 +19,6 @@ from . import models
 from . import utils
 from ..models import MainApplicationServiceKey
 from ..models import MainUserKey
-from ..querysets import get_direct_message_for
 
 
 class CreateRegistrationToken(

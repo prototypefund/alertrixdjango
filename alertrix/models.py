@@ -15,7 +15,6 @@ from matrixappservice.models import ApplicationServiceRegistration
 from matrixappservice.models import User as MatrixUser
 from matrixappservice.models import Event
 from matrixappservice.models import Room
-from django.contrib.auth import get_user_model
 from .events import v1 as events
 
 

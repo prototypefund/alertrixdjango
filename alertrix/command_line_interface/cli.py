@@ -14,6 +14,7 @@ from matrixappservice import models
 
 from alertrix import callbacks
 from .argparse import Parser
+from ..models import DirectMessage
 
 
 async def cli(

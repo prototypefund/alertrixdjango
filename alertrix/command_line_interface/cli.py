@@ -192,7 +192,7 @@ async def chat_cli(
     # commands either need to be sent to the users direct message with an organisations bot account or be prefixed
     prefix_needed = False
     try:
-        dm = await querysets.aget_direct_message_for(
+        dm = await DirectMessage.objects.aget_for(
             event.sender,
             client.user_id,
         )

@@ -12,8 +12,9 @@ class Event(
     content: dict = None
     state_key: dict = None
 
-    def get_type(self):
-        return self.type
+    @classmethod
+    def get_type(cls):
+        return cls.type
 
     def get_content(self):
         return {

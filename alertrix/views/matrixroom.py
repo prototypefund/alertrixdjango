@@ -249,11 +249,16 @@ class CreateMatrixRoom(
         self.form = form
         self.responsible_user: models.User
         if not form.cleaned_data.get('room_id'):
-            async_to_sync(self.create_matrix_room)(
+            room_id = async_to_sync(self.create_matrix_room)(
                 **self.get_matrix_room_args(
                     form=form,
                 ),
             )
+        else:
+            room_id = form.cleaned_data.get('room_id')
+        self.instance = models.Room(
+            room_id=room_id,
+        )
         client = self.responsible_user.get_client()
         async_to_sync(client.sync_n)(
             n=1,

@@ -158,6 +158,115 @@ class Unit(
         proxy = True
 
 
+class AlertChannelManager(
+    models.Manager,
+):
+
+    @classmethod
+    def get_queryset(cls):
+        return Room.objects.filter(
+            room_id__in=list(
+                Event.objects.filter(
+                    room__in=DirectMessage.objects.all(),
+                    type=events.AlertrixEmergencyAlertChannel.get_type(),
+                    state_key__isnull=False,
+                ).values_list(
+                    'content__inbox',
+                    flat=True,
+                ),
+            ),
+        )
+
+    @classmethod
+    def none(cls):
+        return Room.objects.none()
+
+    def get_for(
+            self,
+            user_id: str,
+            company_bot: str,
+            for_keyword: str = None,
+            valid_memberships: list = None,
+    ):
+        if valid_memberships is None:
+            valid_memberships = [
+                'join',
+            ]
+        qs = self.get_queryset().filter(
+            Q(
+                room_id__in=Event.objects.filter(
+                    type='m.room.member',
+                    state_key=user_id,
+                    content__membership__in=valid_memberships,
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ),
+            ),
+            Q(
+                room_id__in=Event.objects.filter(
+                    type='m.room.member',
+                    state_key=company_bot,
+                    content__membership__in=valid_memberships,
+                ).values_list(
+                    'room__room_id',
+                    flat=True,
+                ),
+            ),
+        )
+        if for_keyword is not None:
+            channel_events_in_relevant_rooms = Event.objects.filter(
+                room=DirectMessage.objects.get_for(
+                    user_id,
+                    company_bot,
+                ),
+                type=events.AlertrixEmergencyAlertChannel.get_type(),
+                content__inbox__isnull=False,
+            ).order_by(
+                '-origin_server_ts',
+            )
+            for event in channel_events_in_relevant_rooms:
+                if re.match(event.state_key, for_keyword):
+                    continue
+                qs = qs.exclude(
+                    room_id=event.content['inbox'],
+                )
+            qs = qs.order_by(
+                Case(
+                    *(
+                        When(
+                            room_id=event.content['inbox'],
+                            then=i,
+                        ) for i, event in enumerate(channel_events_in_relevant_rooms)
+                    ),
+                ),
+            )
+        return qs
+
+    async def aget_for(
+            self,
+            user_id: str,
+            company_bot: str,
+            for_keyword: str = None,
+            valid_memberships: list = None,
+    ):
+        return await sync_to_async(self.get_for)(
+            user_id,
+            company_bot,
+            for_keyword,
+            valid_memberships,
+        )
+
+
+class AlertChannel(
+    Room,
+):
+    objects = AlertChannelManager()
+
+    class Meta:
+        proxy = True
+
+
 class Widget(
     models.Model,
 ):

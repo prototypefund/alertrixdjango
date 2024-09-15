@@ -59,6 +59,7 @@ class CreateAlertChannel(
 
     def get_events_permission_level(self) -> Optional[dict[str, int]]:
         return {
+            'im.vector.modular.widgets': 50,
         }
 
     def get_matrix_room_args(

@@ -36,7 +36,7 @@ async def add_widget_to_chat(
         return
     # verify that this happens in a direct message
     try:
-        dm = await querysets.aget_direct_message_for(
+        dm = await models.DirectMessage.objects.aget_for(
             event.sender,
             client.user_id,
         )

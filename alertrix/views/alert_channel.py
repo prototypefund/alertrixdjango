@@ -6,3 +6,4 @@ from django.utils.translation import gettext_lazy as _
 from matrixappservice import models as matrixappservice
 from matrixappservice.exceptions import MatrixError
 from . import matrixroom
+from .. import forms

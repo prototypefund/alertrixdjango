@@ -13,7 +13,6 @@ from matrixappservice import models as mas_models
 from matrixappservice.exceptions import MatrixError
 
 from alertrix import models
-from alertrix import querysets
 
 
 async def add_widget_to_chat(

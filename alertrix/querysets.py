@@ -70,19 +70,6 @@ async def aget_direct_message_for(
     )
 
 
-companies = Room.objects.filter(
-    room_id__in=Event.objects.filter(
-        type='%(prefix)s.company' % {
-            'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
-        },
-        state_key__isnull=False,
-    ).values_list(
-        'room__room_id',
-        flat=True,
-    ),
-)
-
-
 def get_companies_for_unit(
         unit: [
             Iterable,

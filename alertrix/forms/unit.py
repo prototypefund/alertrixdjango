@@ -45,9 +45,9 @@ class UnitCreateForm(
             *args, **kwargs
         )
         if user.is_superuser:
-            qs_companies = querysets.companies.all()
+            qs_companies = Company.objects.all()
         else:
-            qs_companies = querysets.companies.filter(
+            qs_companies = Company.objects.filter(
                 room_id__in=models.Event.objects.filter(
                     type='m.room.member',
                     content__membership__in=['invite', 'join'],

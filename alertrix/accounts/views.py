@@ -17,6 +17,7 @@ from matrixappservice.models import Room
 from . import forms
 from . import models
 from . import utils
+from ..models import DirectMessage
 from ..models import MainApplicationServiceKey
 from ..models import MainUserKey
 

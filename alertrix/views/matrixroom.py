@@ -121,7 +121,7 @@ class CreateMatrixRoom(
         """
         return dict(
             name=form.data['name'],
-            topic=form.data['description'],
+            topic=form.data.get('description'),
             federate=form.data['federate'] == 'on' if 'federate' in form.data else False,
             initial_state=self.get_matrix_state_events(
                 form=form,

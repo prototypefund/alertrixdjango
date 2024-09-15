@@ -28,38 +28,6 @@ direct_messages = Room.objects.filter(
 )
 
 
-def get_direct_message_for(
-        *users: str,
-        valid_memberships: List[str] = None,
-) -> Room:
-    if valid_memberships is None:
-        valid_memberships = [
-            'join',
-        ]
-    queryset = models.DirectMessage.objects.get_queryset()
-    for user in users:
-        queryset = queryset.intersection(
-            direct_messages.filter(
-                room_id__in=Event.objects.filter(
-                    content__membership__in=valid_memberships,
-                    state_key=user,
-                ).values_list(
-                    'room__room_id',
-                    flat=True,
-                ),
-            )
-        )
-    try:
-        return queryset.get()
-    except Room.MultipleObjectsReturned as e:
-        logging.error(
-            'returned too many rooms: %(room_list)s' % {
-                'room_list': str(queryset),
-            },
-        )
-        raise e
-
-
 def get_companies_for_unit(
         unit: [
             Iterable,

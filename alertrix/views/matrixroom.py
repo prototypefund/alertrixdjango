@@ -287,4 +287,10 @@ class CreateMatrixRoom(
         async_to_sync(client.sync_n)(
             n=1,
         )
+        if self.request.META.get('HTTP_ACCEPT') == 'application/json':
+            return JsonResponse(
+                {
+                    'room_id': room_id,
+                },
+            )
         return HttpResponseRedirect(self.get_success_url())

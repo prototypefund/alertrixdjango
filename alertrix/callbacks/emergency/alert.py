@@ -12,6 +12,7 @@ from django.http import HttpRequest
 from django.template import loader
 from matrixappservice import MatrixClient
 
+from ... import utils
 from ...views.emergency import AlertView
 
 

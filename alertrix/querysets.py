@@ -60,16 +60,6 @@ def get_direct_message_for(
         raise e
 
 
-async def aget_direct_message_for(
-        *users: str,
-        valid_memberships: List[str] = None,
-) -> Room:
-    return await sync_to_async(get_direct_message_for)(
-        *users,
-        valid_memberships=valid_memberships,
-    )
-
-
 def get_companies_for_unit(
         unit: [
             Iterable,

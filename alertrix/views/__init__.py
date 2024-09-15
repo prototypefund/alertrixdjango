@@ -47,7 +47,7 @@ def home(request):
         'alertrix/home.html',
         context={
             'main_user': main_user,
-            'units': querysets.units.filter(
+            'units': models.Unit.objects.filter(
                 room_id__in=mas_models.Event.objects.filter(
                     type='m.room.member',
                     content__membership='join',

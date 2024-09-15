@@ -6,7 +6,6 @@ from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models
 
-from .. import querysets
 
 
 async def on_room_invite(

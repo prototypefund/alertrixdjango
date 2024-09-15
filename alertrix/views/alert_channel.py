@@ -60,6 +60,7 @@ class CreateAlertChannel(
     def get_events_permission_level(self) -> Optional[dict[str, int]]:
         return {
             'im.vector.modular.widgets': 50,
+            'm.reaction': 0,
             'm.room.avatar': 50,
             'm.room.name': 50,
             'm.room.redaction': 50,

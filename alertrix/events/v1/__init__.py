@@ -103,3 +103,22 @@ class AlertrixCompanyUnit(
 
     def get_state_key(self):
         return self.child_room_id
+
+
+@dataclass
+class AlertrixEmergencyAlertChannel(
+    Event,
+):
+    type = '%(prefix)s.emergency.alert.channel' % {
+        'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,
+    }
+    inbox: str = None  # The room_id of the room that the alerts should be sent to
+    pattern: str = ''
+
+    def get_content(self):
+        return {
+            'inbox': self.inbox,
+        }
+
+    def get_state_key(self):
+        return self.pattern

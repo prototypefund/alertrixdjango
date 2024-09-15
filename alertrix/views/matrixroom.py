@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 from matrixappservice import models
 from matrixappservice.database.models import Account

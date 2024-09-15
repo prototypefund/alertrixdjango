@@ -14,7 +14,6 @@ from matrixappservice import models
 
 from alertrix import callbacks
 from .argparse import Parser
-from .. import querysets
 
 
 async def cli(

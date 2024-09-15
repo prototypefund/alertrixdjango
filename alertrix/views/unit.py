@@ -66,7 +66,7 @@ class CreateUnit(
                         room__room_id__in=form.cleaned_data.get('companies'),
                     ),
                     Q(
-                        room__in=querysets.companies,
+                        room__in=alertrix.Company.objects.all(),
                     ),
                     type='%(prefix)s.company' % {
                         'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,

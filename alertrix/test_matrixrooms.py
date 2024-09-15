@@ -302,7 +302,7 @@ class MatrixRoomTest(
 
         # After joining the company the user should have been invited to a direct message that is used for non-alert
         # notifications and configuration
-        config_dm = await querysets.aget_direct_message_for(
+        config_dm = await models.DirectMessage.objects.aget_for(
             user.matrix_id,
             (await mas_models.Event.objects.aget(
                 type=events.AlertrixCompany().type,

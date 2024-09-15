@@ -42,7 +42,7 @@ class CreateRegistrationToken(
             responsible_user = MainUserKey.objects.get(
                 service=main_service,
             ).user
-            get_direct_message_for(
+            DirectMessage.objects.get_for(
                 str(responsible_user.user_id),
                 form.data.get('valid_for_matrix_id'),
             )
@@ -96,7 +96,7 @@ class CreateRegistrationToken(
     ):
         try:
             # Save the direct message object
-            dm = await get_direct_message_for(
+            dm = await DirectMessage.objects.aget_for(
                 user_id,
                 app_service.get_user().user_id,
             )

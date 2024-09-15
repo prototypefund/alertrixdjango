@@ -8,3 +8,4 @@ from matrixappservice.exceptions import MatrixError
 from . import matrixroom
 from .. import forms
 from .. import models
+from ..events import v1 as events

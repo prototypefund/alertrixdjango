@@ -5,7 +5,6 @@ from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _

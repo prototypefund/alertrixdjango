@@ -8,6 +8,7 @@ from matrixappservice import models
 
 from . import models as alertrix
 from .views.company import CreateCompany
+from .views.alert_channel import CreateAlertChannel
 
 
 class AppserviceSetup(

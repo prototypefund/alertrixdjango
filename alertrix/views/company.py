@@ -2,7 +2,6 @@ import logging
 
 import django.forms.fields
 import nio
-import synapse.appservice
 from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.contrib import messages

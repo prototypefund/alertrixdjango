@@ -1,7 +1,6 @@
 import logging
 from typing import List
 import nio
-from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser

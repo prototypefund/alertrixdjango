@@ -128,7 +128,7 @@ def get_companies_for_unit(
 def get_units_for_company(
         company: Room,
 ):
-    return units.filter(
+    return models.Unit.objects.get_queryset().filter(
         room_id__in=Event.objects.filter(
             type='%(prefix)s.company.unit' % {
                 'prefix': settings.ALERTRIX_STATE_EVENT_PREFIX,

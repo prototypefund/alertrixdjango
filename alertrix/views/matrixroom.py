@@ -31,6 +31,8 @@ class CreateMatrixRoom(
             **kwargs['initial'],
             **self.request.GET.dict(),
         }
+        if self.request.POST:
+            kwargs['data'] = self.request.POST
         return kwargs
 
     def get_matrix_state_events(self, form):

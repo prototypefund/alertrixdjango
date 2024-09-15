@@ -18,6 +18,7 @@ from django.views.generic import FormView
 from matrixappservice import models as mas_models
 from matrixappservice.database import models as database
 
+from . import alert_channel
 from . import appservice
 from . import company
 from . import emergency

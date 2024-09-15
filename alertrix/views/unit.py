@@ -195,7 +195,7 @@ class PublicUnits(
     template_name = 'alertrix/public_units.html'
 
     def get_queryset(self):
-        qs = querysets.units.filter(
+        qs = alertrix.Unit.filter(
             room_id__in=models.Event.objects.filter(
                 type='m.room.join_rules',
                 content__join_rule='public',

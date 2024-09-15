@@ -31,6 +31,7 @@ class AppserviceSetup(
         )
         for model, view in (
                 (alertrix.Company, CreateCompany),
+                (alertrix.AlertChannel, CreateAlertChannel),
         ):
             content_type, new = ContentType.objects.get_or_create(
                 app_label=model.__module__.split('.')[0],

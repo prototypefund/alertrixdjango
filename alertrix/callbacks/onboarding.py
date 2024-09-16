@@ -189,8 +189,14 @@ async def on_user_joined_company(
                 nio.EnableEncryptionBuilder().as_dict(),
             ],
         )
+        await client.sync_n(
+            n=1,
+        )
         if type(room_create_response) is nio.RoomCreateError:
             logging.error(room_create_response)
+        dm = await models.DirectMessage.objects.aget(
+            room_id=room_create_response.room_id,
+        )
 
 
 async def ensure_encryption(

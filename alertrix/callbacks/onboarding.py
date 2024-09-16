@@ -108,16 +108,21 @@ async def prevent_double_direct_messages(
     for dm in dms:
         if dm.room_id == room.room_id:
             continue
-        await client.room_send(
-            dm.room_id,
-            'm.room.message',
-            {
-                'msgtype': 'm.notice',
-                'body': _('please use https://matrix.to/#/%(room_id)s from now on') % {
-                    'room_id': room.room_id,
+        try:
+            await client.room_send(
+                dm.room_id,
+                'm.room.message',
+                {
+                    'msgtype': 'm.notice',
+                    'body': _('please use https://matrix.to/#/%(room_id)s from now on') % {
+                        'room_id': room.room_id,
+                    },
                 },
-            },
-        )
+            )
+        except (
+                ValueError,
+        ):
+            pass
         await client.room_leave(
             dm.room_id,
         )

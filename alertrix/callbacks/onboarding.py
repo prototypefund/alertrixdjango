@@ -124,6 +124,26 @@ async def on_room_join(
         room: nio.MatrixRoom,
         event: nio.RoomMemberEvent,
 ):
+    dms = models.DirectMessage.objects.get_all_for(
+        client.user_id,
+        event.sender,
+        valid_memberships=[
+            'join',
+            'invite',
+        ],
+    )
+    if all([
+        await dms.acount() > 1,
+        room.room_id in await sync_to_async(list)(dms.values_list(
+            'room_id',
+        )),
+    ]):
+        await prevent_double_direct_messages(
+            client,
+            room,
+            event,
+        )
+
     if event.membership != 'join':
         return
     if await querysets.companies.filter(

@@ -162,7 +162,7 @@ async def on_user_joined_company(
         event: nio.RoomMemberEvent,
 ):
     try:
-        await models.DirectMessage.objects.aget_for(
+        dm = await models.DirectMessage.objects.aget_for(
             event.sender,
             client.user_id,
         )

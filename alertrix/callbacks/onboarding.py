@@ -52,7 +52,7 @@ async def on_room_invite(
             await client.room_send(
                 room_id=room.room_id,
                 message_type='m.room.message',
-                body={
+                content={
                     'msgtype': 'm.text',
                     'body': 'https://matrix.to/#/%(room_id)s' % {
                         'room_id': dm.matrix_room_id,

@@ -6,6 +6,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('setup/', include([
+    ])),
     path('public/', views.unit.PublicUnits.as_view(), name='public_units'),
     path('comp/', include([
         path('', views.company.ListCompanies.as_view(), name='comp.list'),

@@ -2,6 +2,7 @@ import json
 import logging
 
 import nio
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models

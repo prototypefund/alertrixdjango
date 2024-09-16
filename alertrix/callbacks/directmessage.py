@@ -13,13 +13,17 @@ async def on_left_direct_message(
 ):
     if event.membership != 'leave':
         return
+    if not await models.DirectMessage.objects.filter(
+            room_id=room.room_id,
+    ).aexists():
+        # This room does not seem to be a direct message
+        return
     try:
         dm: models.Room = await models.DirectMessage.objects.get_all_for(
             event.sender,
             client.user_id,
         )
     except models.Room.DoesNotExist:
-        # This room does not seem to be a direct message
         return
     if await models.Event.objects.filter(
         room=dm,

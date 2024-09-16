@@ -10,6 +10,7 @@ from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models
 
 from .. import models
+from .. import utils
 
 
 async def on_room_invite(

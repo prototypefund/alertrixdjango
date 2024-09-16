@@ -1,6 +1,7 @@
 from typing import Optional
 
 import nio
+from asgiref.sync import sync_to_async
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse

@@ -11,6 +11,7 @@ from matrixappservice import models as mas_models
 
 from .. import models
 from .. import utils
+from ..views.alert_channel import CreateAlertChannel
 
 
 async def on_room_invite(

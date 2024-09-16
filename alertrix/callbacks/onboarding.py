@@ -81,6 +81,44 @@ async def on_room_invite(
         )
 
 
+async def prevent_double_direct_messages(
+        client: MatrixClient,
+        room: nio.MatrixRoom,
+        event: nio.RoomMemberEvent,
+):
+    dms = await sync_to_async(list)(models.DirectMessage.objects.get_all_for(
+        client.user_id,
+        event.sender,
+        valid_memberships=[
+            'join',
+            'invite',
+        ],
+    ))
+    for dm in dms:
+        if dm.room_id == room.room_id:
+            continue
+        await client.room_send(
+            dm.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.notice',
+                'body': _('please use https://matrix.to/#/%(room_id)s from now on') % {
+                    'room_id': room.room_id,
+                },
+            },
+        )
+        await client.room_leave(
+            dm.room_id,
+        )
+        await client.room_forget(
+            dm.room_id,
+        )
+        await dm.adelete()
+    await client.sync_n(
+        n=1,
+    )
+
+
 async def on_room_join(
         client: MatrixClient,
         room: nio.MatrixRoom,

@@ -52,11 +52,11 @@ class DirectMessageManager(
             ),
         )
 
-    def get_for(
+    def get_all_for(
             self,
             *users: str,
             valid_memberships: List[str] = None,
-    ) -> Room:
+    ):
         if valid_memberships is None:
             valid_memberships = [
                 'join',
@@ -74,6 +74,17 @@ class DirectMessageManager(
                     ),
                 )
             )
+        return queryset
+
+    def get_for(
+            self,
+            *users: str,
+            valid_memberships: List[str] = None,
+    ) -> Room:
+        queryset = self.get_all_for(
+            *users,
+            valid_memberships=valid_memberships,
+        )
         try:
             return queryset.get()
         except Room.MultipleObjectsReturned as e:

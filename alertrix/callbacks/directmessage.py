@@ -14,7 +14,7 @@ async def on_left_direct_message(
     if event.membership != 'leave':
         return
     try:
-        dm: models.Room = await querysets.aget_direct_message_for(
+        dm: models.Room = await models.DirectMessage.objects.get_all_for(
             event.sender,
             client.user_id,
         )

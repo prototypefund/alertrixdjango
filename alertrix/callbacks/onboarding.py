@@ -2,7 +2,6 @@ import logging
 
 import nio
 from django.conf import settings
-from django.utils.translation import gettext as _
 from matrixappservice import MatrixClient
 from matrixappservice import models as mas_models
 

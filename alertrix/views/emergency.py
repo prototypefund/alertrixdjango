@@ -118,7 +118,13 @@ class AlertView(
                     recipient,
                     alert.code,
                 )
-                room = await rooms.afirst()
+                if await rooms.acount() >= 1:
+                    room = await rooms.afirst()
+                else:
+                    room = await models.DirectMessage.objects.aget_for(
+                        client.user_id,
+                        recipient,
+                    )
                 client.rooms[room.room_id] = await room.aget_nio_room(
                     own_user_id=client.user_id,
                 )

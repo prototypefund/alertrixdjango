@@ -3,6 +3,7 @@ from matrixappservice import MatrixClient
 from matrixappservice import models
 
 from .. import querysets
+from .. import models
 
 
 async def on_left_direct_message(

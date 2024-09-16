@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('setup/', include([
+        path('channels/new', views.alert_channel.CreateAlertChannel.as_view(), name='alert_channel.new'),
     ])),
     path('public/', views.unit.PublicUnits.as_view(), name='public_units'),
     path('comp/', include([

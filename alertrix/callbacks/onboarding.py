@@ -24,12 +24,9 @@ async def on_room_invite(
         room,
         event,
     )
-    if not await mas_models.Room.objects.filter(
+    await mas_models.Room.objects.aget_or_create(
         room_id=room.room_id,
-    ).aexists():
-        await mas_models.Room.objects.acreate(
-            room_id=room.room_id,
-        )
+    )
     if event.state_key != client.user_id:
         return
     if event.membership == 'invite':

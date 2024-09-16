@@ -37,4 +37,6 @@ async def on_left_direct_message(
     await client.room_forget(
         room.room_id,
     )
-    await dm.adelete()
+    await models.Room.objects.get(
+        room_id=room.room_id,
+    ).adelete()

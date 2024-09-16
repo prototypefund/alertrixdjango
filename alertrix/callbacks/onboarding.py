@@ -146,7 +146,7 @@ async def on_room_join(
 
     if event.membership != 'join':
         return
-    if await querysets.companies.filter(
+    if await models.Company.objects.filter(
             room_id=room.room_id,
     ).aexists():
         await on_user_joined_company(

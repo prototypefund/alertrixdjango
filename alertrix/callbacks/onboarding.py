@@ -162,10 +162,21 @@ async def on_user_joined_company(
         event: nio.RoomMemberEvent,
 ):
     try:
-        dm = await models.DirectMessage.objects.aget_for(
-            event.sender,
-            client.user_id,
-        )
+        try:
+            dm = await models.DirectMessage.objects.aget_for(
+                event.sender,
+                client.user_id,
+            )
+        except mas_models.Room.DoesNotExist:
+            # Try again, maybe the user has not joined the direct message yet
+            dm = await models.DirectMessage.objects.aget_for(
+                event.sender,
+                client.user_id,
+                valid_memberships=[
+                    'invite',
+                    'join',
+                ],
+            )
     except mas_models.Room.DoesNotExist:
         # There is no direct message for this user and us yet, so we need to create one.
         room_create_response = await client.room_create(

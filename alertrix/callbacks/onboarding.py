@@ -197,6 +197,89 @@ async def on_user_joined_company(
         dm = await models.DirectMessage.objects.aget(
             room_id=room_create_response.room_id,
         )
+    put_state_response = await client.room_put_state(
+        room.room_id,
+        event_type='m.space.child',
+        state_key=dm.room_id,
+        content={
+            'via': await sync_to_async(list)(
+                mas_models.User.objects.filter(
+                    user_id__in=models.Event.objects.filter(
+                        type='m.room.member',
+                        content__membership__in=[
+                            'invite',
+                            'join',
+                        ],
+                        room__room_id__in=room.room_id,
+                    ),
+                ).values_list(
+                    'homeserver__server_name',
+                    flat=True,
+                ),
+            ),
+        },
+    )
+    alert_channels = await models.AlertChannel.objects.aget_for(
+        event.sender,
+        client.user_id,
+        valid_memberships=[
+            'join',
+            'invite',
+        ],
+    )
+    view = CreateAlertChannel()
+    pattern = view.form_class.declared_fields['pattern'].initial
+    request = utils.get_request(
+        POST={
+            'name': (
+                _('%(pattern)s alerts for %(company_name)s') % {
+                    'pattern': pattern,
+                    'company_name': (
+                        await (
+                            await models.Company.objects.aget(
+                                room_id=room.room_id,
+                            )
+                        ).aget_name()
+                    ).content['name'],
+                }
+            ).strip(),
+            'company': room.room_id,
+            'pattern': pattern,
+            'overwrite': 'on',
+        },
+        META={
+            'HTTP_ACCEPT': 'application/json',
+        },
+        user=await get_user_model().objects.aget(matrix_id=event.sender),
+    )
+    view.request = request
+    if all([
+            (await alert_channels.acount()) == 0,
+            await sync_to_async(view.has_permission)(),
+    ]):
+        form = await sync_to_async(view.get_form)()
+        if not await sync_to_async(form.is_valid)():
+            return
+        response = await sync_to_async(view.post)(
+            request,
+        )
+
+        response_data = json.loads(
+            response.content,
+        )
+        await client.room_send(
+            dm.room_id,
+            'm.room.message',
+            {
+                'msgtype': 'm.text',
+                'body': _('alerts with a code matching "%(pattern)s" will be sent to %(room)s') % {
+                    'pattern': '',
+                    'room': 'https://matrix.to/#/%(room_id)s' % {
+                        'room_id': response_data['room_id'],
+                    },
+                },
+            },
+        )
 
 
 async def ensure_encryption(

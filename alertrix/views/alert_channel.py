@@ -80,24 +80,6 @@ class CreateAlertChannel(
 
     def get_matrix_state_events(self, form):
         return super().get_matrix_state_events(form) + [
-            {
-                'type': 'm.space.parent',
-                'state_key': form.cleaned_data.get('company'),
-                'content': {
-                    'via': list(
-                        matrixappservice.User.objects.filter(
-                            user_id__in=models.Event.objects.filter(
-                                type='m.room.member',
-                                content__membership='join',
-                                room__room_id__in=form.cleaned_data.get('company'),
-                            ),
-                        ).values_list(
-                            'homeserver__server_name',
-                            flat=True,
-                        ),
-                    ),
-                },
-            },
             nio.EnableEncryptionBuilder().as_dict(),
         ]
 
@@ -131,6 +113,36 @@ class CreateAlertChannel(
             messages.success(
                 self.request,
                 _('a new alert channel has been created'),
+            )
+        elif type(room_put_state_response) is nio.RoomPutStateError:
+            raise MatrixError(
+                errcode=room_put_state_response.status_code,
+                error=room_put_state_response.message,
+            )
+        company_id = self.form.cleaned_data.get('company')
+        room_put_state_response: nio.RoomPutStateResponse | nio.RoomPutStateError = await client.room_put_state(
+            room_id=company_id,
+            event_type='m.space.child',
+            state_key=room_id,
+            content={
+                'via': await sync_to_async(list)(
+                    matrixappservice.User.objects.filter(
+                        user_id__in=models.Event.objects.filter(
+                            type='m.room.member',
+                            content__membership='join',
+                            room__room_id__in=company_id,
+                        ),
+                    ).values_list(
+                        'homeserver__server_name',
+                        flat=True,
+                    ),
+                ),
+            },
+        )
+        if type(room_put_state_response) is nio.RoomPutStateResponse:
+            messages.debug(
+                self.request,
+                _('alert channel has been added to company'),
             )
         elif type(room_put_state_response) is nio.RoomPutStateError:
             raise MatrixError(

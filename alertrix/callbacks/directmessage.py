@@ -19,7 +19,7 @@ async def on_left_direct_message(
         # This room does not seem to be a direct message
         return
     try:
-        dm: models.Room = await models.DirectMessage.objects.get_all_for(
+        dm: models.Room = await models.DirectMessage.objects.aget_for(
             event.sender,
             client.user_id,
         )

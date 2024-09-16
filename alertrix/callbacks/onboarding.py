@@ -19,6 +19,17 @@ async def on_room_invite(
         room: nio.MatrixRoom,
         event: nio.InviteMemberEvent,
 ):
+    await prevent_double_direct_messages(
+        client,
+        room,
+        event,
+    )
+    if not await mas_models.Room.objects.filter(
+        room_id=room.room_id,
+    ).aexists():
+        await mas_models.Room.objects.acreate(
+            room_id=room.room_id,
+        )
     if event.state_key != client.user_id:
         return
     if event.membership == 'invite':

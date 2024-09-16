@@ -319,4 +319,16 @@ class MatrixRoomTest(
             config_dm_test_message,
             ignore_unverified_devices=True,
         )
+
+        alert_channels = await models.AlertChannel.objects.aget_for(
+            mx_client.user_id,
+            (await models.Event.objects.aget(
+                room=company,
+                type=events.AlertrixCompany.get_type(),
+            )).content['inbox'],
+        )
+        self.assertEqual(
+            await alert_channels.acount(),
+            1,
+        )
         await mx_client.close()

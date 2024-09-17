@@ -6,7 +6,7 @@ from alertrix.command_line_interface.cli import chat_cli
 
 matrix_callbacks = [
     (callbacks.onboarding.ensure_encryption, nio.RoomMessage),
-    (callbacks.encryption.verify_all_devices, nio.RoomMessage),
+    (callbacks.encryption.verify_all_devices, nio.Event),
     (callbacks.onboarding.on_room_invite, nio.InviteMemberEvent),
     (callbacks.onboarding.on_room_join, nio.RoomMemberEvent),
     (chat_cli, nio.RoomMessageText),

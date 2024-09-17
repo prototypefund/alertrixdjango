@@ -15,12 +15,17 @@ class AppserviceSetup(
     abc.ABC,
 ):
     def setUp(self):
-        self.homeserver, new = models.Homeserver.objects.get_or_create(
-            server_name='synapse.localhost',
-            url='http://matrix.synapse.localhost',
-        )
-        if new:
-            self.homeserver.save()
+        server_name = 'synapse.localhost'
+        if not models.Homeserver.objects.filter(
+                server_name=server_name,
+        ):
+            self.homeserver = models.Homeserver.objects.create(
+                server_name=server_name,
+            )
+        else:
+            self.homeserver = models.Homeserver.objects.get(
+                server_name=server_name,
+            )
         admins, new = Group.objects.get_or_create(
             name='admins',
         )

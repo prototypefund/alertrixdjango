@@ -77,17 +77,28 @@ class MatrixRoomTest(
         )
         start = time.time()
         end = start + 20
+        memberships = (
+            ('join', mx_client.user_id),
+            ('join', main_user.user_id),
+        )
         # waiting for bot to join
         while time.time() < end:
-            if await mas_models.Event.objects.filter(
-                room__room_id=room_create_response.room_id,
-                type='m.room.member',
-                content__membership='join',
-                state_key=main_user.user_id,
-            ).aexists():
+            if all([
+                await mas_models.Event.objects.filter(
+                    room__room_id=room_create_response.room_id,
+                    type='m.room.member',
+                    content__membership=membership[0],
+                    state_key=membership[1],
+                ).aexists()
+                for membership in memberships
+            ]):
                 break
             await mx_client.sync_n(
                 n=1,
+            )
+        else:
+            self.fail(
+                'memberships of direct message are incorrect',
             )
         await sync_to_async(self.assertIn)(
             ('join', mx_client.user_id),

@@ -63,18 +63,13 @@ class UserHasSpecificMembershipForThisMatrixRoom(
             assert self.object
         except AttributeError:
             self.object = self.get_object(self.get_queryset())
-        try:
-            mas_models.Event.objects.get(
-                room__room_id=self.object.room_id,
-                content__membership__in=self.valid_room_membership_states,
-                state_key=self.request.user.matrix_id,
-            )
-            return True
-        except mas_models.Event.DoesNotExist:
-            pass
-        except AttributeError:
-            pass
-        return False
+        return self.object in type(self.object).objects.filter_for_user(
+            self.request.user,
+            valid_memberships=[
+                'join',
+                'invite',
+            ],
+        )
 
 
 class MemberOrPublic(

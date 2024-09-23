@@ -47,14 +47,14 @@ class UnitCreateForm(
         if user.is_superuser:
             qs_companies = Company.objects.all()
         else:
-            qs_companies = Company.objects.filter(
-                room_id__in=models.Event.objects.filter(
-                    type='m.room.member',
-                    content__membership__in=['invite', 'join'],
-                    state_key=user.matrix_id,
-                ).values_list(
-                    'room__room_id',
-                    flat=True,
+            qs_companies = Company.objects.all(
+            ).filter(
+                room_id__in=models.Room.objects.filter_for_user(
+                    user=user,
+                    valid_memberships=[
+                        'join',
+                        'invite',
+                    ],
                 ),
             )
         self.fields['companies'].choices = [

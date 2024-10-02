@@ -18,7 +18,7 @@ Django = "^5.0.5"
 matrix-synapse = "^1.109.0"
 matrix-nio = "0.24.0"
 beautifulsoup4 = "^4.12.3"
-djangomatrixappservice = { url = "https://codeberg.org/alertrix/djangomatrixappservice/releases/download/v0.1.0a244001/djangomatrixappservice-0.1.0a244001.tar.gz" }
+djangomatrixappservice = { url = "https://codeberg.org/alertrix/djangomatrixappservice/releases/download/v0.1.0a244002/djangomatrixappservice-0.1.0a244002.tar.gz" }
 
 
 [tool.poetry-dynamic-versioning]

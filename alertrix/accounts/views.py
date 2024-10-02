@@ -180,6 +180,7 @@ class CreateFirstUser(
             server_name=server_name,
             url=server_info['m.homeserver']['base_url'],
         )
+        hs.url = hs.get_url()
         hs.save()
         messages.success(
             self.request,

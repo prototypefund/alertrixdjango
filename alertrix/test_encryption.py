@@ -20,13 +20,13 @@ class EncryptionTests(
 
     async def test_e2ee_messaging(self):
         user1 = await models.User.objects.acreate(
-            user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user1:synapse.localhost',
+            user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user1:synapse',
             app_service=self.app_service,
             homeserver=self.homeserver,
             prevent_automated_responses=True,
         )
         user2 = await models.User.objects.acreate(
-            user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user2:synapse.localhost',
+            user_id='@alertrix_EncryptionTest_test_e2ee_messaging_user2:synapse',
             app_service=self.app_service,
             homeserver=self.homeserver,
             prevent_automated_responses=True,

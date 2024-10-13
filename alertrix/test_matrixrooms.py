@@ -27,7 +27,7 @@ class MatrixRoomTest(
     async def test_create_organisation_and_unit(self):
         # Create a Matrix-Account for the test user in the scope of the application service
         mx_user, new = await mas_models.User.objects.aget_or_create(
-            user_id='@alertrix_OrganisationTest_test_create_organisation_and_unit-user:synapse.localhost',
+            user_id='@alertrix_OrganisationTest_test_create_organisation_and_unit-user:synapse',
             app_service=self.app_service,
             prevent_automated_responses=True,
         )

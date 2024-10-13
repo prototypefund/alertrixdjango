@@ -15,7 +15,7 @@ class AppserviceSetup(
     abc.ABC,
 ):
     def setUp(self):
-        server_name = 'synapse.localhost'
+        server_name = 'synapse'
         if not models.Homeserver.objects.filter(
                 server_name=server_name,
         ):
@@ -70,7 +70,7 @@ class AppserviceSetup(
             service=self.app_service,
         )
         main_as_user, new = models.User.objects.get_or_create(
-            user_id='@alertrix_test_main:synapse.localhost',
+            user_id='@alertrix_test_main:synapse',
             app_service=main_as_key.service,
         )
         main_as_user_key, new = alertrix.MainUserKey.objects.get_or_create(

@@ -72,6 +72,14 @@ class MatrixRoomTest(
                 nio.EnableEncryptionBuilder().as_dict(),
             ],
         )
+        if type(room_create_response) is nio.RoomCreateError:
+            self.fail(
+                'unable to create room as user %(user_id)s: %(errcode)s %(errmsg)s' % {
+                    'user_id': mx_client.user_id,
+                    'errcode': room_create_response.status_code,
+                    'errmsg': room_create_response.message,
+                },
+            )
         await mx_client.sync_n(
             n=1,
         )

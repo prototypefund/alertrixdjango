@@ -200,7 +200,7 @@ async def chat_cli(
             prefix_needed = True
     except models.Room.DoesNotExist:
         # No direct message set up for this user, so this chat cannot be a direct message
-        prefix_needed = True,
+        prefix_needed = True
     prefix = getattr(settings, 'ALERTRIX_COMMAND_PREFIX') or '!'
     program_name = getattr(settings, 'ALERTRIX_COMMAND_NAME') or 'alertrix'
     if prefix_needed:

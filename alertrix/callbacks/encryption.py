@@ -22,6 +22,15 @@ async def verify_all_devices(
         room: nio.MatrixRoom,
         event: nio.RoomMemberEvent,
 ):
+    if all([
+        len(client.device_store[event.sender].items()) == 0,
+        event.sender != client.user_id,
+    ]):
+        logger.debug(
+            'there is no device that could be verified for %(sender)s' % {
+                'sender': event.sender,
+            },
+        )
     for device_id, device in client.device_store[event.sender].items():
         await sync_to_async(client.verify_device)(
             device,

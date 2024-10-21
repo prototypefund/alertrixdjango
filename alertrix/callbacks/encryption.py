@@ -1,4 +1,5 @@
 import logging
+import os
 import nio
 from asgiref.sync import sync_to_async
 from matrixappservice import MatrixClient
